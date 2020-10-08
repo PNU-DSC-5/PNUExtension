@@ -1,0 +1,8 @@
+{
+  "name": "PNUExtension",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/PNU-DSC-5/PNUExtension.git",
+  "author": "KIMBEOBWOO",
+  "license": "MIT"
+}
