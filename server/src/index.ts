@@ -1,9 +1,8 @@
-import './LoadEnv'; // Must be the first import
-import app from '@server';
-import logger from '@shared/Logger';
+import express, { Request, Response, NextFunction} from 'express' // 1
+const router = express.Router();
 
-// Start the server
-const port = Number(process.env.PORT || 3000);
-app.listen(port, () => {
-    logger.info('Express server started on port: ' + port);
+router.get('/', (req: Request, res: Response, next: NextFunction) => {
+  res.send('PNU Extension Test Success');
 });
+
+export = router;
