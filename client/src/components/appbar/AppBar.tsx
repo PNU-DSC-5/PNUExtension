@@ -31,11 +31,12 @@ export function LayoutAppBar(): JSX.Element {
     const handleTest = () => {
       excuteTest()
           .then((res) => {
-           
+           console.log('in test app bar');
+           console.log(res);
           })
-          .catch((err) => console.log(
-            'ㅜㅜㅜ', err
-          ));
+          .catch((err) => {
+            console.log(err);
+          })
     }
 
     return(

@@ -2,6 +2,8 @@ import express, { NextFunction } from 'express';
 import createError from 'http-errors';
 import passport from 'passport';
 import cors from 'cors';
+import cookieParser from 'cookie-parser';
+
 // routes
 import testRouter from './src/users/index';
 import userRouter from './src/users/index';
@@ -38,6 +40,8 @@ class PNUApi {
       
     // //enable pre-flight
     // this.app.options('*', cors());
+
+    this.app.use(cookieParser());
 
     // 루트 앱 세팅 적용부
     this.app.use(passport.initialize()); // passport 구동

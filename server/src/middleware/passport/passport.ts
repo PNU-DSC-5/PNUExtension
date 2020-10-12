@@ -36,6 +36,7 @@ passport.use('google',new GoogleStrategy({
 function loginByThirdparty(user: GoogleUser, done: any) {
     const sql_dupleCheck = 'SELECT * FROM users WHERE id = ?';
 
+    console.log('user in login', user);
     doQuery(sql_dupleCheck,[user.sub])
       .then((row)=>{
         if(row.result.length === 0){

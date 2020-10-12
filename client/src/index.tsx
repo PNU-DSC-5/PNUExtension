@@ -33,9 +33,10 @@ function Index(): JSX.Element {
 
   // 페이지 렌더링 -> access Token 및 refresh Token 확인
   React.useEffect(() => {
-
+    console.log('is ok?')
     /* refresh token 이 쿠키에 존재  */
     if(cookie.load('refreshToken')){
+        window.localStorage.removeItem('refreshToken');
         /* 로컬 스토리지에 삽입  */
         window.localStorage.setItem('refreshToken', cookie.load('refreshToken'));
     }
@@ -46,9 +47,7 @@ function Index(): JSX.Element {
     } else if(!cookie.load('accessToken')) {
       axios.setAxiosHeaders(null);
     }
-
-  
-    
+      
   },[]);
 
   return(
