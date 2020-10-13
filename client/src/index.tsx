@@ -20,6 +20,9 @@ import { createMuiTheme, ThemeProvider } from '@material-ui/core';
 // cookie
 import cookie from 'react-cookies';
 
+// contexts
+import UserContext, { useUser } from './utils/contexts/UserContext';
+
 function Index(): JSX.Element {
   
   // api 요청 axios 설정 적용
@@ -31,9 +34,16 @@ function Index(): JSX.Element {
     palette: { ...globalTheme.palette }
   });
 
+  const {
+    user, handleLogout, handleProfile,state
+  } = useUser();
+
   // 페이지 렌더링 -> access Token 및 refresh Token 확인
   React.useEffect(() => {
-    console.log('is ok?')
+    cookie.save('kind', 1, {});
+
+    handleProfile();
+
     /* refresh token 이 쿠키에 존재  */
     if(cookie.load('refreshToken')){
         window.localStorage.removeItem('refreshToken');
@@ -43,12 +53,14 @@ function Index(): JSX.Element {
 
     /* access token 이 쿠키에 존재 */
     if(cookie.load('accessToken')){ // accessToken 을 axios 디폴트 요청 헤더에 삽입해야한다.
-      axios.setAxiosHeaders(cookie.load('accessToken'));
+      axios.setAxiosHeaders('accesstoken',cookie.load('accessToken'));
     } else if(!cookie.load('accessToken')) {
-      axios.setAxiosHeaders(null);
+      axios.setAxiosHeaders('accesstoken',null);
     }
       
-  },[]);
+  },[handleProfile]);
+
+  
 
   return(
     <React.StrictMode>
@@ -56,20 +68,27 @@ function Index(): JSX.Element {
       {/* 앱 전체 테마 설정 */}
       <ThemeProvider theme={THEME}>
 
-        <BrowserRouter>
-          
-          {/* 상단 고정 앱 바 */}
-          <LayoutAppBar />
-          
-          {/* 라우팅 스위치 */}
-          <Switch>
+        {/* 유저 컨택스트 제공자 설정 */}
+        <UserContext.Provider value={{
+          user,handleLogout,handleProfile,state
+        }}>
+          <BrowserRouter>
+            
+            {/* 상단 고정 앱 바 */}
+            <LayoutAppBar />
+            
+            {/* 라우팅 스위치 */}
+            <Switch>
 
-            {/* 메인 페이지 */}
-            <Route path="/" component={Main}/>
+              {/* 메인 페이지 */}
+              <Route path="/" component={Main}/>
 
-          </Switch>
+            </Switch>
 
-        </BrowserRouter>
+          </BrowserRouter>
+
+        </UserContext.Provider>
+        
 
       </ThemeProvider>
     </React.StrictMode>

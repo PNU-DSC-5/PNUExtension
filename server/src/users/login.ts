@@ -1,6 +1,6 @@
 import express, { Request, Response, NextFunction} from 'express';
 import passport from '../middleware/passport/passport';
-import JwtToken, { Payload } from '../middleware/jwt/jwtToken';
+import JwtToken, { Payload, Token } from '../middleware/jwt/jwtToken';
 import response from '../middleware/responseHelper/helper';
 
 const router = express.Router();
@@ -9,34 +9,23 @@ router.get('/', (req: Request, res: Response, next: NextFunction) => {
   res.send('PNU Extension Login Success');
 });
 
-router.get('/isok', (req: Request, res: Response, next: NextFunction) => {
-  res.send('PNU Extension Login Success');
+router.get('/check-profile', JwtToken.check, async (req, res) => {
+  if(req.user){
+    const userInfo: Payload = req.user as Payload;
+    res.send(userInfo);
+  }
+  else{
+    res.send(false);
+  }
 });
 
-interface Token {
-  readonly accessToken : string;
-  readonly refreshToken : string;
-}
-
 /* refresh 토큰 사용한 accessToken 및 refreshToken 재발급 */
-router.post('/refresh', JwtToken.refresh, (req: express.Request, res: express.Response) => {
-  console.log('refresh router');
-  if(true){
-    // console.log('[Success : Refresh Token ... ]');
-    // const user: Payload = req.user as Payload;
-    // const { accessToken, refreshToken } = await JwtToken.create(user);
-
-    // res.cookie('accessToken', accessToken);
-    // res.cookie('refreshToken', refreshToken);
-    // res.cookie('error', null);
-    // res.send(true);
+router.get('/refresh', JwtToken.refresh, (req: express.Request, res: express.Response) => {
+  console.log('[Excute Refresh Router Logic ... ]');
+  if(req.user){
+    console.log('[Finish Refresh Router Logic ... ]');
     const { accessToken , refreshToken } = req.user as Token;
-    // res.cookie('accessToken', accessToken);
-    // res.cookie('refreshToken', refreshToken);
-    // res.cookie('error', 'refreshed !');
-    // res.cookie('test', true)
-
-    res.setHeader('test','ok ... ');
+    res.setHeader('refresh-result',[accessToken, refreshToken]);
     res.send({
       accessToken,
       refreshToken,
@@ -69,14 +58,12 @@ router.get('/google/callback', passport.authenticate('google'), async (req,res) 
     res.redirect('http://localhost:3003');
 
    } catch(err) {
-    console.log(err);
     res.cookie('error', "Internal server Error ... create Token");
     res.redirect('http://localhost:3003');
    } 
 });
 
 router.get('/test' , JwtToken.check, async (req,res) => {
-  console.log(req.user);
   res.send('Good Test!')
 });
 

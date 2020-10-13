@@ -19,28 +19,27 @@ class PNUApi {
 
   private initializeAppSettings(): void {
 
+    this.app.use((req, res, next) => {  
+      res.setHeader('Access-Control-Allow-Origin', "*");
+      res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, DELETE');
+      res.setHeader('Access-Control-Allow-Headers', 'authorization, content-type');
+      next();
+    });
+
+    /* http 통신 origin Url 설정 -> cors 옵션 설정 */
     const whiteList = [
       'http://localhost:3003',
       'http://localhost:3000'
      ];
+    
     const corsOptions = {
        origin: whiteList,
        credentials: true,
     };
+    
     this.app.use(cors(corsOptions));
 
-    // this.app.use('*', function(req, res, next) {
-    //   //replace localhost:8080 to the ip address:port of your server
-    //   res.header("Access-Control-Allow-Origin", "*");
-    //   res.header("Access-Control-Allow-Headers", "X-Requested-With");
-    //   res.header('Access-Control-Allow-Headers', 'Content-Type');
-    //   res.header('Access-Control-Allow-Credentials', "true");
-    //   next(); 
-    // });
-      
-    // //enable pre-flight
-    // this.app.options('*', cors());
-
+    
     this.app.use(cookieParser());
 
     // 루트 앱 세팅 적용부

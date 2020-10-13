@@ -12,90 +12,133 @@ import refreshByToken from './refreshToken';
 export const cancelToken = axios.CancelToken;
 export const { isCancel } = axios;
 
-const postData = {
-  config: {},
-  method: '',
+interface PostRequestData {
+  config : AxiosRequestConfig | null;
+  method: string | null;
+}
+
+const postData:PostRequestData = {
+  config: null,
+  method: null,
 };
 
 const axiosInstance = axios.create({
   withCredentials: true,
   baseURL: 'http://localhost:3000',
+  timeout: 3600
 });
 
-const setAxiosHeaders = (accessToken: string|null) => {
-  axiosInstance.defaults.headers.common['accessToken'] = accessToken;
+const setAxiosHeaders = (key: string, accessToken: string|null) => {
+  axiosInstance.defaults.headers.common[key.toLocaleLowerCase()] = accessToken;
 }
 
+/* axios 객체 request 를 가져와 하단 로직 수행 후 flow 재 실행 */
 axiosInstance.interceptors.request.use(
+  /* request Conifg 작업 */
  (config) => {
-   console.log('Axios Post Request : ',config)
+   console.log('[axios request Interceptor ... ] ');
    postData.config = config;
    postData.method = config.method!;
-   return config;
- },
 
+   const accessToken: string|undefined = cookie.load('accessToken');
+   if(accessToken){
+    console.log('accessToken : ',accessToken);
+    setAxiosHeaders('accessToken', accessToken);
+    const setHeaderedConfig = { ...config , headers: {
+      accesstoken: accessToken
+    }}
+
+    console.log(setHeaderedConfig);
+
+    return setHeaderedConfig;
+   }
+   return config
+   
+ },
+ /* request Error 작업 */
  (err) => {
    return err;
  }
 )
 
+/* axios 객체 response 를 가져와 하단 로직 수행 후 flow 재 실행 */
 axiosInstance.interceptors.response.use(
+   /* resonse Conifg 작업 */
   (config) => {
     return config;
   },
- 
+ /* resonse Error 작업 */
   async (err) => {
-    
+    console.log('[axios response Interceptor ... ]');
     const errorState = err.response.status;
-    if(errorState === 402) { // jwtExpired
+
+    /* JWT Expierd , 토큰 만료 에러시 리프레쉬 토큰을 사용해 엑세스 토큰 재발급 요청 로직 수행 시작 */
+    if(errorState === 402) {
       console.log('[Error : Jwt ExpiredIn ... ]', err.response.status);
       const refreshToken = window.localStorage.getItem('refreshToken');
-      if(refreshToken){ // refresh token 을 이용한 accessToken 재발급 수행
+
+      /* 리프레쉬 토큰이 로컬 스토리지에 존재 할 경우 */
+      if(refreshToken){
         console.log('[Refresh Logic Start ... ]');
 
-        axios.defaults.headers.common['refreshtoken'] = refreshToken;
-        return axios.post('http://localhost:3000/users/login/refresh',{
+        /* 서버에 엑세스, 리프레쉬 토큰 재발급 요청 */
+        setAxiosHeaders('refreshToken', refreshToken);
+        return axios.get('http://localhost:3000/users/login/refresh',{
           headers: {
-            refreshtoken : refreshToken
+            refreshToken : refreshToken
           }
         })
           .then((res) => {
             if(res){
-              console.log('refresh success',res);
-              // const reRefreshToken = cookie.load('refreshToken');
-              // const reAccessToken = cookie.load('accessToken');
+
+              /* 새로운 엑세스, 리프레쉬 토큰을 통해 axios 및 쿠키, 로컬 스토리지 재설정 */
               const errorMessage = cookie.load('error');
+              const reRefreshToken: string = res.data.refreshToken;
+              const reAccessToken: string = res.data.accessToken;
+              cookie.save('accessToken', reAccessToken, {
 
-              const reRefreshToken = res.data.refreshToken;
-              const reAccessToken = res.data.accessToken;
+              });
+              cookie.save('refreshToken', reRefreshToken, {
 
-              const testMessage = cookie.load('test');
-              console.log(errorMessage);
-
-              console.log('test header : ',testMessage);
+              });
+              cookie.save('error', errorMessage, {})
+              cookie.save('kind', 0, {});
 
               if(reAccessToken && reRefreshToken && res.data){
                 console.log('[Success : Refresh by Token ... ]');
-                console.log(postData.config)
                 window.localStorage.removeItem('refreshToken');
                 window.localStorage.setItem('refreshToken', reRefreshToken);
+                
+                setAxiosHeaders('accessToken',reAccessToken);
 
-                // setAxiosHeaders(reAccessToken);
-
-                return axios({
-                  ...postData.config,
-                  headers: {
-                    accessToken: reAccessToken
-                  }
-                })
-                  .then((res) => {
-                    console.log('res with re request',res);
-                    return res.data;
+                /* 
+                  request interceptor 를 통해 인터셉트한 request 를 재수행 하는 로직 
+                  (기존의 request는 402 에러에 의해 사라짐)
+                */
+                if(postData.config){
+                  return axios({
+                    ...postData.config,
+                    headers: {
+                      accesstoken: reAccessToken,
+                      isok : true
+                    }
                   })
-                  .catch((err) => {
-                    console.log(err);
-                    return new HTTPError(444, '[Error : Somethine Wrong ... ]'); 
-                  })
+                    .then((res) => {
+                      console.log('[excute Intercepted Request ... ]');
+                      postData.config = null;
+                      postData.method = null;
+  
+                      return res.data;
+                    })
+                    .catch((err) => {
+                      console.log(err);
+                      return new HTTPError(505, '[Error : Somethine Wrong ... ]'); 
+                    })
+                }
+                else{
+                  return;
+                }
+                
               }
               else{
                 console.log('refresh fail',res);
