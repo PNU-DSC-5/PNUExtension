@@ -1,13 +1,8 @@
-  
-import axios,{AxiosRequestConfig} from 'axios';
-import { Console } from 'console';
-
+import axios,{ AxiosRequestConfig } from 'axios';
 // cookie
 import cookie from 'react-cookies';
 
 import HTTPError from './httpError';
-
-import refreshByToken from './refreshToken';
 
 export const cancelToken = axios.CancelToken;
 export const { isCancel } = axios;
@@ -34,22 +29,23 @@ const setAxiosHeaders = (key: string, accessToken: string|null) => {
 
 /* axios 객체 request 를 가져와 하단 로직 수행 후 flow 재 실행 */
 axiosInstance.interceptors.request.use(
-  /* request Conifg 작업 */
+  /* 
+    request Conifg 작업 
+    JWT Expeired or Unauthorization Error 로 인해 날라간 요청을
+    자동으로 재수행하기 위한 사전작업
+  */
  (config) => {
    console.log('[axios request Interceptor ... ] ');
    postData.config = config;
    postData.method = config.method!;
 
+   /* AccessToken 헤더 첨부 */
    const accessToken: string|undefined = cookie.load('accessToken');
    if(accessToken){
-    console.log('accessToken : ',accessToken);
     setAxiosHeaders('accessToken', accessToken);
     const setHeaderedConfig = { ...config , headers: {
       accesstoken: accessToken
     }}
-
-    console.log(setHeaderedConfig);
-
     return setHeaderedConfig;
    }
    return config
@@ -75,9 +71,16 @@ axiosInstance.interceptors.response.use(
     /* JWT Expierd , 토큰 만료 에러시 리프레쉬 토큰을 사용해 엑세스 토큰 재발급 요청 로직 수행 시작 */
     if(errorState === 402) {
       console.log('[Error : Jwt ExpiredIn ... ]', err.response.status);
-      const refreshToken = window.localStorage.getItem('refreshToken');
 
-      /* 리프레쉬 토큰이 로컬 스토리지에 존재 할 경우 */
+      /* uuid(고유식별자) 가 로컬 스토리지에 존재 하지 않는 경우 , 재로그인 필요 */
+      const uuid = window.localStorage.getItem('uuid');
+      if(!uuid) {
+        console.log('[Empty UUID, Login Redirect]');
+        return err;
+      }
+
+      /* uuid(고유식별자) 가 로컬 스토리지에 존재 하는 경우 , 자동 토큰 재발급 및 재요청 수행 로직 시작 */
+      const refreshToken = cookie.load('refreshToken');
       if(refreshToken){
         console.log('[Refresh Logic Start ... ]');
 
@@ -90,25 +93,18 @@ axiosInstance.interceptors.response.use(
         })
           .then((res) => {
             if(res){
-
               /* 새로운 엑세스, 리프레쉬 토큰을 통해 axios 및 쿠키, 로컬 스토리지 재설정 */
-              const errorMessage = cookie.load('error');
               const reRefreshToken: string = res.data.refreshToken;
               const reAccessToken: string = res.data.accessToken;
-              cookie.save('accessToken', reAccessToken, {
 
-              });
-              cookie.save('refreshToken', reRefreshToken, {
-
-              });
-              cookie.save('error', errorMessage, {})
-              cookie.save('kind', 0, {});
+              cookie.remove('accessToken');
+              cookie.remove('refreshToken');
+              
+              cookie.save('accessToken', reAccessToken, {});
+              cookie.save('refreshToken', reRefreshToken, {});
 
               if(reAccessToken && reRefreshToken && res.data){
-                console.log('[Success : Refresh by Token ... ]');
-                window.localStorage.removeItem('refreshToken');
-                window.localStorage.setItem('refreshToken', reRefreshToken);
-                
+                console.log('[Success : Refresh by Token ... ]');  
                 setAxiosHeaders('accessToken',reAccessToken);
 
                 /* 

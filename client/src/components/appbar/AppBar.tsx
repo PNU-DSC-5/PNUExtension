@@ -12,18 +12,24 @@ import TimerIcon from '@material-ui/icons/Timer';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 
 // styles
-import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
+import { createStyles, makeStyles, Theme, fade  } from '@material-ui/core/styles';
 
 // axios
 import useAxios from 'axios-hooks';
 
 // context
-import { useUser } from '../../utils/contexts/UserContext';
+import UserContext from '../../utils/contexts/UserContext';
+
+// sub component
+import ProfilePopover from './ProfilePopover';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
       flexGrow: 1,
+    },
+    appBar: {
+      backgroundColor: fade(theme.palette.primary.main, 0.5)
     },
     menuButton: {
       marginRight: theme.spacing(2),
@@ -51,18 +57,11 @@ const useStyles = makeStyles((theme: Theme) =>
 
 export function LayoutAppBar(): JSX.Element {
     const classes = useStyles();
-    const userContext = useUser();
-    const [loginedState, setLoginedState] = React.useState<undefined|'logined'|'static'>(undefined);
-    
+    const userContext = React.useContext(UserContext);
+
     React.useLayoutEffect(() => {
-      setLoginedState(userContext.state);
-      console.log(userContext.state);
-    },[userContext.state])
-
-    React.useEffect(() => {
-      console.log(userContext.state)
     },[userContext])
-
+    
     const LoginButton = (): JSX.Element => {
       return (
         <Button 
@@ -84,23 +83,21 @@ export function LayoutAppBar(): JSX.Element {
             <TimerIcon fontSize="large" color="secondary"/>
           </IconButton>
           <IconButton>
-            <AccountCircleIcon fontSize="large" color="secondary"/>
-          </IconButton>
-          <IconButton>
             <NotificationsIcon fontSize="large" color="secondary"/>
           </IconButton>
+          <ProfilePopover />
         </div>
       );
     }
 
     return(
         <div className={classes.root}>
-            <AppBar position="fixed">
-                <Toolbar style={{ justifyContent: 'space-between' }}>
+            <AppBar position="fixed" className={classes.appBar}>
+                <Toolbar style={{ justifyContent: 'space-between'}}>
                     <Typography variant="h5">
                         PNU Extension
                     </Typography>
-                    {loginedState === 'logined' ? UserInterfaces() : LoginButton()}
+                    {userContext.state === 'logined' ? UserInterfaces() : LoginButton()}
                 </Toolbar>
             </AppBar>
         </div>

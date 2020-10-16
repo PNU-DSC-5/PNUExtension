@@ -17,8 +17,7 @@ export interface UserContextValue {
   state: "logined" | "static" | undefined;
 }
 
-
-const defaultUser: UserInfo = {
+export const defaultUser: UserInfo = {
   name: null,
   picture: null,
   email: null,
@@ -44,10 +43,14 @@ export function useUser(): UserContextValue {
     url: 'http://localhost:3000/users/login/check-profile',
   },{ manual: true });
 
-
   const handleProfile = React.useCallback(() => {
-    console.log('profile check start')
-    excuteGetProfile()
+    console.log('[Profile Check Start ... ]');
+    if(cookie.load('accessToken')){
+      return excuteGetProfile({
+        headers: {
+          accessToken: cookie.load('accessToken')
+        }
+      })
       .then((res) => {
         if(res.data){
           console.log('[UserContext Setting ...]',res.data);
@@ -56,16 +59,19 @@ export function useUser(): UserContextValue {
         }
       })
       .catch((err) => {
-        console.log('[UserContext Error : Get Profile ...]',err)
+        console.log('[UserContext Error : Get Profile ...]',err);
+        return false;
       })
-  },[excuteGetProfile])
+    }
+    
+  },[excuteGetProfile, cookie.load('accessToken')])
 
   const handleLogout = () => {
-    window.localStorage.removeItem('refreshToken');
     cookie.remove('accessToken');
     cookie.remove('refreshToken');
     cookie.remove('error');
-
+  
+    setUser(defaultUser);
     setState(undefined);
   }
 

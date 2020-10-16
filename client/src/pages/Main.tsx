@@ -7,6 +7,7 @@ import { Grid, Typography } from '@material-ui/core';
 import BottomTest from '../components/main-page/bottom-section/BottomSectionTest';
 import TopTest from '../components/main-page/top-section/TopSectionTest';
 
+import BackGround from '../public/space.jpg';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -14,16 +15,17 @@ const useStyles = makeStyles((theme: Theme) =>
       display: 'flex',
       flex: 1,
       flexDirection: 'column',
-      marginTop: '60px'
     },
     topSection: {
-        minHeight: '300px',
+        minHeight: '500px',
         backgroundColor: theme.palette.primary.dark,
-        paddingTop: '20px'
+        paddingTop: '20px',
+        backgroundImage: `url(${BackGround})`,
+        backgroundSize: 'cover',
     },
     bottomSection: {
         minHeight: '2300px',
-        backgroundColor: theme.palette.primary.light,
+        backgroundColor: theme.palette.primary.dark,
         paddingTop: '20px'  
     }
   }),
@@ -39,8 +41,6 @@ const useStyles = makeStyles((theme: Theme) =>
 
 export default function Main(): JSX.Element {
     const classes = useStyles();
-
-    
 
     return (
         <div className={classes.root}>
