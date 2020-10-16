@@ -29,16 +29,13 @@ async function create(user: Payload): Promise<Token> {
     }
     
     const accessToken = jwt.sign(payload, process.env.JWT_SECRET!, { expiresIn: '5s' });
-    const refreshToken = jwt.sign(payload, process.env.JWT_REFRESH!, { expiresIn: '72h' });
+    const refreshToken = jwt.sign(payload, process.env.JWT_REFRESH!, { expiresIn: '5m' });
     const sql = 'UPDATE users SET refresh = ? WHERE email = ?';
 
-    // console.log(refreshToken.length);
-    // console.log(refreshToken)
     return doQuery(sql,[refreshToken, user.email])
         .then(() => {
             return { accessToken, refreshToken };
         })
-    
 } 
 
 
@@ -49,6 +46,8 @@ async function check(req: express.Request, res: express.Response, next: express.
         try{
             const decoded: Payload = jwt.verify(accessToken, process.env.JWT_SECRET!) as Payload;
             req.user = decoded; // req 인스턴스에 api 요청 유저 정보 삽입
+            
+            console.log('by check : ',jwt.decode(accessToken));
             next();
 
         }catch(err){
@@ -85,8 +84,7 @@ async function refresh(req: express.Request, res: express.Response, next: expres
                             req.user = {
                                 accessToken,
                                 refreshToken
-                            }
-
+                            };
                             next();
                         });
                     }

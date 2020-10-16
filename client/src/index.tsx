@@ -42,18 +42,18 @@ function Index(): JSX.Element {
   React.useEffect(() => {
     cookie.save('kind', 1, {});
 
-    handleProfile();
-
-    /* refresh token 이 쿠키에 존재  */
-    if(cookie.load('refreshToken')){
-        window.localStorage.removeItem('refreshToken');
+    /* uuid 가 쿠키에 존재  */
+    if(cookie.load('uuid')){
+        window.localStorage.clear();
+        window.localStorage.removeItem('uuid');
         /* 로컬 스토리지에 삽입  */
-        window.localStorage.setItem('refreshToken', cookie.load('refreshToken'));
+        window.localStorage.setItem('uuid', cookie.load('uuid'));
     }
 
     /* access token 이 쿠키에 존재 */
     if(cookie.load('accessToken')){ // accessToken 을 axios 디폴트 요청 헤더에 삽입해야한다.
       axios.setAxiosHeaders('accesstoken',cookie.load('accessToken'));
+      handleProfile();
     } else if(!cookie.load('accessToken')) {
       axios.setAxiosHeaders('accesstoken',null);
     }
@@ -63,11 +63,8 @@ function Index(): JSX.Element {
   
 
   return(
-    <React.StrictMode>
-
-      {/* 앱 전체 테마 설정 */}
       <ThemeProvider theme={THEME}>
-
+        {/* 앱 전체 테마 설정 */}
         {/* 유저 컨택스트 제공자 설정 */}
         <UserContext.Provider value={{
           user,handleLogout,handleProfile,state
@@ -91,7 +88,6 @@ function Index(): JSX.Element {
         
 
       </ThemeProvider>
-    </React.StrictMode>
   );
 }
 
