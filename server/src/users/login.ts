@@ -50,7 +50,10 @@ interface GoogleUser {
   uuid? : string;
 }
 
-router.get('/google',passport.authenticate('google', {session: false, scope: ['profile', 'email'] }));
+router.get('/google/:auto',(req,res) => {
+  console.log(req.url);
+  console.log(req.url.match)
+},passport.authenticate('google', {session: false, scope: ['profile', 'email'] }));
 router.get('/google/callback', passport.authenticate('google'), async (req,res) => {
    try{
     const user: GoogleUser = req.user as GoogleUser;
@@ -65,7 +68,7 @@ router.get('/google/callback', passport.authenticate('google'), async (req,res) 
     res.redirect('http://localhost:3003');
 
    } catch(err) {
-    res.cookie('error', "Internal server Error ... create Token");
+    res.cookie('error', "Internal server Error ... create Token"  );
     res.redirect('http://localhost:3003');
    } 
 });

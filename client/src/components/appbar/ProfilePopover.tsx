@@ -26,13 +26,15 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     paper: {
       marginRight: theme.spacing(2),
+
     },
     menuItem: {
       display: 'flex',
       flexGrow : 0,
       justifyContent: 'space-between',
+      color: theme.palette.primary.main,
       '&:hover,select': {
-        backgroundColor: theme.palette.primary.main,
+        backgroundColor: theme.palette.primary.light,
         color: theme.palette.primary.contrastText,
       },
     }
@@ -102,7 +104,13 @@ export default function ProfilePopover() {
         >
           {ProfileFace()}
         </IconButton>
-        <Popper open={open} anchorEl={anchorRef.current} role={undefined} transition disablePortal>
+        <Popper 
+          open={open} 
+          anchorEl={anchorRef.current} 
+          role={undefined} 
+          transition 
+          disablePortal
+        >
           {({ TransitionProps, placement }) => (
             <Grow
               {...TransitionProps}
@@ -110,7 +118,12 @@ export default function ProfilePopover() {
             >
               <Paper>
                 <ClickAwayListener onClickAway={handleClose}>
-                  <MenuList autoFocusItem={open} id="menu-list-grow" onKeyDown={handleListKeyDown}>
+                  <MenuList 
+                    autoFocusItem={open} 
+                    id="menu-list-grow" 
+                    onKeyDown={handleListKeyDown}
+                    
+                  >
                     <MenuItem onClick={handleClose} className={classes.menuItem}>
                       <SupervisedUserCircleIcon style={{marginRight: '15px'}}/>
                       Profile

@@ -22,6 +22,10 @@ import UserContext from '../../utils/contexts/UserContext';
 
 // sub component
 import ProfilePopover from './ProfilePopover';
+import LoginDialog from './LoginDialog';
+
+// hooks
+import useBasicDialog from '../../utils/hooks/useBasicDialog';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -58,6 +62,7 @@ const useStyles = makeStyles((theme: Theme) =>
 export function LayoutAppBar(): JSX.Element {
     const classes = useStyles();
     const userContext = React.useContext(UserContext);
+    const dialog = useBasicDialog();
 
     React.useLayoutEffect(() => {
     },[userContext])
@@ -65,9 +70,10 @@ export function LayoutAppBar(): JSX.Element {
     const LoginButton = (): JSX.Element => {
       return (
         <Button 
-          href="http://localhost:3000/users/login/google"
+          // href="http://localhost:3000/users/login/google"
           variant="contained"
           color="secondary"
+          onClick={() => dialog.handleOpen()}
         >
           <Typography style={{fontWeight: 'bold'}}>
               Login
@@ -100,6 +106,12 @@ export function LayoutAppBar(): JSX.Element {
                     {userContext.state === 'logined' ? UserInterfaces() : LoginButton()}
                 </Toolbar>
             </AppBar>
+
+            <LoginDialog 
+              open={dialog.open}
+              handleOpen={dialog.handleOpen}
+              handleClose={dialog.handleClose}
+            />
         </div>
     );
 }
