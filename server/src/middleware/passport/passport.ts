@@ -30,6 +30,7 @@ passport.use('google',new GoogleStrategy({
     callbackURL: process.env.GOOGLE_CALLBACK!,
     passReqToCallback: true,
   }, (req, accessToken, refreshToken, profile, done) => {
+    console.log(req.query);
     const googleUser: GoogleUser = profile._json;
     loginByThirdparty(googleUser , done);
   }));

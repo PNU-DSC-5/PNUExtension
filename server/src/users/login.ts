@@ -50,10 +50,7 @@ interface GoogleUser {
   uuid? : string;
 }
 
-router.get('/google/:auto',(req,res) => {
-  console.log(req.url);
-  console.log(req.url.match)
-},passport.authenticate('google', {session: false, scope: ['profile', 'email'] }));
+router.get('/google',passport.authenticate('google', {session: false, scope: ['profile', 'email'] }));
 router.get('/google/callback', passport.authenticate('google'), async (req,res) => {
    try{
     const user: GoogleUser = req.user as GoogleUser;

@@ -48,7 +48,7 @@ const useStyles = makeStyles((theme: Theme) =>
     buttonIcon: {
       fontSize: '50px',
       marginRight: '10px',
-      marginTop: '5px'
+      marginTop: '5px',
     },
     buttonText: {
       fontWeight: 'bold',
@@ -119,11 +119,11 @@ export default function LoginDialog(props: DialogProps): JSX.Element {
           className={classnames([
             classes.buttonCommon, classes.google
           ])}
-          href={'http://localhost:3000/users/login/google/:auto='+autoLogin}
+          href={'http://localhost:3000/users/login/google?auto='+autoLogin}
         >
           <Grid container alignItems="center" style={{ width : '100%', height: '100%', padding: '-30px' }}>
 
-            <Grid item xs={6} style={{ justifyContent: 'flex-end', padding: '-5px'}}>
+            <Grid item xs={6} style={{ justifyContent: 'flex-end', padding: '-5px', textAlign: 'center'}}>
               <GoogleIcon className={classes.buttonIcon}/>
             </Grid>
 
@@ -144,7 +144,7 @@ export default function LoginDialog(props: DialogProps): JSX.Element {
         >
           <Grid container alignItems="center" style={{ width : '100%', height: '100%' }}>
 
-            <Grid item xs={6} style={{justifyContent: 'flex-end' , padding: '-5px'}}>
+            <Grid item xs={6} style={{ justifyContent: 'flex-end' , padding: '-5px'}}>
               <GithubIcon className={classes.buttonIcon}/>
             </Grid>
 
