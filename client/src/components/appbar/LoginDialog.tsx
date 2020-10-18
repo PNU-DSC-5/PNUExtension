@@ -3,7 +3,7 @@ import React from 'react';
 // material-ui core components
 import { 
   Dialog, 
-  DialogContent, Typography ,AppBar, Toolbar, FormControlLabel,
+  DialogContent, Typography ,AppBar, Toolbar, FormControlLabel, 
   DialogTitle, Button, Grid, Switch
 } from '@material-ui/core';
 

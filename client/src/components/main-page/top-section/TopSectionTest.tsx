@@ -1,7 +1,7 @@
 import React from 'react';
 
 // material-ui core components
-import { Typography, Button, Grid, TextField, InputAdornment ,FormControl, OutlinedInput, IconButton} from '@material-ui/core';
+import { Typography, Button, Grid, TextField, InputAdornment ,FormControl, OutlinedInput, IconButton, Paper, Avatar} from '@material-ui/core';
 
 // styles
 import { createStyles, makeStyles, Theme, } from '@material-ui/core/styles';
@@ -98,36 +98,20 @@ export default function TopTest(): JSX.Element {
               />
                  
             </FormControl>
-            {/* <TextField 
-                variant="outlined" 
-                value={value}
-                onChange={handleChange}
-                style={{ alignSelf: 'center', marginTop: '60px' }}
-                
-                inputProps={{
-                    startAdornment:
-                      <InputAdornment position="end"><SearchIcon/></InputAdornment>
-                    ,
-                    style: {
-                      textAlign: 'center',
-                      fontFamily: 'AppleSDGothicNeo',
-                      fontSize: '35px',
-                      fontWeight: 440,
-                      color: '#ffff'
-                    },
-                  }}
-                InputLabelProps={{
-                    style: {
-                        fontSize: '35px',
-                        backgroundColor: 'inherit',
-                    }
-                }}
-                className={classes.textField}
+            
+            <Paper
+              style={{
+                width: '600px', 
+                alignSelf: 'center', 
+                marginTop: '80px', 
+                minHeight: '60px',
+                display: 'flex',
+                flexDirection: 'row',
+
+              }}
             >
-              <IconButton>
-                  <SearchIcon fontSize="large"/>
-              </IconButton>
-            </TextField> */}
+                
+            </Paper>
         </Grid>
         
     );

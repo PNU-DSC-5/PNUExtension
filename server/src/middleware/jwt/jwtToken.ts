@@ -69,7 +69,7 @@ async function refresh(req: express.Request, res: express.Response, next: expres
     if(refreshToken){
         try{
             /* refresh 토큰 분해로 email 획득  */
-            const decoded: Payload = jwt.verify(refreshToken, process.env.JWT_REFRESH!) as Payload;
+            const decoded: Payload = jwt.decode(refreshToken) as Payload;
             const sql = 'SELECT * FROM users WHERE email = ?';
 
             /*
