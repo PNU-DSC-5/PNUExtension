@@ -213,6 +213,15 @@
     "@types/jsonwebtoken" "*"
     "@types/passport-strategy" "*"
 
+"@types/passport-local@^1.0.33":
+  version "1.0.33"
+  resolved "https://registry.yarnpkg.com/@types/passport-local/-/passport-local-1.0.33.tgz#d245b60c5b801cb3aeca1ffab557d5fe1534260d"
+  integrity sha512-+rn6ZIxje0jZ2+DAiWFI8vGG7ZFKB0hXx2cUdMmudSWsigSq6ES7Emso46r4HJk0qCgrZVfI8sJiM7HIYf4SbA==
+  dependencies:
+    "@types/express" "*"
+    "@types/passport" "*"
+    "@types/passport-strategy" "*"
+
 "@types/passport-oauth2@*":
   version "1.4.9"
   resolved "https://registry.yarnpkg.com/@types/passport-oauth2/-/passport-oauth2-1.4.9.tgz#134007c4b505a82548c9cb19094c5baeb2205c92"
@@ -2051,6 +2060,13 @@ pascalcase@^0.1.1:
   resolved "https://registry.yarnpkg.com/pascalcase/-/pascalcase-0.1.1.tgz#b363e55e8006ca6fe21784d2db22bd15d7917f14"
   integrity sha1-s2PlXoAGym/iF4TS2yK9FdeRfxQ=
 
+passport-custom@^1.1.1:
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/passport-custom/-/passport-custom-1.1.1.tgz#71db3d7ec1d7d0085e8768507f61b26d88051c0a"
+  integrity sha512-/2m7jUGxmCYvoqenLB9UrmkCgPt64h8ZtV+UtuQklZ/Tn1NpKBeOorCYkB/8lMRoiZ5hUrCoMmDtxCS/d38mlg==
+  dependencies:
+    passport-strategy "1.x.x"
+
 passport-google-oauth1@1.x.x:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/passport-google-oauth1/-/passport-google-oauth1-1.0.0.tgz#af74a803df51ec646f66a44d82282be6f108e0cc"
@@ -2080,6 +2096,13 @@ passport-jwt@^4.0.0:
   dependencies:
     jsonwebtoken "^8.2.0"
     passport-strategy "^1.0.0"
+
+passport-local@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/passport-local/-/passport-local-1.0.0.tgz#1fe63268c92e75606626437e3b906662c15ba6ee"
+  integrity sha1-H+YyaMkudWBmJkN+O5BmYsFbpu4=
+  dependencies:
+    passport-strategy "1.x.x"
 
 passport-oauth1@1.x.x:
   version "1.1.0"

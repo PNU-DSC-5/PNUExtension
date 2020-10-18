@@ -35,20 +35,20 @@ function Index(): JSX.Element {
   });
 
   const {
-    user, handleLogout, handleProfile,state
+    user, handleLogout, handleProfile, state,
+    handleAutoLogin
   } = useUser();
 
   // 페이지 렌더링 -> access Token 및 refresh Token 확인
   React.useEffect(() => {
-    cookie.save('kind', 1, {});
-
     /* uuid 가 쿠키에 존재  */
     if(cookie.load('uuid')){
-        window.localStorage.clear();
-        window.localStorage.removeItem('uuid');
-        /* 로컬 스토리지에 삽입  */
-        window.localStorage.setItem('uuid', cookie.load('uuid'));
-    }
+      window.localStorage.clear();
+      window.localStorage.removeItem('uuid');
+
+      /* 로컬 스토리지에 삽입  */
+      window.localStorage.setItem('uuid', cookie.load('uuid'));
+    } 
 
     /* access token 이 쿠키에 존재 */
     if(cookie.load('accessToken')){ // accessToken 을 axios 디폴트 요청 헤더에 삽입해야한다.
@@ -60,14 +60,18 @@ function Index(): JSX.Element {
       
   },[handleProfile]);
 
+  React.useEffect(() => {
+    if(!cookie.load('accessToken'))
+      handleAutoLogin();
+  },[])
   
-
   return(
       <ThemeProvider theme={THEME}>
         {/* 앱 전체 테마 설정 */}
         {/* 유저 컨택스트 제공자 설정 */}
         <UserContext.Provider value={{
-          user,handleLogout,handleProfile,state
+          user,handleLogout,handleProfile,state,
+          handleAutoLogin
         }}>
           <BrowserRouter>
             

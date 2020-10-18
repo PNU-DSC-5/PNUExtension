@@ -78,11 +78,11 @@ export default function ProfilePopover() {
     prevOpen.current = open;
   }, [open]);
 
-  React.useEffect(() => {
+  React.useLayoutEffect(() => {
     setProfile(userContext.user);
-  }, [userContext]);
+  }, [userContext.user]);
 
-  const ProfileFace = React.useCallback((): JSX.Element => {
+  const ProfileFace = (): JSX.Element => {
     if(profile.picture){
       return (
         <Avatar src={profile.picture}/>
@@ -92,7 +92,7 @@ export default function ProfilePopover() {
     return (
       <AccountCircleIcon fontSize="large" color="secondary"/>
     )
-  }, [profile.picture]);
+  };
 
   return (
     <div className={classes.root}>

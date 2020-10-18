@@ -18,6 +18,9 @@ import { createStyles, makeStyles, Theme, fade ,withStyles } from '@material-ui/
 // classnames
 import classnames from 'classnames';
 
+// cookie
+import cookie from 'react-cookies';
+
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     dialogContents: {
@@ -49,11 +52,15 @@ const useStyles = makeStyles((theme: Theme) =>
       fontSize: '50px',
       marginRight: '10px',
       marginTop: '5px',
+      marginLeft:'20px'
     },
     buttonText: {
       fontWeight: 'bold',
       textAlign: 'left'
     },
+    switchLabel: {
+      color: theme.palette.primary.contrastText,
+    }
   })
 );
 
@@ -95,18 +102,30 @@ export default function LoginDialog(props: DialogProps): JSX.Element {
   const [autoLogin, setAutoLogin] = React.useState<boolean>(false);
 
   const handleAutoLogin = (e: React.ChangeEvent<HTMLInputElement>) => {
-    console.log(e.target.checked)
     setAutoLogin(e.target.checked);
   }
+
+  React.useEffect(() => {
+    cookie.save('autoLogin',(() => {
+      if(autoLogin) return 1;
+      return 0;
+    })(),{});
+  },[autoLogin])
 
   return(
     <Dialog
       open={open}
       onClose={handleClose}
       maxWidth="md"
+      scroll="paper"
+      PaperProps={{
+        style: {
+          backgroundColor: fade('#495057', 0.8)
+        }
+      }}
     >
-      <DialogTitle style={{ textAlign: 'center' }}>        
-          <Typography variant="h4" color="primary"> 
+      <DialogTitle style={{ textAlign: 'center', fontWeight: 900,}}>        
+          <Typography variant="h4" className={classes.switchLabel}> 
             Login
           </Typography>
       </DialogTitle>
@@ -119,11 +138,11 @@ export default function LoginDialog(props: DialogProps): JSX.Element {
           className={classnames([
             classes.buttonCommon, classes.google
           ])}
-          href={'http://localhost:3000/users/login/google?auto='+autoLogin}
+          href={'http://localhost:3000/users/login/google'}
         >
           <Grid container alignItems="center" style={{ width : '100%', height: '100%', padding: '-30px' }}>
 
-            <Grid item xs={6} style={{ justifyContent: 'flex-end', padding: '-5px', textAlign: 'center'}}>
+            <Grid item xs={6} style={{ justifyContent: 'flex-end', padding: '-5px', textAlign: 'left'}}>
               <GoogleIcon className={classes.buttonIcon}/>
             </Grid>
 
@@ -144,7 +163,7 @@ export default function LoginDialog(props: DialogProps): JSX.Element {
         >
           <Grid container alignItems="center" style={{ width : '100%', height: '100%' }}>
 
-            <Grid item xs={6} style={{ justifyContent: 'flex-end' , padding: '-5px'}}>
+            <Grid item xs={6} style={{ justifyContent: 'flex-end' , padding: '-5px',  textAlign: 'left'}}>
               <GithubIcon className={classes.buttonIcon}/>
             </Grid>
 
@@ -165,7 +184,7 @@ export default function LoginDialog(props: DialogProps): JSX.Element {
         >
           <Grid container alignItems="center" style={{ width : '100%', height: '100%' }}>
 
-            <Grid item xs={6} style={{justifyContent: 'flex-end'}}>
+            <Grid item xs={6} style={{justifyContent: 'flex-end',  textAlign: 'left'}}>
               <FacebookIcon className={classes.buttonIcon}/>
             </Grid>
 
@@ -187,10 +206,18 @@ export default function LoginDialog(props: DialogProps): JSX.Element {
             />
           }
         
-          label={
-          (<Typography variant="body1">
+          label={(
+          <Typography 
+            variant="body1" 
+            color="primary" 
+            style={{fontWeight: 'bold'}}
+            className={classnames({
+              [classes.switchLabel]: autoLogin
+            })}
+          >
             Auto Login
-          </Typography>)}
+          </Typography>
+          )}
           style={{ alignSelf: 'center', }}
         />
 

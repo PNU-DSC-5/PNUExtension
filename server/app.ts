@@ -3,6 +3,8 @@ import createError from 'http-errors';
 import passport from 'passport';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
+import bodyParser from 'body-parser';
+import path from 'path';
 
 // routes
 import testRouter from './src/users/index';
@@ -40,7 +42,13 @@ class PNUApi {
     this.app.use(cors(corsOptions));
 
     
+    this.app.use(express.json());
+    this.app.use(bodyParser.json());
+    this.app.use(bodyParser.urlencoded({extended : false}));
+    
+    this.app.use(express.urlencoded({ extended: false }));
     this.app.use(cookieParser());
+    this.app.use(express.static(path.join(__dirname, 'public')));
 
     // 루트 앱 세팅 적용부
     this.app.use(passport.initialize()); // passport 구동
