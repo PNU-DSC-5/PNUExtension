@@ -12,7 +12,8 @@ import { useHistory } from 'react-router-dom';
 
 // material-ui icons
 import SearchIcon from '@material-ui/icons/Search';
-
+import GooglePlacesAutocomplete from 'react-google-places-autocomplete';
+ 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     textField: {
@@ -110,7 +111,11 @@ export default function TopTest(): JSX.Element {
 
               }}
             >
-                
+                <div>
+                  <GooglePlacesAutocomplete
+                    apiKey="AIzaSyDEfcu0gn2zTQ237wpofSB67df583e_AYM"
+                  />
+                </div>
             </Paper>
         </Grid>
         
