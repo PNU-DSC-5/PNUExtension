@@ -10,6 +10,12 @@ import {
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import TimerIcon from '@material-ui/icons/Timer';
 import NotificationsIcon from '@material-ui/icons/Notifications';
+import Dialog from '@material-ui/core/Dialog';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import TextField from '@material-ui/core/TextField';
 
 // styles
 import { createStyles, makeStyles, Theme, fade  } from '@material-ui/core/styles';
@@ -22,6 +28,9 @@ import UserContext from '../../utils/contexts/UserContext';
 
 // sub component
 import ProfilePopover from './ProfilePopover';
+
+// countdown timer
+import { CountdownCircleTimer } from 'react-countdown-circle-timer'
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -90,6 +99,83 @@ export function LayoutAppBar(): JSX.Element {
       );
     }
 
+    const remainTime = ({ remainingTime } : any) => {
+      const hours = Math.floor(remainingTime / 3600)
+      const minutes = Math.floor((remainingTime % 3600) / 60)
+      const seconds = remainingTime % 60
+      let time;
+      if (hours === 0 && minutes === 0) time = `${seconds}`
+      else if (hours === 0) time = `${minutes}:${seconds}`
+      else time = `${hours}:${minutes}`
+    
+      return time
+    }
+
+    const [open, setOpen] = React.useState(false);
+
+    const handleClickOpen = () => {
+      setOpen(true);
+    };
+    const handleClose = () => {
+      setOpen(false);
+    };
+
+    const CountdownTimer = (): JSX.Element => {
+      return(
+        <div>
+          <Button
+            variant="contained"
+            style={{backgroundColor: 'white', borderRadius: 50, width:50, height: 60}} 
+            onClick={handleClickOpen}
+          >
+            <CountdownCircleTimer
+              isPlaying
+              size={50}
+              duration={10}
+              //initialRemainingTime={5}
+              trailColor={"#FFFFFF"}
+              colors={"#FF0000"}
+            >
+              {remainTime}
+              {/* {{({ remainingTime }) => remainingTime}} */}
+            </CountdownCircleTimer>
+          </Button>
+          <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
+            <DialogTitle id="form-dialog-title">시간을 설정해주세요(미완성)</DialogTitle>
+            <DialogContent>
+            <CountdownCircleTimer
+              isPlaying
+              size={50}
+              duration={10}
+              //initialRemainingTime={5}
+              trailColor={"#FFFFFF"}
+              colors={"#FF0000"}
+            >
+              {remainTime}
+              {/* {{({ remainingTime }) => remainingTime}} */}
+            </CountdownCircleTimer>
+              {/* {<TextField
+                autoFocus
+                margin="dense"
+                id="name"
+                label="Email Address"
+                type="email"
+                fullWidth
+              />} */}
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={handleClose} color="primary">
+                Cancel
+              </Button>
+              <Button onClick={handleClose} color="primary">
+                Set
+              </Button>
+            </DialogActions>
+          </Dialog>
+        </div>
+      );
+    }
+
     return(
         <div className={classes.root}>
             <AppBar position="fixed" className={classes.appBar}>
@@ -97,6 +183,7 @@ export function LayoutAppBar(): JSX.Element {
                     <Typography variant="h5">
                         PNU Extension
                     </Typography>
+                    <CountdownTimer/>
                     {userContext.state === 'logined' ? UserInterfaces() : LoginButton()}
                 </Toolbar>
             </AppBar>
