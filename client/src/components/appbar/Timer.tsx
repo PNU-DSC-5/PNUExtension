@@ -58,9 +58,9 @@ export default function Timer(): JSX.Element {
         if (minutes < 10) minutesStr = '0' + minutes ;
         if (seconds < 10) secondsStr = '0' + seconds;
         let resultTime;
-        if (hours === 0 && minutes === 0) resultTime = `${secondsStr}`
-        else if (hours === 0) resultTime = `${minutesStr}:${secondsStr}`
-        else resultTime = `${hours}:${minutesStr}`
+        if (hours === 0 && minutes === 0) resultTime = `${secondsStr}` //1분 미만이면 초만 출력
+        else if (hours === 0) resultTime = `${minutesStr}:${secondsStr}` //1시간 미만이면 분:초 출력
+        else resultTime = `${hours}:${minutesStr}` //1시간 이상이면 시:분 출력
       
         return resultTime
       }

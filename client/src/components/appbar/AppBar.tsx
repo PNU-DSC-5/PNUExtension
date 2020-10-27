@@ -98,7 +98,7 @@ export function LayoutAppBar(): JSX.Element {
                     <Typography variant="h5">
                         PNU Extension
                     </Typography>
-                    {userContext.state === 'logined' ? UserInterfaces() : UserInterfaces()}
+                    {userContext.state === 'logined' ? UserInterfaces() : LoginButton()}
                 </Toolbar>
             </AppBar>
         </div>
