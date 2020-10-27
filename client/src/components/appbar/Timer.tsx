@@ -1,41 +1,52 @@
 import React from 'react';
 
 // material-ui core components
-import { Button } from '@material-ui/core';
-import Dialog from '@material-ui/core/Dialog';
-//import DialogTitle from '@material-ui/core/DialogTitle';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-//import DialogContentText from '@material-ui/core/DialogContentText';
-//import TextField from '@material-ui/core/TextField';
-import InputLabel from '@material-ui/core/InputLabel';
-import MenuItem from '@material-ui/core/MenuItem';
-//import FormHelperText from '@material-ui/core/FormHelperText';
+import { Button, IconButton } from '@material-ui/core';
 import FormControl from '@material-ui/core/FormControl';
-import Select from '@material-ui/core/Select';
+import Modal from '@material-ui/core/Modal';
+import InputAdornment from '@material-ui/core/InputAdornment';
+import Input from '@material-ui/core/Input';
 
 // styles
-import { createStyles, makeStyles, Theme, fade  } from '@material-ui/core/styles';
+import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 
 // countdown timer
 import { CountdownCircleTimer } from 'react-countdown-circle-timer'
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
-    formControl: {
-      margin: theme.spacing(1),
-      minWidth: 120,
+    modal: {
+      position: 'absolute',
+      width: 500,
+      backgroundColor: 'white',
+      borderRadius: '10px'
     },
-    selectEmpty: {
-      marginTop: theme.spacing(2),
+    clock: {
+      margin: 35
     },
-
+    inputContainer: {
+      display: 'flex',
+      flexGrow: 0,
+      marginBottom: 10,
+      float: 'right'
+    },
   }),
 );
 
 export default function Timer(): JSX.Element {
 
     const classes = useStyles();
+
+    function getModalStyle() {
+      const top = 10;
+      const right = 5;
+    
+      return {
+        top: `${top}%`,
+        right: `${right}%`,
+        transform: `translate(-${top}%, -${right}%)`,
+      };
+    }
 
     const remainTime = ({ remainingTime } : any) => { //남은 시간 출력
         currentTime = remainingTime
@@ -57,159 +68,94 @@ export default function Timer(): JSX.Element {
       const [open, setOpen] = React.useState(false);
       let [settingTime, setSettingTime] = React.useState(0); //설정한 총 시간
       let [currentTime, setCurrentTime] = React.useState(0); //설정한 시간 중 남은 시간
-      //const [isPlay, setIsPlay] = React.useState(false); //Timer가 실행 중인지
-      const [selectTime_hours, setSelectTime_hours] = React.useState(0); //설정할 시간 : 시
       const [selectTime_minutes, setSelectTime_minutes] = React.useState(0); //설정할 시간 : 분
-      const [selectTime_seconds, setSelectTime_seconds] = React.useState(0); //설정할 시간 : 초
+      const [modalStyle] = React.useState(getModalStyle); //팝업 스타일 지정
     
       const handleClickOpen = () => { //Timer를 클릭하면 실행되는 함수
-        setOpen(true); //Dialog를 엶
         setCurrentTime(currentTime); //현재 남은 시간 저장
+        setOpen(true); //팝업을 엶
       };
       const handleCancel = () => { //Dialog 바깥을 누르면 실행되는 함수
-        setOpen(false); //Dialog를 닫음
         setCurrentTime(currentTime); //현재 남은 시간 저장
+        setOpen(false); //팝업을 닫음
       };
       const handleReset = () => { //Dialog에서 Reset 버튼을 누르면 실행되는 함수
         setSettingTime(0); //설정한 시간 초기화
         setCurrentTime(0); //현재 남은 시간 초기화
       };
       const handleSet = () => { //Dialog에서 Set 버튼을 누르면 실행되는 함수
-        setOpen(false); //Dialog를 닫음
-        //setIsPlay(true); //Timer를 시작함
-        const selectTime = selectTime_hours * 3600 + selectTime_minutes * 60 + selectTime_seconds; //입력받은 시간을 통해 Timer에 설정할 시간 계산
+        setOpen(false); //팝업을 닫음
+        const selectTime = selectTime_minutes * 60; //입력받은 시간을 통해 Timer에 설정할 시간 계산
         setSettingTime(selectTime);
         setCurrentTime(selectTime);
       };
-      const handleChangeHours = (event: React.ChangeEvent<{ value: unknown }>) => { //시를 설정하면 실행되는 함수
-        setSelectTime_hours(event.target.value as number);
-        setCurrentTime(currentTime);
-      };
       const handleChangeMinutes = (event: React.ChangeEvent<{ value: unknown }>) => { //분을 설정하면 실행되는 함수
         setSelectTime_minutes(event.target.value as number);
-        setCurrentTime(currentTime);
-      };
-      const handleChangeSeconds = (event: React.ChangeEvent<{ value: unknown }>) => { //초를 설정하면 실행되는 함수
-        setSelectTime_seconds(event.target.value as number);
         setCurrentTime(currentTime);
       };
     
       const CountdownTimer = (): JSX.Element => {
         return(
           <div>
-            <Button
-              variant="contained"
-              style={{backgroundColor: 'white', borderRadius: 50, width:50, height: 65}} 
+            <IconButton //타이머 버튼
+              style={{backgroundColor: 'white', borderRadius: 30, height: 40, margin:10}}
               onClick={handleClickOpen}
+              size="small"
             >
-              <CountdownCircleTimer
+              <CountdownCircleTimer //타이머
                 isPlaying//={isPlay}
-                size={50}
-                strokeWidth={5}
+                size={35}
+                strokeWidth={2}
                 duration={settingTime}
                 initialRemainingTime={currentTime}
                 trailColor={"#FFFFFF"}
                 colors={"#FF0000"}
               >
-                {remainTime}
+                {remainTime} 
                 {/* {{({ remainingTime }) => remainingTime}} */}
               </CountdownCircleTimer>
-            </Button>
-            <Dialog open={open} onClose={handleCancel} aria-labelledby="form-dialog-title">
-              {/* {<DialogTitle id="form-dialog-title">시간을 설정해주세요</DialogTitle>} */}
-              <DialogContent>
-                <CountdownCircleTimer
+            </IconButton>
+            <Modal //팝업
+              open={open}
+              onClose={handleCancel}
+            >
+              <div style={modalStyle} className={classes.modal}>
+                <IconButton onClick={handleReset} className={classes.clock}>
+                  <CountdownCircleTimer //타이머
                     isPlaying
                     size={400}
+                    strokeWidth={20}
                     duration={settingTime}
                     initialRemainingTime={currentTime}
                     trailColor={"#FFFFFF"}
                     colors={"#FF0000"}
-                >
+                  >
                     {remainTime}
-                    {/* {{({ remainingTime }) => remainingTime}} */}
-                </CountdownCircleTimer>
-                <FormControl className={classes.formControl}>
-                <InputLabel id="hours_select_label">Hours</InputLabel>
-                    <Select
-                    labelId="hours_select_label"
-                    id="hours_select"
-                    value={selectTime_hours}
-                    onChange={handleChangeHours}
-                    >
-                    <MenuItem value={0}>0</MenuItem>
-                    <MenuItem value={1}>1</MenuItem>
-                    <MenuItem value={2}>2</MenuItem>
-                    <MenuItem value={3}>3</MenuItem>
-                    <MenuItem value={4}>4</MenuItem>
-                    <MenuItem value={5}>5</MenuItem>
-                    <MenuItem value={6}>6</MenuItem>
-                    <MenuItem value={7}>7</MenuItem>
-                    <MenuItem value={8}>8</MenuItem>
-                    <MenuItem value={9}>9</MenuItem>
-                    <MenuItem value={10}>10</MenuItem>
-                    <MenuItem value={11}>11</MenuItem>
-                    <MenuItem value={12}>12</MenuItem>
-                    </Select>
-                </FormControl>
-                <FormControl className={classes.formControl}>
-                <InputLabel id="minutes_select_label">Minutes</InputLabel>
-                    <Select
-                    labelId="minutes_select_label"
-                    id="minutes_select"
+                  </CountdownCircleTimer>
+                </IconButton>
+               
+               <div className={classes.inputContainer}>
+                <FormControl>
+                  <Input //입력창
+                    id="input_minutes"
                     value={selectTime_minutes}
+                    type="number"
                     onChange={handleChangeMinutes}
-                    >
-                    <MenuItem value={0}>0</MenuItem>
-                    <MenuItem value={1}>1</MenuItem>
-                    <MenuItem value={2}>2</MenuItem>
-                    <MenuItem value={3}>3</MenuItem>
-                    <MenuItem value={4}>4</MenuItem>
-                    <MenuItem value={5}>5</MenuItem>
-                    <MenuItem value={6}>6</MenuItem>
-                    <MenuItem value={7}>7</MenuItem>
-                    <MenuItem value={8}>8</MenuItem>
-                    <MenuItem value={9}>9</MenuItem>
-                    <MenuItem value={10}>10</MenuItem>
-                    <MenuItem value={20}>20</MenuItem>
-                    <MenuItem value={30}>30</MenuItem>
-                    <MenuItem value={40}>40</MenuItem>
-                    <MenuItem value={50}>50</MenuItem>
-                    <MenuItem value={59}>59</MenuItem>
-                    </Select>
+                    autoFocus={true}
+                    endAdornment={<InputAdornment position="end">분</InputAdornment>}
+                  />
                 </FormControl>
-                <FormControl className={classes.formControl}>
-                <InputLabel id="seconds_select_label">Seconds</InputLabel>
-                    <Select
-                    labelId="seconds_select_label"
-                    id="seconds_select"
-                    value={selectTime_seconds}
-                    onChange={handleChangeSeconds}
-                    >
-                    <MenuItem value={0}>0</MenuItem>
-                    <MenuItem value={10}>10</MenuItem>
-                    <MenuItem value={20}>20</MenuItem>
-                    <MenuItem value={30}>30</MenuItem>
-                    <MenuItem value={40}>40</MenuItem>
-                    <MenuItem value={50}>50</MenuItem>
-                    <MenuItem value={59}>59</MenuItem>
-                    </Select>
-                </FormControl>
-              </DialogContent>
-              <DialogActions>
-                <Button onClick={handleReset} color="primary">
-                  Reset
-                </Button>
-                <Button onClick={handleSet} color="primary">
+                <Button onClick={handleSet} color="primary" >
                   Set
                 </Button>
-              </DialogActions>
-            </Dialog>
+               </div>
+              </div>
+            </Modal>
           </div>
         );
       }
 
     return (
-        <CountdownTimer/>
+      <CountdownTimer/>
     )
 }

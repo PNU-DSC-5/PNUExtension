@@ -45,15 +45,7 @@ const useStyles = makeStyles((theme: Theme) =>
       display: 'flex',
       flexGrow: 0,
       paddingLeft: '10px'
-    },
-    formControl: {
-      margin: theme.spacing(1),
-      minWidth: 120,
-    },
-    selectEmpty: {
-      marginTop: theme.spacing(2),
-    },
-
+    }
   }),
 );
 
@@ -90,9 +82,7 @@ export function LayoutAppBar(): JSX.Element {
     const UserInterfaces = (): JSX.Element => {
       return(
         <div className={classes.userInterfaceContainer}>
-          <IconButton>
-            <TimerIcon fontSize="large" color="secondary"/>
-          </IconButton>
+          <Timer/>
           <IconButton>
             <NotificationsIcon fontSize="large" color="secondary"/>
           </IconButton>
@@ -108,8 +98,7 @@ export function LayoutAppBar(): JSX.Element {
                     <Typography variant="h5">
                         PNU Extension
                     </Typography>
-                    <Timer/>
-                    {userContext.state === 'logined' ? UserInterfaces() : LoginButton()}
+                    {userContext.state === 'logined' ? UserInterfaces() : UserInterfaces()}
                 </Toolbar>
             </AppBar>
         </div>
