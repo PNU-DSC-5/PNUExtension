@@ -8,17 +8,21 @@ import Todo from './Todo';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 
 import Grid, { GridSpacing } from '@material-ui/core/Grid';
+import GridList from '@material-ui/core/GridList';
+import GridListTile from '@material-ui/core/GridListTile';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
-    section: {
-      backgroundColor: 'white',
-      borderRadius: 30,
-      width: '19%',
-      height: 300,
-      margin: '0.5%',
-      display: 'inline-block',
-      //whiteSpace: 'nowrap',
+    root: {
+      display: 'flex',
+      flexWrap: 'wrap',
+      justifyContent: 'space-around',
+      overflow: 'hidden',
+      backgroundColor: theme.palette.background.paper,
+    },
+    gridList: {
+      width: '100%',
+      height: '100%',
     },
   }),
 );
@@ -53,28 +57,39 @@ export default function BottomTest(): JSX.Element {
       text: 'IT5',
     },
   ];
-  const SpecialSection = (): JSX.Element => {
-    return (
-      <div>
-        <Timetable />
-        <MealPlanner />
-        <Todo />
-      </div>
-    );
+
+  const CrawlingSection = (text: string): JSX.Element => {
+    return <Crawling content={text} />;
   };
 
-  const ITtimesSection = (text: string): JSX.Element => {
-    return <Crawling content={text} />;
+  const SpecialSection = (): JSX.Element => {
+    return (
+      <GridList cellHeight="auto" className={classes.gridList} cols={1}>
+        <GridListTile cols={1}>
+          <Timetable />
+        </GridListTile>
+        <GridListTile cols={1}>
+          <MealPlanner />
+        </GridListTile>
+        <GridListTile cols={1}>
+          <Todo />
+        </GridListTile>
+      </GridList>
+    );
   };
 
   const bottomSection = category.map((elem) => {
     const { id, text } = elem;
     const content = { text }.text;
     return (
-      <div className={classes.section}>
-        {id === 5 ? SpecialSection() : ITtimesSection(content)}
-      </div>
+      <GridListTile key={id} cols={1}>
+        {id === 5 ? SpecialSection() : CrawlingSection(content)}
+      </GridListTile>
     );
   });
-  return <div style={{ width: '100%' }}>{bottomSection}</div>;
+  return (
+    <GridList cellHeight={400} className={classes.gridList} cols={5}>
+      {bottomSection}
+    </GridList>
+  );
 }
