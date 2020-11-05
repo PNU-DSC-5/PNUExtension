@@ -22,7 +22,7 @@ const useStyles = makeStyles((theme: Theme) =>
         paddingTop: '20px',
         backgroundImage: `url(${BackGround})`,
         backgroundSize: 'cover',
-    },
+    }, 
     bottomSection: {
         minHeight: '2300px',
         backgroundColor: theme.palette.primary.dark,
@@ -49,7 +49,7 @@ export default function Main(): JSX.Element {
             <Grid container className={classes.topSection}>
                 <TopTest />
             </Grid>
-
+            
             {/* 메인페이지 하단 섹션 */}
             <Grid container className={classes.bottomSection}>
                 <BottomTest/>

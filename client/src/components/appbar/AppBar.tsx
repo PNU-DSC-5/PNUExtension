@@ -27,6 +27,9 @@ import LoginDialog from './LoginDialog';
 // hooks
 import useBasicDialog from '../../utils/hooks/useBasicDialog';
 
+//Timer
+import Timer from './Timer';
+
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
@@ -85,9 +88,7 @@ export function LayoutAppBar(): JSX.Element {
     const UserInterfaces = (): JSX.Element => {
       return(
         <div className={classes.userInterfaceContainer}>
-          <IconButton>
-            <TimerIcon fontSize="large" color="secondary"/>
-          </IconButton>
+          <Timer/>
           <IconButton>
             <NotificationsIcon fontSize="large" color="secondary"/>
           </IconButton>
