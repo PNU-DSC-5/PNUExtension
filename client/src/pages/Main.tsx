@@ -34,9 +34,9 @@ const useStyles = makeStyles((theme: Theme) =>
 /*
   <제작 필요 컴포넌트>
 
-  상단 섹션 :   검색창 , 로고? , 배경 고화질 이미지? ...
+  상단 섹션 :   검색창, 즐겨찾기 , 로고? , 배경 고화질 이미지? ...
   
-  하단 섹션 :   즐겨찾기, 식단, IT뉴스 , 학과 공지사항, 투두 리스트 
+  하단 섹션 :   식단, IT뉴스 , 학과 공지사항, 투두 리스트 
 */
 
 export default function Main(): JSX.Element {

@@ -45,9 +45,10 @@ async function check(req: express.Request, res: express.Response, next: express.
     if(accessToken){
         try{
             const decoded: Payload = jwt.verify(accessToken, process.env.JWT_SECRET!) as Payload;
-            req.user = decoded; // req 인스턴스에 api 요청 유저 정보 삽입
+            req.user = {
+                ... decoded
+            }; // req 인스턴스에 api 요청 유저 정보 삽입
             
-            console.log('by check : ',jwt.decode(accessToken));
             next();
 
         }catch(err){
@@ -64,19 +65,34 @@ async function check(req: express.Request, res: express.Response, next: express.
 async function refresh(req: express.Request, res: express.Response, next: express.NextFunction) {
     const refreshToken: string = req.header('refreshtoken')!;
    
+    /* refresh 토큰이 헤더에 존재하는 경우 재발급 로직 수행  */
     if(refreshToken){
         try{
-            const decoded: Payload = jwt.verify(refreshToken, process.env.JWT_REFRESH!) as Payload;
+            /* refresh 토큰 분해로 email 획득  */
+            const decoded: Payload = jwt.decode(refreshToken) as Payload;
             const sql = 'SELECT * FROM users WHERE email = ?';
 
+            /*
+                추가할 보안 로직
+
+                리프레쉬 토큰 및 엑세스 토큰 탈취가능 -> API 접근 및 요청 수행 가능.
+                (http only 옵션 적용이 불가능 .. cors 문제 해결 못함)
+
+                받아온 refresh token 을 header 에 포함된 encoding 수식을 통해 분해 및 유효성 검증
+                -> 단순 탈취로는 API 요청 불가능, 해당 수식에 맞춰 보내야함
+
+                해당 Encoding 수식 을 관리하는 방법
+            */
+            
             doQuery(sql,[decoded.email, refreshToken])
                 .then(async (row) =>  {
                     if(row.result[0]){
+                         /* refresh 토큰 유효성 검증 후 재발급 */
                         const result = row.result[0];
                         console.log('[Success : Refresh Token ... ]');
                         create({
                             name: result.id,
-                            picture: result.thumbnail,
+                            picture: result.picture,
                             email: result.email,
                             roles: 'user',
                         }).then((token) => {
@@ -107,6 +123,7 @@ async function refresh(req: express.Request, res: express.Response, next: expres
         response.Helper.unauthorized(req,res);
     }
 }
+
 export default {
     create, 
     check,

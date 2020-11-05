@@ -21,7 +21,8 @@ import { useHistory } from 'react-router-dom';
 
 // material-ui icons
 import SearchIcon from '@material-ui/icons/Search';
-
+import GooglePlacesAutocomplete from 'react-google-places-autocomplete';
+ 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     textField: {
@@ -83,6 +84,58 @@ export default function TopTest(): JSX.Element {
         Top Section
       </Typography>
 
+<<<<<<< HEAD
+            <FormControl className={classes.textField} style={{ alignSelf: 'center', marginTop: '60px' }}>
+              <OutlinedInput
+                value={value}
+                onChange={handleChange}
+                endAdornment={ 
+                  <InputAdornment position="end">
+                    <IconButton 
+                      onClick={handleSearch} 
+                      color="secondary"
+                      className={classes.searchBackground}
+                    >
+                      <SearchIcon fontSize="large" style={{color: 'white'}}/>
+                    </IconButton>
+                  </InputAdornment>
+                }
+                inputProps={{
+                  style: {
+                    textAlign: 'center',
+                    fontFamily: 'AppleSDGothicNeo',
+                    fontSize: '35px',
+                    fontWeight: 440,
+                    color: '#ffff'
+                  },
+                }}
+                onKeyPress={handleEnterKeyPress}
+              />
+                 
+            </FormControl>
+            
+            <Paper
+              style={{
+                width: '600px', 
+                alignSelf: 'center', 
+                marginTop: '80px', 
+                minHeight: '60px',
+                display: 'flex',
+                flexDirection: 'row',
+
+              }}
+            >
+                <div>
+                  <GooglePlacesAutocomplete
+                    apiKey="AIzaSyDEfcu0gn2zTQ237wpofSB67df583e_AYM"
+                  />
+                </div>
+            </Paper>
+        </Grid>
+        
+    );
+}
+=======
       <FormControl
         className={classes.textField}
         style={{ alignSelf: 'center', marginTop: '60px' }}
@@ -146,3 +199,4 @@ export default function TopTest(): JSX.Element {
     </Grid>
   );
 }
+>>>>>>> 5395359da083184f9a53642c9bafe5ab5cd039cf
