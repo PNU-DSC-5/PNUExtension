@@ -160,6 +160,7 @@ export default function LoginDialog(props: DialogProps): JSX.Element {
           className={classnames([
             classes.buttonCommon, classes.github
           ])}
+          href={'http://localhost:3000/users/login/github'}
         >
           <Grid container alignItems="center" style={{ width : '100%', height: '100%' }}>
 
@@ -181,6 +182,7 @@ export default function LoginDialog(props: DialogProps): JSX.Element {
           className={classnames([
             classes.buttonCommon, classes.facebook
           ])}
+          href={'http://localhost:3000/users/login/facebook'}
         >
           <Grid container alignItems="center" style={{ width : '100%', height: '100%' }}>
 

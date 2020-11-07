@@ -72,20 +72,10 @@ router.post('/auto-login',passport.authenticate('auto-login'), async (req, res) 
 })
 
 /* Google OAuth2.0 로그인  */
-interface GoogleUser {
-  sub : string;
-  name: string;
-  picture: string;
-  email: string;
-  email_verified: boolean;
-  locale: string;
-  uuid? : string;
-}
-
 router.get('/google',passport.authenticate('google', {session: false, scope: ['profile', 'email'] }));
 router.get('/google/callback', passport.authenticate('google'), async (req,res) => {
    try{
-    const user: GoogleUser = req.user as GoogleUser;
+    const user: User = req.user as User;
     console.log("[Google Login Success]", user.email);
 
     const { accessToken, refreshToken } = await JwtToken.create({...user, roles: 'user'});
@@ -104,8 +94,28 @@ router.get('/google/callback', passport.authenticate('google'), async (req,res) 
    } 
 });
 
-router.get('/test' , JwtToken.check, async (req,res) => {
-  res.send('Good Test!')
+/* Facebook OAuth2.0 로그인  */
+router.get('/facebook',passport.authenticate('facebook', {session: false, scope: ['profile', 'email'] }));
+router.get('/facebook/callback', passport.authenticate('facebook'), async (req,res) => {
+   try{
+    const user: User = req.user as User;
+    console.log('user in facebook',user);
+    // console.log("[Facebook Login Success]", user.email);
+
+    // const { accessToken, refreshToken } = await JwtToken.create({...user, roles: 'user'});
+    // res.cookie('accessToken', accessToken, { });  
+    // res.cookie('refreshToken', refreshToken, { });
+    // res.cookie('error', null);
+
+    // if(user.uuid) res.cookie('uuid',user.uuid);
+    // else res.cookie('uuid', null);
+
+    // res.redirect('http://localhost:3003');
+
+   } catch(err) {
+    res.cookie('error', "Internal server Error ... create Token"  );
+    res.redirect('http://localhost:3003');
+   } 
 });
 
 export = router;

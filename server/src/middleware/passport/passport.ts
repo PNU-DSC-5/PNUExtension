@@ -1,5 +1,6 @@
 import passport from 'passport';
 import doQuery from '../../database/doQuery';
+import { Strategy as FacebookStrategy } from "passport-facebook";
 import { Strategy as GoogleStrategy , VerifyCallback } from 'passport-google-oauth20';
 import { Strategy as CustomStrategy } from 'passport-custom';
 import { v4 as uuidV4 } from 'uuid';
@@ -15,7 +16,7 @@ passport.deserializeUser( (user, done) => {
   done(null, user);
 });
 
-interface GoogleUser {
+interface User {
     sub : string;
     name: string;
     picture: string;
@@ -56,15 +57,30 @@ passport.use('google',new GoogleStrategy({
     passReqToCallback: true,
   }, (req, accessToken, refreshToken, profile, done) => {
     const autoLogin: number = req.cookies.autoLogin;
-    const googleUser: GoogleUser = profile._json;
+    const googleUser: User = profile._json;
     checkAndLogin(googleUser, autoLogin > 0 ? true:false , done);
   }));
+
+passport.use('facebook',new FacebookStrategy({
+    clientID: process.env.FACEBOOK_CLIENT_ID!,
+    clientSecret: process.env.FACEBOOK_SECRET!,
+    callbackURL: process.env.FACEBOOK_CALLBACK!,
+    passReqToCallback: true,
+  }, (req, accessToken, refreshToken, profile, done) => {
+    const autoLogin: number = req.cookies.autoLogin;
+    // const facebookUser: User = profile._json;
+
+    console.log(profile._json);
+    done(null);
+    
+  }));
+  
 
 function createUuid() {
   return uuidV4();
 }
 
-function checkAndLogin(user: GoogleUser, autoLogin: boolean, done: VerifyCallback) {
+function checkAndLogin(user: User, autoLogin: boolean, done: VerifyCallback) {
   const sql_dupleCheck = 'SELECT * FROM users WHERE id = ?';
 
   console.log('[Login Start ... ]');
@@ -128,72 +144,5 @@ function checkAndLogin(user: GoogleUser, autoLogin: boolean, done: VerifyCallbac
       }
     })
 };
-
-// function createUUID() {
-//   return new Promise((resolve, reject) => {
-//     try{
-//       const uuid = uuidV4();
-//       resolve(uuid);
-//     } catch(err){
-//       reject(err);
-//     }
-//   });
-// }
-
-// function loginByThirdparty(user: GoogleUser, autoLogin: number, done: VerifyCallback) {
-//     const sql_dupleCheck = 'SELECT * FROM users WHERE id = ?';
-
-//     console.log('[Login Start ... ]', user.email);
-//     doQuery(sql_dupleCheck,[user.sub])
-//       .then((row)=>{
-//         if(row.result.length === 0){
-//           // 길이가 0, 중복 x , insert(회원가입) 시키고 done로그인 수행
-//           const sql_insert = `
-//             INSERT INTO users(id,thumbnail,email,locale,kind,uuid) VALUES(?,?,?,?,?,?)
-//           `;
-          
-//           createUUID()
-//             .then((uuid) => {
-//               console.log('[Login : User Not Exist ... create user with uuid]');
-//               doQuery(sql_insert,[user.sub,user.picture,user.email,user.locale,'google',uuid])
-//                 .then(()=>{
-//                   return done(undefined,{...user, uuid});  
-//                 })
-//                 .catch((err)=>{
-//                   console.log(err);
-//                   return done(err,null);
-//                 })
-//             })
-//             .catch((err) => {
-//               return done(err);
-//             })
-          
-//         }
-//         else if(row.result.length > 0 && !row.result[0].uuid){
-//           console.log('[Login : User Exist but has empty uuid ... create uuid]');
-//           const sql_update = `
-//             UPDATE users SET uuid = ? WHERE email = ?
-//           `;
-
-//           createUUID()
-//             .then((uuid) => {
-//               doQuery(sql_update, [uuid, user.email])
-//                 .then(() => {
-//                   return done(undefined, row.result[0]);
-//                 })
-//                 .catch((err) => {
-//                   return done(err ,null);
-//                 })
-              
-//             })
-//             .catch((err) => {
-//               return done(err);
-//             })
-//         }
-//         else{
-//           done(undefined, user);
-//         }
-//       })
-// };
 
 export default passport;
