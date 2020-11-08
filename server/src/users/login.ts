@@ -2,7 +2,6 @@ import express, { Request, Response, NextFunction} from 'express';
 import passport from '../middleware/passport/passport';
 import JwtToken, { Payload, Token } from '../middleware/jwt/jwtToken';
 import response from '../middleware/responseHelper/helper';
-import { Http2ServerResponse } from 'http2';
 import { HttpError } from 'http-errors';
 
 
@@ -41,6 +40,7 @@ router.get('/refresh', JwtToken.refresh, (req: express.Request, res: express.Res
 })
 
 interface User {
+  id: string;
   sub : string;
   name: string;
   picture: string;
@@ -94,12 +94,12 @@ router.get('/google/callback', passport.authenticate('google'), async (req,res) 
    } 
 });
 
-/* Facebook OAuth2.0 로그인  */
-router.get('/facebook',passport.authenticate('facebook', {session: false, scope: ['profile', 'email'] }));
-router.get('/facebook/callback', passport.authenticate('facebook'), async (req,res) => {
+/* Naver OAuth2.0 로그인  */
+router.get('/naver',passport.authenticate('naver', { session: false }));
+router.get('/naver/callback', passport.authenticate('naver'), async (req,res) => {
    try{
     const user: User = req.user as User;
-    console.log('user in facebook',user);
+    console.log('user in naver',user);
     // console.log("[Facebook Login Success]", user.email);
 
     // const { accessToken, refreshToken } = await JwtToken.create({...user, roles: 'user'});
@@ -117,5 +117,30 @@ router.get('/facebook/callback', passport.authenticate('facebook'), async (req,r
     res.redirect('http://localhost:3003');
    } 
 });
+
+/* GitHub OAuth2.0 로그인  */
+router.get('/github',passport.authenticate('github', {session: false, scope: ['profile', 'email'] }));
+router.get('/github/callback', passport.authenticate('github'), async (req,res) => {
+   try{
+    const user: User = req.user as User;
+    console.log('user in github\n',user);
+    console.log("[GitHub Login Success]", user.name? user.name : user.id);
+
+    const { accessToken, refreshToken } = await JwtToken.create({...user, roles: 'user'});
+    res.cookie('accessToken', accessToken, { });  
+    res.cookie('refreshToken', refreshToken, { });
+    res.cookie('error', null);
+
+    if(user.uuid) res.cookie('uuid',user.uuid);
+    else res.cookie('uuid', null);
+
+    res.redirect('http://localhost:3003');
+
+   } catch(err) {
+    res.cookie('error', "Internal server Error ... create Token"  );
+    res.redirect('http://localhost:3003');
+   } 
+});
+
 
 export = router;

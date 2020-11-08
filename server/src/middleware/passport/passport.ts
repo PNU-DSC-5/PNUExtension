@@ -1,7 +1,8 @@
 import passport from 'passport';
 import doQuery from '../../database/doQuery';
-import { Strategy as FacebookStrategy } from "passport-facebook";
-import { Strategy as GoogleStrategy , VerifyCallback } from 'passport-google-oauth20';
+import { Strategy as NaverStrategy } from "passport-naver";
+import { Strategy as GithubStrategy } from 'passport-github';
+import { Strategy as GoogleStrategy } from 'passport-google-oauth20';
 import { Strategy as CustomStrategy } from 'passport-custom';
 import { v4 as uuidV4 } from 'uuid';
 
@@ -15,16 +16,6 @@ passport.serializeUser( (user, done) => {
 passport.deserializeUser( (user, done) => {
   done(null, user);
 });
-
-interface User {
-    sub : string;
-    name: string;
-    picture: string;
-    email: string;
-    email_verified: boolean;
-    locale: string;
-    uuid? : string;
-}
 
 passport.use('auto-login',new CustomStrategy(
   (req, done) => {
@@ -50,6 +41,27 @@ passport.use('auto-login',new CustomStrategy(
   }
 ))
 
+interface User {
+  id: string;
+  name: string;
+  refresh?: string;
+  picture?: string;
+  email: string;
+  locale?: string;
+  kind: 'local'| 'github' | 'google' | 'facebook';
+  uuid?: string;
+}
+
+interface GoogleUser {
+  sub : string;
+  name: string;
+  picture: string;
+  email: string;
+  email_verified: boolean;
+  locale: string;
+  uuid? : string;
+}
+
 passport.use('google',new GoogleStrategy({
     clientID: process.env.GOOGLE_CLIENT_ID!,
     clientSecret: process.env.GOOGLE_SECRET!,
@@ -57,22 +69,63 @@ passport.use('google',new GoogleStrategy({
     passReqToCallback: true,
   }, (req, accessToken, refreshToken, profile, done) => {
     const autoLogin: number = req.cookies.autoLogin;
-    const googleUser: User = profile._json;
-    checkAndLogin(googleUser, autoLogin > 0 ? true:false , done);
+    const googleUser: GoogleUser = profile._json;
+
+    const remoteData: User = {
+      id: googleUser.sub,
+      name: googleUser.name,
+      email: googleUser.email,
+      locale: googleUser.locale,
+      picture: googleUser.picture,
+      kind: 'google'
+    };
+
+    checkAndLogin(remoteData, autoLogin > 0 ? true:false , done);
   }));
 
-passport.use('facebook',new FacebookStrategy({
-    clientID: process.env.FACEBOOK_CLIENT_ID!,
-    clientSecret: process.env.FACEBOOK_SECRET!,
-    callbackURL: process.env.FACEBOOK_CALLBACK!,
+interface FacebookUser {
+
+}
+
+passport.use('naver',new NaverStrategy({
+    clientID: process.env.NAVER_CLIENT_ID!,
+    clientSecret: process.env.NAVER_SECRET!,
+    callbackURL: process.env.NAVER_CALLBACK!,
     passReqToCallback: true,
   }, (req, accessToken, refreshToken, profile, done) => {
     const autoLogin: number = req.cookies.autoLogin;
-    // const facebookUser: User = profile._json;
-
     console.log(profile._json);
     done(null);
     
+  }));
+
+  interface GithubUser {
+    id: number;
+    login: string;
+    avatar_url: string;
+    email: string;
+    company: string;
+    name: string;
+  }
+
+  passport.use('github',new GithubStrategy({
+    clientID: process.env.GITHUB_CLIENT_ID!,
+    clientSecret: process.env.GITHUB_SECRET!,
+    callbackURL: process.env.GITHUB_CALLBACK!,
+    passReqToCallback: true,
+  }, (req, accessToken, refreshToken, profile, done) => {
+    const autoLogin: number = req.cookies.autoLogin;
+    const githubUser: GithubUser = profile._json as GithubUser;
+
+    const remoteData: User = {
+      id: githubUser.id.toString(),
+      email: githubUser.email,
+      locale: '',
+      picture: githubUser.avatar_url,
+      kind: 'github',
+      name: githubUser.name
+    };
+    checkAndLogin(remoteData, autoLogin > 0 ? true:false , done);
   }));
   
 
@@ -80,29 +133,27 @@ function createUuid() {
   return uuidV4();
 }
 
-function checkAndLogin(user: User, autoLogin: boolean, done: VerifyCallback) {
+function checkAndLogin(user: User, autoLogin: boolean, done: (err?: Error , user?: any, info?: any) => void) {
   const sql_dupleCheck = 'SELECT * FROM users WHERE id = ?';
 
   console.log('[Login Start ... ]');
-  doQuery(sql_dupleCheck,[user.sub])
+  doQuery(sql_dupleCheck,[user.id])
     .then((row)=>{
-      console.log(row.result[0].uuid, row.result[0].email);
+      console.log(row);
       
       if(!row.result[0]){
         /* 비회원 , 회원가입 이후 uuid 발급, 로그인 수행 */
         const sql_insert = `
-          INSERT INTO users(id,thumbnail,email,locale,kind,uuid) VALUES(?,?,?,?,?,?)
+          INSERT INTO users(name,id,picture,email,locale,kind,uuid) VALUES(?,?,?,?,?,?,?)
         `;
         console.log('[Login : User Not Exist ... create user with uuid]');
-        const sql_data = [user.sub,user.picture,user.email,user.locale,'google'];
+        const sql_data: (string|undefined|null)[] = [user.name, user.id, user.picture, user.email, user.locale, user.kind];
         const uuid = createUuid();
         if(autoLogin) sql_data.push(uuid);
+        else sql_data.push(null);
         
         doQuery(sql_insert,sql_data)
               .then(()=>{
-                const user = {
-
-                }
                 return done(undefined,{...user, uuid});  
               })
               .catch((err)=>{
