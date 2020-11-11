@@ -37,7 +37,8 @@ const useStyles = makeStyles((theme: Theme) =>
       width: '100%',
       heigth: 'auto',
       marginBottom: '15px',
-      padding: '0px'
+      padding: '0px',
+      borderRadius: 32
     },
     github: {
       backgroundColor: "#9775fa",
@@ -182,7 +183,7 @@ export default function LoginDialog(props: DialogProps): JSX.Element {
           className={classnames([
             classes.buttonCommon, classes.facebook
           ])}
-          href={'http://localhost:3000/users/login/naver'}
+          href={'http://localhost:3000/users/login/kakao'}
         >
           <Grid container alignItems="center" style={{ width : '100%', height: '100%' }}>
 

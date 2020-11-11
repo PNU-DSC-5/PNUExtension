@@ -94,23 +94,23 @@ router.get('/google/callback', passport.authenticate('google'), async (req,res) 
    } 
 });
 
-/* Naver OAuth2.0 로그인  */
-router.get('/naver',passport.authenticate('naver', { session: false }));
-router.get('/naver/callback', passport.authenticate('naver'), async (req,res) => {
+/* Kakao OAuth2.0 로그인  */
+router.get('/kakao',passport.authenticate('kakao'));
+router.get('/kakao/callback', passport.authenticate('kakao'), async (req,res) => {
    try{
     const user: User = req.user as User;
     console.log('user in naver',user);
-    // console.log("[Facebook Login Success]", user.email);
+    console.log("[Kakao Login Success]", user.id);
 
-    // const { accessToken, refreshToken } = await JwtToken.create({...user, roles: 'user'});
-    // res.cookie('accessToken', accessToken, { });  
-    // res.cookie('refreshToken', refreshToken, { });
-    // res.cookie('error', null);
+    const { accessToken, refreshToken } = await JwtToken.create({...user, roles: 'user'});
+    res.cookie('accessToken', accessToken, { });  
+    res.cookie('refreshToken', refreshToken, { });
+    res.cookie('error', null);
 
-    // if(user.uuid) res.cookie('uuid',user.uuid);
-    // else res.cookie('uuid', null);
+    if(user.uuid) res.cookie('uuid',user.uuid);
+    else res.cookie('uuid', null);
 
-    // res.redirect('http://localhost:3003');
+    res.redirect('http://localhost:3003');
 
    } catch(err) {
     res.cookie('error', "Internal server Error ... create Token"  );
@@ -142,5 +142,45 @@ router.get('/github/callback', passport.authenticate('github'), async (req,res) 
    } 
 });
 
+/* Naver OAuth2.0 로그인  */
+router.get('/naver',passport.authenticate('naver'));
+router.get('/naver/callback', passport.authenticate('naver'), async (req,res) => {
+   try{
+    const user: User = req.user as User;
+    console.log('user in naver', user.id);
+    console.log("[Naver Login Success]", user.email);
 
+    const { accessToken, refreshToken } = await JwtToken.create({...user, roles: 'user'});
+    res.cookie('accessToken', accessToken, { });  
+    res.cookie('refreshToken', refreshToken, { });
+    res.cookie('error', null);
+
+    if(user.uuid) res.cookie('uuid',user.uuid);
+    else res.cookie('uuid', null);
+
+    res.redirect('http://localhost:3003');
+
+   } catch(err) {
+    res.cookie('error', "Internal server Error ... create Token"  );
+    res.redirect('http://localhost:3003');
+   } 
+});
+
+router.get('/naver',passport.authenticate('naver',{ session: false,scope: ['public_profile', 'email'] }));
+router.get('/naver/callback', passport.authenticate('naver'), (req,res) => {
+  console.log("[Naver Login Success]",req.user);
+  return;
+  // JwtToken.create(req.user as string)
+  //   .then((result) => {
+  //       const {accesstoken,refreshtoken} = result; 
+  //       res.header({
+  //           access_token: accesstoken
+  //       });
+  //       res.cookie('refresh_token',refreshtoken,{ httpOnly:true });
+  //       res.redirect(`http://localhost:3000/main`);
+  //   })
+  //   .catch((err) => {
+  //       response.Helper.serverError(req,res,err);
+  //   })
+});
 export = router;

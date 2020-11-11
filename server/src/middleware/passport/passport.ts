@@ -1,6 +1,7 @@
 import passport from 'passport';
 import doQuery from '../../database/doQuery';
 import { Strategy as NaverStrategy } from "passport-naver";
+import { Strategy as KakaoStrategy } from "passport-kakao";
 import { Strategy as GithubStrategy } from 'passport-github';
 import { Strategy as GoogleStrategy } from 'passport-google-oauth20';
 import { Strategy as CustomStrategy } from 'passport-custom';
@@ -48,7 +49,7 @@ interface User {
   picture?: string;
   email: string;
   locale?: string;
-  kind: 'local'| 'github' | 'google' | 'facebook';
+  kind: 'local'| 'github' | 'google' | 'facebook' | 'kakao';
   uuid?: string;
 }
 
@@ -83,8 +84,8 @@ passport.use('google',new GoogleStrategy({
     checkAndLogin(remoteData, autoLogin > 0 ? true:false , done);
   }));
 
-interface FacebookUser {
-
+interface NaverUser {
+  
 }
 
 passport.use('naver',new NaverStrategy({
@@ -96,8 +97,37 @@ passport.use('naver',new NaverStrategy({
     const autoLogin: number = req.cookies.autoLogin;
     console.log(profile._json);
     done(null);
-    
   }));
+
+interface KakaoUser {
+  id: string;
+  nickname: string;
+  thumbnail_image_url: string;
+}
+
+passport.use('kakao',new KakaoStrategy({
+  clientID:  process.env.KAKAO_CLIENT_ID!,
+  clientSecret: "",
+  callbackURL: process.env.KAKAO_CALLBACK!,
+}, (accessToken, refreshToken, profile, done) => {
+  const kakaoUser = profile._json;
+ 
+  const remoteData: User = {
+    id: kakaoUser.id.toString(),
+    email: '',
+    locale: 'korea',
+    picture: kakaoUser.profile.thumbnail_image_url,
+    kind: 'kakao',
+    name: kakaoUser.profile.nickname
+  };
+  
+  /**
+   * 문제사항
+   * 
+   * @param autologin 에 대한 설정이 필요함
+   */
+  checkAndLogin(remoteData, true , done);
+}));
 
   interface GithubUser {
     id: number;
