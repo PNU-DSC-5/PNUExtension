@@ -4,7 +4,7 @@ import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 // material-ui core components
 import { Grid, Typography } from '@material-ui/core';
 // app components
-import BottomTest from '../components/main-page/bottom-section/BottomSectionTest';
+import BottomTest from '../components/main-page/bottom-section/BottomSection';
 import TopTest from '../components/main-page/top-section/TopSectionTest';
 
 import BackGround from '../public/space.jpg';
@@ -17,17 +17,17 @@ const useStyles = makeStyles((theme: Theme) =>
       flexDirection: 'column',
     },
     topSection: {
-        minHeight: '500px',
-        backgroundColor: theme.palette.primary.dark,
-        paddingTop: '20px',
-        backgroundImage: `url(${BackGround})`,
-        backgroundSize: 'cover',
-    }, 
+      minHeight: '500px',
+      backgroundColor: theme.palette.primary.dark,
+      paddingTop: '20px',
+      backgroundImage: `url(${BackGround})`,
+      backgroundSize: 'cover',
+    },
     bottomSection: {
-        minHeight: '2300px',
-        backgroundColor: theme.palette.primary.dark,
-        paddingTop: '20px'  
-    }
+      minHeight: '2300px',
+      backgroundColor: theme.palette.primary.dark,
+      paddingTop: '20px',
+    },
   }),
 );
 
@@ -40,21 +40,19 @@ const useStyles = makeStyles((theme: Theme) =>
 */
 
 export default function Main(): JSX.Element {
-    const classes = useStyles();
+  const classes = useStyles();
 
-    return (
-        <div className={classes.root}>
+  return (
+    <div className={classes.root}>
+      {/* 메인페이지 상단 섹션 */}
+      <Grid container className={classes.topSection}>
+        <TopTest />
+      </Grid>
 
-            {/* 메인페이지 상단 섹션 */}
-            <Grid container className={classes.topSection}>
-                <TopTest />
-            </Grid>
-            
-            {/* 메인페이지 하단 섹션 */}
-            <Grid container className={classes.bottomSection}>
-                <BottomTest/>
-            </Grid>
-
-        </div>
-    );
+      {/* 메인페이지 하단 섹션 */}
+      <Grid container className={classes.bottomSection}>
+        <BottomTest />
+      </Grid>
+    </div>
+  );
 }
