@@ -4,7 +4,7 @@ import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 // material-ui core components
 import { Grid, Typography } from '@material-ui/core';
 // app components
-import BottomTest from '../components/main-page/bottom-section/BottomSectionTest';
+import BottomTest from '../components/main-page/bottom-section/BottomSection';
 import TopTest from '../components/main-page/top-section/TopSectionTest';
 
 import BackGround from '../public/space.jpg';
