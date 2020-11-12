@@ -2,8 +2,8 @@ import React from 'react';
 
 // material - ui core components
 import {
-  IconButton, ClickAwayListener, Grow , 
-  Paper, Popper, MenuItem, MenuList, Avatar, 
+  IconButton, ClickAwayListener, Grow,
+  Paper, Popper, MenuItem, MenuList, Avatar,
 } from '@material-ui/core';
 
 // material - ui icons
@@ -16,7 +16,7 @@ import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
 
 // contexts
-import UserContext,{ UserInfo, defaultUser } from '../../utils/contexts/UserContext';
+import UserContext, { UserInfo, defaultUser } from '../../utils/contexts/UserContext';
 
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -30,7 +30,7 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     menuItem: {
       display: 'flex',
-      flexGrow : 0,
+      flexGrow: 0,
       justifyContent: 'space-between',
       color: theme.palette.primary.main,
       '&:hover,select': {
@@ -79,69 +79,70 @@ export default function ProfilePopover() {
   }, [open]);
 
   React.useLayoutEffect(() => {
-    setProfile(userContext.user);
+    if (userContext.user)
+      setProfile(userContext.user);
   }, [userContext.user]);
 
   const ProfileFace = (): JSX.Element => {
-    if(profile.picture){
+    if (profile.picture) {
       return (
-        <Avatar src={profile.picture}/>
+        <Avatar src={profile.picture} />
       )
     }
 
     return (
-      <AccountCircleIcon fontSize="large" color="secondary"/>
+      <AccountCircleIcon fontSize="large" color="secondary" />
     )
   };
 
   return (
     <div className={classes.root}>
-        <IconButton
-          ref={anchorRef}
-          aria-controls={open ? 'menu-list-grow' : undefined}
-          aria-haspopup="true"
-          onClick={handleToggle}
-        >
-          {ProfileFace()}
-        </IconButton>
-        <Popper 
-          open={open} 
-          anchorEl={anchorRef.current} 
-          role={undefined} 
-          transition 
-          disablePortal
-        >
-          {({ TransitionProps, placement }) => (
-            <Grow
-              {...TransitionProps}
-              style={{ transformOrigin: placement === 'bottom' ? 'center top' : 'center bottom' }}
-            >
-              <Paper>
-                <ClickAwayListener onClickAway={handleClose}>
-                  <MenuList 
-                    autoFocusItem={open} 
-                    id="menu-list-grow" 
-                    onKeyDown={handleListKeyDown}
-                    
-                  >
-                    <MenuItem onClick={handleClose} className={classes.menuItem}>
-                      <SupervisedUserCircleIcon style={{marginRight: '15px'}}/>
+      <IconButton
+        ref={anchorRef}
+        aria-controls={open ? 'menu-list-grow' : undefined}
+        aria-haspopup="true"
+        onClick={handleToggle}
+      >
+        {ProfileFace()}
+      </IconButton>
+      <Popper
+        open={open}
+        anchorEl={anchorRef.current}
+        role={undefined}
+        transition
+        disablePortal
+      >
+        {({ TransitionProps, placement }) => (
+          <Grow
+            {...TransitionProps}
+            style={{ transformOrigin: placement === 'bottom' ? 'center top' : 'center bottom' }}
+          >
+            <Paper>
+              <ClickAwayListener onClickAway={handleClose}>
+                <MenuList
+                  autoFocusItem={open}
+                  id="menu-list-grow"
+                  onKeyDown={handleListKeyDown}
+
+                >
+                  <MenuItem onClick={handleClose} className={classes.menuItem}>
+                    <SupervisedUserCircleIcon style={{ marginRight: '15px' }} />
                       Profile
                     </MenuItem>
-                    <MenuItem onClick={handleClose} className={classes.menuItem}>
-                      <SettingsIcon />
+                  <MenuItem onClick={handleClose} className={classes.menuItem}>
+                    <SettingsIcon />
                       Setting
                     </MenuItem>
-                    <MenuItem onClick={userContext.handleLogout} className={classes.menuItem}>
-                      <ExitToAppIcon />
+                  <MenuItem onClick={userContext.handleLogout} className={classes.menuItem}>
+                    <ExitToAppIcon />
                       Logout
                     </MenuItem>
-                  </MenuList>
-                </ClickAwayListener>
-              </Paper>
-            </Grow>
-          )}
-        </Popper>
+                </MenuList>
+              </ClickAwayListener>
+            </Paper>
+          </Grow>
+        )}
+      </Popper>
     </div>
   );
 }
