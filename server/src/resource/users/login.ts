@@ -1,7 +1,7 @@
 import express, { Request, Response, NextFunction } from 'express';
-import passport from '../middleware/passport/passport';
-import JwtToken, { Payload, Token } from '../middleware/jwt/jwtToken';
-import response from '../middleware/responseHelper/helper';
+import passport from '../../middleware/passport/passport';
+import JwtToken, { Payload, Token } from '../../middleware/jwt/jwtToken';
+import response from '../../middleware/responseHelper/helper';
 import { HttpError } from 'http-errors';
 
 const router = express.Router();
