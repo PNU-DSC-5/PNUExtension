@@ -4,5 +4,8 @@
   "main": "index.js",
   "repository": "https://github.com/PNU-DSC-5/PNUExtension.git",
   "author": "KIMBEOBWOO",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "react-countdown-circle-timer": "^2.3.7"
+  }
 }

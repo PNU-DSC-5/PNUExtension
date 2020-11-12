@@ -1,19 +1,20 @@
 import React from 'react';
 
 // material-ui core components
-import { 
-  Dialog, 
-  DialogContent, Typography ,AppBar, Toolbar, FormControlLabel, 
-  DialogTitle, Button, Grid, Switch
+import {
+  Dialog,
+  DialogContent, Typography, AppBar, Toolbar, FormControlLabel,
+  DialogTitle, Button, Grid, Switch, Avatar
 } from '@material-ui/core';
 
 // custom icon
 import GoogleIcon from '../../atoms/icons/GoogleIcon';
-import FacebookIcon from '../../atoms/icons/FacebookIcon';
 import GithubIcon from '../../atoms/icons/GithubIcon';
+import KakaoIcon from '../../atoms/icons/KakaoIcon';
+import NaverIcon from '../../atoms/icons/NaverIcon';
 
 // styles
-import { createStyles, makeStyles, Theme, fade ,withStyles } from '@material-ui/core/styles';
+import { createStyles, makeStyles, Theme, fade, withStyles } from '@material-ui/core/styles';
 
 // classnames
 import classnames from 'classnames';
@@ -24,35 +25,50 @@ import cookie from 'react-cookies';
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     dialogContents: {
-      minWidth: '270px',
+      minWidth: 'auto',
       height: 'auto',
       display: 'flex',
       flexDirection: 'column',
-      padding: '25px',
       justifyContent: 'center',
       flex: 1,
-      backgroundColor: fade(theme.palette.primary.main, 0.1)
+      backgroundColor: fade(theme.palette.primary.main, 0.1),
+      padding: theme.spacing(4),
+      borderRadius: 16
     },
     buttonCommon: {
-      width: '100%',
-      heigth: 'auto',
+      width: '200px',
+      heigth: '62px',
       marginBottom: '15px',
-      padding: '0px'
+      padding: 0,
+      borderRadius: 32,
+      margin: theme.spacing(2)
     },
     github: {
       backgroundColor: "#9775fa",
+      '&:hover,select': {
+        backgroundColor: '#d0bfff',
+      },
     },
     google: {
       backgroundColor: '#ffff',
     },
-    facebook: {
-      backgroundColor: '#4267b2'
+    naver: {
+      backgroundColor: '#2b8a3e',
+      '&:hover,select': {
+        backgroundColor: '#69db7c',
+      },
+    },
+    kakao: {
+      backgroundColor: '#ffd43b',
+      '&:hover,select': {
+        backgroundColor: '#ffec99',
+      },
     },
     buttonIcon: {
       fontSize: '50px',
-      marginRight: '10px',
+      marginRight: theme.spacing(1),
       marginTop: '5px',
-      marginLeft:'20px'
+      marginLeft: theme.spacing(2)
     },
     buttonText: {
       fontWeight: 'bold',
@@ -64,7 +80,7 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-interface DialogProps{
+interface DialogProps {
   open: boolean;
   handleOpen: () => void;
   handleClose: () => void;
@@ -106,13 +122,13 @@ export default function LoginDialog(props: DialogProps): JSX.Element {
   }
 
   React.useEffect(() => {
-    cookie.save('autoLogin',(() => {
-      if(autoLogin) return 1;
+    cookie.save('autoLogin', (() => {
+      if (autoLogin) return 1;
       return 0;
-    })(),{});
-  },[autoLogin])
+    })(), {});
+  }, [autoLogin])
 
-  return(
+  return (
     <Dialog
       open={open}
       onClose={handleClose}
@@ -120,105 +136,147 @@ export default function LoginDialog(props: DialogProps): JSX.Element {
       scroll="paper"
       PaperProps={{
         style: {
-          backgroundColor: fade('#495057', 0.8)
+          backgroundColor: fade('#495057', 0.8),
+          borderRadius: 32
         }
       }}
     >
-      <DialogTitle style={{ textAlign: 'center', fontWeight: 900,}}>        
-          <Typography variant="h4" className={classes.switchLabel}> 
-            Login
+      <DialogTitle style={{ textAlign: 'center', fontWeight: 900, marginTop: '16px' }}>
+        <Typography variant="h4" className={classes.switchLabel}>
+          Login
           </Typography>
       </DialogTitle>
 
-      <DialogContent 
+      <DialogContent
         className={classes.dialogContents}
       >
-        <Button 
-          variant="contained"
-          className={classnames([
-            classes.buttonCommon, classes.google
-          ])}
-          href={'http://localhost:3000/users/login/google'}
+        <div
+          style={{
+            display: 'flex',
+            flexDirection: 'row',
+
+          }}
         >
-          <Grid container alignItems="center" style={{ width : '100%', height: '100%', padding: '-30px' }}>
+          <Button
+            variant="contained"
+            className={classnames([
+              classes.buttonCommon, classes.google
+            ])}
+            href={'http://localhost:3000/users/login/google'}
+          >
+            <Grid container alignItems="center" style={{ width: '100%', height: '100%', padding: '-30px' }}>
 
-            <Grid item xs={6} style={{ justifyContent: 'flex-end', padding: '-5px', textAlign: 'left'}}>
-              <GoogleIcon className={classes.buttonIcon}/>
-            </Grid>
+              <Grid item xs={6} style={{ justifyContent: 'flex-end', padding: '-5px', textAlign: 'left' }}>
+                <GoogleIcon className={classes.buttonIcon} />
+              </Grid>
 
-            <Grid item xs={6}>
-              <Typography variant="h6" color="primary" className={classes.buttonText}>
-                Google  
+              <Grid item xs={6}>
+                <Typography variant="h6" color="primary" className={classes.buttonText}>
+                  Google
               </Typography>
+              </Grid>
             </Grid>
-          </Grid>
-             
-        </Button>
 
-        <Button 
-          variant="contained"
-          className={classnames([
-            classes.buttonCommon, classes.github
-          ])}
+          </Button>
+
+          <Button
+            variant="contained"
+            className={classnames([
+              classes.buttonCommon, classes.naver
+            ])}
+            href={'http://localhost:3000/users/login/naver'}
+          >
+            <Grid container alignItems="center" style={{ width: '100%', height: '100%' }}>
+
+              <Grid item xs={6} style={{ justifyContent: 'flex-end', textAlign: 'left' }}>
+                <NaverIcon className={classes.buttonIcon} />
+              </Grid>
+
+              <Grid item xs={6}>
+                <Typography variant="h6" style={{ color: 'white' }} className={classes.buttonText}>
+                  Naver
+              </Typography>
+              </Grid>
+            </Grid>
+
+          </Button>
+        </div>
+
+        <div
+          style={{
+            display: 'flex',
+            flexDirection: 'row',
+
+          }}
         >
-          <Grid container alignItems="center" style={{ width : '100%', height: '100%' }}>
+          <Button
+            variant="contained"
+            className={classnames([
+              classes.buttonCommon, classes.github
+            ])}
+            href={'http://localhost:3000/users/login/github'}
+          >
+            <Grid container alignItems="center" style={{ width: '100%', height: '100%' }}>
 
-            <Grid item xs={6} style={{ justifyContent: 'flex-end' , padding: '-5px',  textAlign: 'left'}}>
-              <GithubIcon className={classes.buttonIcon}/>
-            </Grid>
+              <Grid item xs={6} style={{ justifyContent: 'flex-end', padding: '-5px', textAlign: 'left' }}>
+                <GithubIcon className={classes.buttonIcon} />
+              </Grid>
 
-            <Grid item xs={6}>
-              <Typography variant="h6" style={{color: 'white'}}  className={classes.buttonText}>
-                Github  
+              <Grid item xs={6}>
+                <Typography variant="h6" style={{ color: 'white' }} className={classes.buttonText}>
+                  Github
               </Typography>
-            </Grid>
-          </Grid>
-             
-        </Button>
-
-        <Button 
-          variant="contained"
-          className={classnames([
-            classes.buttonCommon, classes.facebook
-          ])}
-        >
-          <Grid container alignItems="center" style={{ width : '100%', height: '100%' }}>
-
-            <Grid item xs={6} style={{justifyContent: 'flex-end',  textAlign: 'left'}}>
-              <FacebookIcon className={classes.buttonIcon}/>
+              </Grid>
             </Grid>
 
-            <Grid item xs={6}>
-              <Typography variant="h6" style={{color: 'white'}} className={classes.buttonText}>
-                Facebook  
+          </Button>
+
+          <Button
+            variant="contained"
+            className={classnames([
+              classes.buttonCommon, classes.kakao
+            ])}
+            href={'http://localhost:3000/users/login/kakao'}
+          >
+            <Grid container alignItems="center" style={{ width: '100%', height: '100%' }}>
+
+              <Grid item xs={6} style={{ justifyContent: 'flex-end', textAlign: 'left' }}>
+                <KakaoIcon className={classes.buttonIcon} style={{ fontSize: '32px', marginLeft: '24px' }} />
+              </Grid>
+
+              <Grid item xs={6}>
+                <Typography variant="h6" style={{ color: 'white' }} className={classes.buttonText}>
+                  Kakao
               </Typography>
+              </Grid>
             </Grid>
-          </Grid>
-             
-        </Button>
+
+          </Button>
+        </div>
+
 
         <FormControlLabel
           control={
-            <WithStyledSwitch 
-              checked={autoLogin} 
-              onChange={handleAutoLogin} 
+            <WithStyledSwitch
+              checked={autoLogin}
+              onChange={handleAutoLogin}
               name="checked"
             />
           }
-        
+
           label={(
-          <Typography 
-            variant="body1" 
-            color="primary" 
-            style={{fontWeight: 'bold'}}
-            className={classnames({
-              [classes.switchLabel]: autoLogin
-            })}
-          >
-            Auto Login
-          </Typography>
+            <Typography
+              variant="body1"
+              color="primary"
+              style={{ fontWeight: 'bold' }}
+              className={classnames({
+                [classes.switchLabel]: autoLogin
+              })}
+            >
+              Auto Login
+            </Typography>
           )}
-          style={{ alignSelf: 'center', }}
+          style={{ alignSelf: 'center', marginTop: '16px' }}
         />
 
       </DialogContent>

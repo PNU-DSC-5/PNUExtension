@@ -16,6 +16,7 @@ export interface Payload {
     picture: string;
     email: string;
     roles: 'user' | 'admin';
+    id: string;
 }
 
 /* jwt accesstoken 및 refreshtoken 생성 */
@@ -25,14 +26,15 @@ async function create(user: Payload): Promise<Token> {
         name : user.name,
         picture: user.picture,
         email: user.email,
-        roles: user.roles
+        roles: user.roles,
+        id : user.id
     }
     
     const accessToken = jwt.sign(payload, process.env.JWT_SECRET!, { expiresIn: '5s' });
     const refreshToken = jwt.sign(payload, process.env.JWT_REFRESH!, { expiresIn: '5m' });
-    const sql = 'UPDATE users SET refresh = ? WHERE email = ?';
+    const sql = 'UPDATE users SET refresh = ? WHERE id = ?';
 
-    return doQuery(sql,[refreshToken, user.email])
+    return doQuery(sql,[refreshToken, user.id])
         .then(() => {
             return { accessToken, refreshToken };
         })
@@ -70,7 +72,7 @@ async function refresh(req: express.Request, res: express.Response, next: expres
         try{
             /* refresh 토큰 분해로 email 획득  */
             const decoded: Payload = jwt.decode(refreshToken) as Payload;
-            const sql = 'SELECT * FROM users WHERE email = ?';
+            const sql = 'SELECT * FROM users WHERE id = ?';
 
             /*
                 추가할 보안 로직
@@ -84,17 +86,18 @@ async function refresh(req: express.Request, res: express.Response, next: expres
                 해당 Encoding 수식 을 관리하는 방법
             */
             
-            doQuery(sql,[decoded.email, refreshToken])
+            doQuery(sql,[decoded.id, refreshToken])
                 .then(async (row) =>  {
                     if(row.result[0]){
                          /* refresh 토큰 유효성 검증 후 재발급 */
                         const result = row.result[0];
                         console.log('[Success : Refresh Token ... ]');
                         create({
-                            name: result.id,
+                            name: result.name? result.name : result.id,
                             picture: result.picture,
                             email: result.email,
                             roles: 'user',
+                            id: result.id
                         }).then((token) => {
                             const {accessToken , refreshToken} = token;
                             req.user = {
