@@ -1,5 +1,5 @@
 import express, { Request, Response, NextFunction} from 'express';
-import doQuery from '../database/doQuery';
+import doQuery from '../../database/doQuery';
 import loginRouter from './login';
 
 const router = express.Router();

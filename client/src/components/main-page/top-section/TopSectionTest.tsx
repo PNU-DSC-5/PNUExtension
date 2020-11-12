@@ -20,11 +20,12 @@ import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import useEventTargetValue from '../../../utils/hooks/useEventTargetValue';
 import { useHistory } from 'react-router-dom';
 
+import BookMarkList from './book-marks/BookMarkList';
+
 // material-ui icons
 import SearchIcon from '@material-ui/icons/Search';
-import GooglePlacesAutocomplete from 'react-google-places-autocomplete';
-
-import Favicon from 'react-favicon';
+// import GooglePlacesAutocomplete from 'react-google-places-autocomplete';
+// import Favicon from 'react-favicon';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -118,6 +119,15 @@ export default function TopTest(): JSX.Element {
           onKeyPress={handleEnterKeyPress}
         />
       </FormControl>
+
+      <div
+        style={{
+          marginTop: '132px'
+        }}
+      >
+        <BookMarkList />
+      </div>
+
       {/* <TextField 
                 variant="outlined" 
                 value={value}

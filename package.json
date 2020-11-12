@@ -6,6 +6,7 @@
   "author": "KIMBEOBWOO",
   "license": "MIT",
   "dependencies": {
+    "get-website-favicon": "^0.0.7",
     "react-countdown-circle-timer": "^2.3.7"
   }
 }
