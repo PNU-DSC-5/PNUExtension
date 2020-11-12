@@ -1,5 +1,6 @@
 import React from 'react';
 
+
 // material-ui core components
 import {
   Typography,
@@ -22,7 +23,9 @@ import { useHistory } from 'react-router-dom';
 // material-ui icons
 import SearchIcon from '@material-ui/icons/Search';
 import GooglePlacesAutocomplete from 'react-google-places-autocomplete';
- 
+
+import Favicon from 'react-favicon';
+
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     textField: {
@@ -77,6 +80,7 @@ export default function TopTest(): JSX.Element {
         'https://www.google.com/search?q=' + escape(value),
       );
   };
+
 
   return (
     <Grid container direction="column" style={{ marginTop: '60px' }}>
@@ -144,6 +148,6 @@ export default function TopTest(): JSX.Element {
                   <SearchIcon fontSize="large"/>
               </IconButton>
             </TextField> */}
-    </Grid>
+    </Grid >
   );
 }

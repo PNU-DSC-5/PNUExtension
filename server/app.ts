@@ -7,8 +7,8 @@ import bodyParser from 'body-parser';
 import path from 'path';
 
 // routes
-import testRouter from './src/users/index';
-import userRouter from './src/users/index';
+import testRouter from './src/resource/users/index';
+import userRouter from './src/resource/users/index';
 
 class PNUApi {
   public app : express.Express

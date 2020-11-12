@@ -24,6 +24,7 @@
     "react-cookie": "^4.0.3",
     "react-cookies": "^0.1.1",
     "react-dom": "^16.13.1",
+    "react-favicon": "^0.0.18",
     "react-google-places-autocomplete": "^3.0.0",
     "react-router-dom": "^5.2.0",
     "react-scripts": "3.4.3",
