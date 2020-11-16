@@ -13,6 +13,8 @@ import {
   ClickAwayListener
 } from '@material-ui/core';
 
+import moment from 'moment'
+
 // styles
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 
@@ -61,27 +63,67 @@ const useStyles = makeStyles((theme: Theme) =>
   }),
 );
 
-const dummy: string[] = [
-  '나락',
-  '극락',
-  '굿',
-  '에바',
-  '지렷다',
-  '노답',
-  '가능?',
-  '레전드',
-  '침디',
-  'abc',
-  'efg'
-];
+type EachHistory = { word: string, time: string }
+
+interface SearchHistory {
+  history: EachHistory[]
+}
 
 export default function SearchBox(): JSX.Element {
   const classes = useStyles();
   const { value, handleChange, setValue } = useEventTargetValue();
   const { open, handleAnchorClose, handleAnchorOpen, anchorEl } = useAnchorEl();
-
-  const [history, setHistory] = React.useState<string[]>(dummy);
   const [selectedIndex, setSelectedIndex] = React.useState<number>(-1);
+
+  /* 로컬 스토리지 검색 기록으로 컴포넌트 history init */
+  const initHistoryLine = (): string[] => {
+    try {
+      const localHistory: SearchHistory = JSON.parse(localStorage.getItem('history')!);
+      const historyLine: EachHistory[] = localHistory.history.sort(
+        (a: EachHistory, b: EachHistory) => moment(a.time).isBefore(moment(b.time)) ? -1 : 1);
+
+      return historyLine.map((each) => each.word);
+    } catch {
+      return []
+    }
+  }
+  const [history, setHistory] = React.useState<string[]>(initHistoryLine());
+
+  /**
+   * 검색 기록을 로컬 스토리지에 업데이트 하는 함수
+   * @param newWord 검색기록에 추가할 단어
+   */
+  const handleAddHistory = (newWord: string): void => {
+    const localHistory: SearchHistory = JSON.parse(localStorage.getItem('history')!);
+    if (localHistory) {
+      const newHistory: EachHistory = {
+        time: (new Date()).toISOString(),
+        word: newWord
+      };
+
+      /* 중복 시 추가 안함 */
+      if (!localHistory.history.map((each) => each.word).find((ele) => ele === newWord)) {
+        localHistory.history.push(newHistory);
+
+        /* 최신순으로 재정렬 */
+        localHistory.history = localHistory.history.sort(
+          (a: EachHistory, b: EachHistory) => moment(a.time).isBefore(moment(b.time)) ? 1 : -1);
+
+        localStorage.setItem('history', JSON.stringify(localHistory));
+        setHistory(localHistory.history.map((each) => each.word))
+      }
+    } else {
+      console.log('[Error in search history logic ... ]')
+      /* history 가 비어 있었을 경우에 , 알지 못 할 이유로 초기화 되어 있을 경우 예외 처리 */
+
+      const initialHistory: SearchHistory = {
+        history: []
+      };
+
+      localStorage.setItem('history', JSON.stringify(initialHistory))
+      handleAddHistory(newWord)
+    }
+  }
 
   const handleSearchIconButton = () => {
     if (value.length > 0)
@@ -108,6 +150,7 @@ export default function SearchBox(): JSX.Element {
   /**
    * up , down , enter 키보드 리스트 셀렉터
    * @param e popper 가 열린 이후 keyboard input, focus 는 그대로 텍스트 필드에
+   * 키보드는 편할 것 같아서 넣어봄
    */
   const handleKeyboard = (e: React.KeyboardEvent<HTMLDivElement | HTMLTextAreaElement | HTMLInputElement>): void => {
     if (e.key === 'ArrowDown') {
@@ -126,14 +169,18 @@ export default function SearchBox(): JSX.Element {
       if (value.length > 0) {
         if (selectedIndex != -1 && selectedIndex != history.length) {
           setValue(filterKoeranSpread(value)[selectedIndex])
+          handleAddHistory(filterKoeranSpread(value)[selectedIndex])
           window.location.assign(
             'https://www.google.com/search?q=' + filterKoeranSpread(value)[selectedIndex],
           );
+
         } else {
+          handleAddHistory(value)
           window.location.assign(
             'https://www.google.com/search?q=' + value,
           );
         }
+
         handleAnchorClose();
       }
     }
