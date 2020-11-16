@@ -5,7 +5,7 @@ import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import { Grid, Typography } from '@material-ui/core';
 // app components
 import BottomTest from '../components/main-page/bottom-section/BottomSection';
-import TopTest from '../components/main-page/top-section/TopSectionTest';
+import TopSectionLayout from '../components/main-page/layout/TopSectionLayout';
 
 import BackGround from '../public/space.jpg';
 
@@ -20,8 +20,8 @@ const useStyles = makeStyles((theme: Theme) =>
       minHeight: '500px',
       backgroundColor: theme.palette.primary.dark,
       paddingTop: '20px',
-      backgroundImage: `url(${BackGround})`,
-      backgroundSize: 'cover',
+      // backgroundImage: `url(${BackGround})`,
+      // backgroundSize: 'cover',
     },
     bottomSection: {
       minHeight: '2300px',
@@ -46,7 +46,7 @@ export default function Main(): JSX.Element {
     <div className={classes.root}>
       {/* 메인페이지 상단 섹션 */}
       <Grid container className={classes.topSection}>
-        <TopTest />
+        <TopSectionLayout />
       </Grid>
 
       {/* 메인페이지 하단 섹션 */}
