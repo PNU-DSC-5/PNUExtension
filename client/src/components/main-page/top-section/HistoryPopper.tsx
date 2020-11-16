@@ -81,12 +81,12 @@ export default function HistoryPopper(props: HistoryPopperProps): JSX.Element {
                 {eachHistory}
               </Typography>
             </div>
-
+                
             {selectedIndex === index && (
               <CheckIcon
                 style={{
                   fontWeight: 'bold',
-                  color: 'green',
+                  color: '#69db7c',
                   alignSelf: 'flex-end'
                 }}
               />

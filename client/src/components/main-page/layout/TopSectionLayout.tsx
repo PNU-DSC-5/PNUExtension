@@ -17,6 +17,7 @@ import {
 
 // sub component
 import SearchBox from '../top-section/SearchBox';
+import FaviconList from '../top-section/FavicionList';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -30,7 +31,13 @@ export default function TopSectionLayout(): JSX.Element {
   return (
     <Grid container direction="column" justify="center" alignContent="center">
 
-      <SearchBox />
+      <Grid style={{ display: 'flex', justifyContent: 'center', width: '100%' }}>
+        <SearchBox />
+      </Grid>
+
+      <Grid style={{ marginTop: '32px' }}>
+        <FaviconList />
+      </Grid>
 
     </Grid >
   )
