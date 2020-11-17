@@ -3,10 +3,12 @@ import CrawlingCard from './CrawlingCard';
 import Timetable from './Timetable';
 import MealPlanner from './MealPlanner';
 import Todo from './Todo';
+import CategoryButton from './CategoryButton';
 
 // styles
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 
+import Button from '@material-ui/core/Button';
 //Grid
 import GridList from '@material-ui/core/GridList';
 import GridListTile from '@material-ui/core/GridListTile';
@@ -17,12 +19,11 @@ const useStyles = makeStyles((theme: Theme) =>
       display: 'flex',
       flexWrap: 'wrap',
       justifyContent: 'space-around',
-      overflow: 'hidden',
+      //overflow: 'hidden',
       backgroundColor: theme.palette.background.paper,
     },
     gridList: {
       width: '100%',
-      height: '100%',
     },
   }),
 );
@@ -108,7 +109,12 @@ export default function BottomTest(): JSX.Element {
   //시간표, 학식, 할일 Card
   const SpecialSection = (): JSX.Element => {
     return (
-      <GridList cellHeight="auto" className={classes.gridList} cols={1}>
+      <GridList
+        cellHeight={129}
+        className={classes.gridList}
+        cols={1}
+        spacing={5}
+      >
         <GridListTile cols={1}>
           <Timetable />
         </GridListTile>
@@ -138,9 +144,18 @@ export default function BottomTest(): JSX.Element {
       </GridListTile>
     );
   });
+
   return (
-    <GridList cellHeight={400} className={classes.gridList} cols={5}>
-      {bottomSection}
-    </GridList>
+    <div>
+      <CategoryButton />
+      <GridList
+        cellHeight={400}
+        className={classes.gridList}
+        cols={5}
+        spacing={10}
+      >
+        {bottomSection}
+      </GridList>
+    </div>
   );
 }
