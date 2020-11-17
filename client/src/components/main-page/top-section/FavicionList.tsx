@@ -109,8 +109,8 @@ export default function FavicionList(): JSX.Element {
   const urlInput = useEventTargetValue();
   const nameInput = useEventTargetValue();
 
-  const handleAddUrl = (url: string) => {
-    setUrlList([...urlList, { url }])
+  const handleAddUrl = (url: string, name: string) => {
+    setUrlList([...urlList, { url, name }])
   }
 
   return (
@@ -256,9 +256,12 @@ export default function FavicionList(): JSX.Element {
 
         <Button
           variant="contained"
-          color="primary" style={{
+          color="primary"
+          style={{
             marginTop: '16px'
-          }}>
+          }}
+          onClick={() => handleAddUrl(urlInput.value, nameInput.value)}
+        >
           추가하기
         </Button>
 
