@@ -14,10 +14,10 @@ import CheckIcon from '@material-ui/icons/Check';
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
-      backgroundColor: fade(theme.palette.primary.light, 0.5),
+      backgroundColor: fade(theme.palette.primary.light, 0.9),
       width: '696px',
       zIndex: 999,
-      border: `2px solid ${fade(theme.palette.primary.light, 0.5)}`,
+      border: `2px solid ${fade(theme.palette.primary.light, 0.9)}`,
       borderRadius: 4
     }
   }),
@@ -77,11 +77,11 @@ export default function HistoryPopper(props: HistoryPopperProps): JSX.Element {
                   color: 'white'
                 }}
               />
-              <Typography color="secondary">
+              <Typography color="secondary" variant="h5">
                 {eachHistory}
               </Typography>
             </div>
-                
+
             {selectedIndex === index && (
               <CheckIcon
                 style={{
