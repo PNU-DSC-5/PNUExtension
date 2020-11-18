@@ -56,17 +56,30 @@ const useStyles = makeStyles((theme: Theme) =>
       flexDirection: 'column',
       justifyContent: 'center',
       backgroundColor: theme.palette.primary.light,
-      // padding: `0 ${theme.spacing(2)} ${theme.spacing(2)} ${theme.spacing(2)}`,
       border: `2px solid ${theme.palette.primary.light}`,
-      borderRadius: 4,
+      borderRadius: 10,
       zIndex: 999,
-      padding: '0 16px 16px 16px'
+      padding: '0 16px 16px 16px',
+      boxShadow: theme.shadows[4],
     },
     popperBox: {
       display: 'flex',
       flexDirection: 'row',
       justifyContent: 'flex-start',
     },
+    textField: {
+      '& label.Mui-focused': {
+        color: 'green',
+      },
+      '& .MuiInput-underline:after': {
+        borderBottomColor: 'green',
+      },
+      '& .MuiOutlinedInput-root': {
+        '&.Mui-focused fieldset': {
+          borderColor: 'green',
+        },
+      },
+    }
   }),
 );
 
@@ -145,6 +158,9 @@ export default function FavicionList(): JSX.Element {
               style={{
                 padding: '4px',
               }}
+              onClick={() => {
+                window.location.assign('http://' + each.url)
+              }}
             >
               <Avatar
                 variant="rounded"
@@ -155,7 +171,6 @@ export default function FavicionList(): JSX.Element {
             </Button>
           </div>
         </Button>
-
       ))
       }
 
@@ -190,7 +205,7 @@ export default function FavicionList(): JSX.Element {
           }}
         >
           <ListItemIcon>
-            <CreateIcon />
+            <CreateIcon color="primary" style={{ fontWeight: 'bold' }} />
           </ListItemIcon>
           <Typography variant="body1">
             변경
@@ -226,7 +241,6 @@ export default function FavicionList(): JSX.Element {
           hide: { enabled: false },
         }}
       >
-
         <IconButton
           style={{ alignSelf: 'flex-end' }}
           onClick={addAnchorEl.handleAnchorClose}
@@ -235,22 +249,37 @@ export default function FavicionList(): JSX.Element {
         </IconButton>
 
         <TextField
+          className={classes.textField}
           variant="outlined"
           label="URL"
+          placeholder="www.example.com"
           value={urlInput.value}
           onChange={urlInput.handleChange}
-        // style={{
-        //   marginTop: '16px'
-        // }}
+          inputProps={{
+            style: {
+              fontFamily: 'AppleSDGothicNeo',
+              fontSize: '18px',
+              fontWeight: 'bold',
+            },
+          }}
         />
 
         <TextField
+          className={classes.textField}
           variant="outlined"
           label="Name"
+          placeholder="url name"
           value={nameInput.value}
           onChange={nameInput.handleChange}
           style={{
             marginTop: '16px'
+          }}
+          inputProps={{
+            style: {
+              fontFamily: 'AppleSDGothicNeo',
+              fontSize: '18px',
+              fontWeight: 'bold',
+            },
           }}
         />
 
@@ -260,6 +289,7 @@ export default function FavicionList(): JSX.Element {
           style={{
             marginTop: '16px'
           }}
+          disabled={!(nameInput.value && urlInput.value)}
           onClick={() => handleAddUrl(urlInput.value, nameInput.value)}
         >
           추가하기
