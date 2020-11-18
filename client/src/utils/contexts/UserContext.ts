@@ -114,7 +114,6 @@ export function useUser(): UserContextValue {
    handleProfile,
    handleLogout,
    handleAutoLogin
-
   };
 }
 

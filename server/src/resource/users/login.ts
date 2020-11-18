@@ -1,8 +1,12 @@
 import express, { Request, Response, NextFunction } from 'express';
 import passport from '../../middleware/passport/passport';
-import JwtToken, { Payload, Token } from '../../middleware/jwt/jwtToken';
+import JwtToken from '../../middleware/jwt/jwtToken';
 import response from '../../middleware/responseHelper/helper';
 import { HttpError } from 'http-errors';
+
+// shared interfaces
+import { Payload, Token } from '../../shared/interfaces/token.interface';
+import { User, Url } from '../../shared/interfaces/user.interface';
 
 const router = express.Router();
 
@@ -40,17 +44,6 @@ router.get(
   },
 );
 
-interface User {
-  id: string;
-  sub: string;
-  name: string;
-  picture: string;
-  email: string;
-  email_verified: boolean;
-  locale: string;
-  uuid: string;
-}
-
 /* auto login 수행 부 */
 router.post(
   '/auto-login',
@@ -59,7 +52,7 @@ router.post(
     try {
       const user: User = req.user as User;
       console.log('[Auto Login Success ]');
-      
+
       const { accessToken, refreshToken } = await JwtToken.create({
         ...user,
         roles: 'user',

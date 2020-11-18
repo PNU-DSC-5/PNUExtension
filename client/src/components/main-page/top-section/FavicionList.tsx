@@ -113,12 +113,19 @@ const dummy: any[] = [
 export default function FavicionList(): JSX.Element {
   const classes = useStyles({ dragActive: false });
   const defaultUrl = "https://icons.duckduckgo.com/ip3/";
+
+  /**
+   * url 리스트 초기값은 userContext 에서 가져오며
+   * 해당 userContext 에 추가 할 경우 DB 의 유저 정보에 url list 에 추가한다.
+   */
   const [selectedUrlIndex, setSelectedUrlIndex] = React.useState<number>(0);
   const [urlList, setUrlList] = React.useState<any[]>(dummy);
 
+  /* url 입력 popper 와 아바타 popover ref */
   const menuAnchorEl = useAnchorEl();
   const addAnchorEl = useAnchorEl();
 
+  /* url 과 url name 입력 */
   const urlInput = useEventTargetValue();
   const nameInput = useEventTargetValue();
 
