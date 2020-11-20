@@ -1,6 +1,8 @@
 export interface Url {
   name: string;
   url: string;
+  index: number;
+  userId: string;
 }
 
 export interface User {

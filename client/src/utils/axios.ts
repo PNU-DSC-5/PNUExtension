@@ -49,10 +49,10 @@ axiosInstance.interceptors.request.use(
     return setHeaderedConfig;
    }
    return config
-   
  },
  /* request Error 작업 */
  (err) => {
+   console.log('[axios request Interceptor ... ] : Error ')
    return err;
  }
 )

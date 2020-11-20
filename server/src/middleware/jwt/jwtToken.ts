@@ -25,7 +25,7 @@ async function create(user: Payload): Promise<Token> {
   };
 
   const accessToken = jwt.sign(payload, process.env.JWT_SECRET!, {
-    expiresIn: '5s',
+    expiresIn: '5m',
   });
   const refreshToken = jwt.sign(payload, process.env.JWT_REFRESH!, {
     expiresIn: '15m',

@@ -17,6 +17,9 @@ import useEventTargetValue from '../../../utils/hooks/useEventTargetValue'
 import UserContext from '../../../utils/contexts/UserContext';
 import { Url } from '../../../shared/interfaces/user.interface';
 
+import useAxios from 'axios-hooks';
+import userEvent from '@testing-library/user-event';
+
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
@@ -112,29 +115,46 @@ export default function FavicionList(): JSX.Element {
   const defaultUrl = "https://icons.duckduckgo.com/ip3/";
   const userContext = React.useContext(UserContext);
 
+  const [, postUrlRequest] = useAxios<any>({
+    url: 'http://localhost:3000/url',
+    method: 'post'
+  }, { manual: true });
+
+  const [{ data: urlsData, error: urlError, loading: urlLoading }, getUrlRequest] = useAxios<Url[]>({
+    url: 'http://localhost:3000/url',
+    method: 'get'
+  }, { manual: true });
+
+  const [, deleteUrlRequest] = useAxios<any>({
+    url: 'http://localhost:3000/url',
+    method: 'delete'
+  }, { manual: true });
+
   /**
    * url 리스트 초기값은 userContext 에서 가져오며
    * 해당 userContext 에 추가 할 경우 DB 의 유저 정보에 url list 에 추가한다.
    */
   const [selectedUrlIndex, setSelectedUrlIndex] = React.useState<number>(0);
-  const [urlList, setUrlList] = React.useState<Url[]>([]);
 
   /* url 입력 popper 와 아바타 popover ref */
   const menuAnchorEl = useAnchorEl();
   const addAnchorEl = useAnchorEl();
+
+  /* url 정규식 */
+  const regUrl = /(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/;
 
   /* url 과 url name 입력 */
   const urlInput = useEventTargetValue();
   const nameInput = useEventTargetValue();
 
   React.useEffect(() => {
-    if (userContext.user.url.length > 0)
-      setUrlList(userContext.user.url);
-  }, [userContext.user.url])
 
-  const handleAddUrl = (url: string, name: string) => {
-    setUrlList([...urlList, { url, name }])
-  }
+    getUrlRequest({
+      params: {
+        userId: userContext.user.id
+      }
+    });
+  }, [userContext.user])
 
   return (
     // <ClickAwayListener onClickAway={addAnchorEl.handleAnchorClose}>
@@ -145,7 +165,7 @@ export default function FavicionList(): JSX.Element {
         justifyContent: 'center',
       }}
     >
-      {urlList.map((each, index) => (
+      { urlsData && !urlError && !urlLoading && urlsData.map((each, index) => (
         <Button className={classes.avatarWrapper}>
           <div
             style={{
@@ -225,8 +245,22 @@ export default function FavicionList(): JSX.Element {
           dense
           button
           onClick={() => {
-            setUrlList(urlList.filter((each) => each.name !== urlList[selectedUrlIndex].name));
-            menuAnchorEl.handleAnchorClose();
+            // setUrlList(urlList.filter((each) => each.name !== urlList[selectedUrlIndex].name));
+            deleteUrlRequest({
+              data: {
+                name: urlsData[selectedUrlIndex].name,
+                userId: urlsData[selectedUrlIndex].userId,
+                url: urlsData[selectedUrlIndex].url,
+                index: urlsData[selectedUrlIndex].index,
+              }
+            }).then(() => {
+              menuAnchorEl.handleAnchorClose();
+              getUrlRequest({
+                params: {
+                  userId: userContext.user.id
+                }
+              });
+            })
           }}
         >
           <ListItemIcon>
@@ -265,6 +299,8 @@ export default function FavicionList(): JSX.Element {
           placeholder="www.example.com"
           value={urlInput.value}
           onChange={urlInput.handleChange}
+          error={!regUrl.test(urlInput.value)}
+          helperText="올바른 url 을 입력해 주세요 example.com"
           inputProps={{
             style: {
               fontFamily: 'AppleSDGothicNeo',
@@ -281,6 +317,8 @@ export default function FavicionList(): JSX.Element {
           placeholder="url name"
           value={nameInput.value}
           onChange={nameInput.handleChange}
+          error={nameInput.value.length === 0}
+          helperText="url 이름을 입력해 주세요"
           style={{
             marginTop: '16px'
           }}
@@ -299,8 +337,22 @@ export default function FavicionList(): JSX.Element {
           style={{
             marginTop: '16px'
           }}
-          disabled={!(nameInput.value && urlInput.value)}
-          onClick={() => handleAddUrl(urlInput.value, nameInput.value)}
+          disabled={!(nameInput.value && regUrl.test(urlInput.value))}
+          onClick={() => {
+            postUrlRequest({
+              data: {
+                url: urlInput.value,
+                name: nameInput.value
+              }
+            }).then(() => {
+              getUrlRequest({
+                params: {
+                  userId: userContext.user.id
+                }
+              });
+              addAnchorEl.handleAnchorClose();
+            })
+          }}
         >
           추가하기
         </Button>
