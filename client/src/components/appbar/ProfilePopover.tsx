@@ -16,8 +16,8 @@ import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
 
 // contexts
-import UserContext, { UserInfo, defaultUser } from '../../utils/contexts/UserContext';
-
+import UserContext, { defaultUser } from '../../utils/contexts/UserContext';
+import { Payload as UserInfo } from '../../shared/interfaces/token.interface';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({

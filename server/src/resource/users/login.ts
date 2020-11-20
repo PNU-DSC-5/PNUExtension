@@ -52,6 +52,7 @@ router.post(
     try {
       const user: User = req.user as User;
       console.log('[Auto Login Success ]');
+      console.log(user);
 
       const { accessToken, refreshToken } = await JwtToken.create({
         ...user,
@@ -85,7 +86,8 @@ router.get(
   async (req, res) => {
     try {
       const user: User = req.user as User;
-      console.log('[Google Login Success]', user.email);
+      console.log('[Google Login Success]');
+      console.log(user);
 
       const { accessToken, refreshToken } = await JwtToken.create({
         ...user,
@@ -114,7 +116,8 @@ router.get(
   async (req, res) => {
     try {
       const user: User = req.user as User;
-      console.log('[Kakao Login Success]', user.id);
+      console.log('[Kakao Login Success]');
+      console.log(user);
 
       const { accessToken, refreshToken } = await JwtToken.create({
         ...user,
@@ -149,7 +152,8 @@ router.get(
   async (req, res) => {
     try {
       const user: User = req.user as User;
-      console.log('[GitHub Login Success]', user.name ? user.name : user.id);
+      console.log('[GitHub Login Success]');
+      console.log(user);
 
       const { accessToken, refreshToken } = await JwtToken.create({
         ...user,
@@ -178,7 +182,8 @@ router.get(
   async (req, res) => {
     try {
       const user: User = req.user as User;
-      console.log('[Naver Login Success]', user.email);
+      console.log('[Naver Login Success]');
+      console.log(user);
 
       const { accessToken, refreshToken } = await JwtToken.create({
         ...user,

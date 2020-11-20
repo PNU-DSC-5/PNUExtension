@@ -7,6 +7,8 @@ import createError from 'http-errors';
 
 // shared interfaces
 import { Payload, Token } from '../../shared/interfaces/token.interface';
+import { Url, User } from '../../shared/interfaces/user.interface';
+import { url } from 'inspector';
 
 dotenv.config();
 
@@ -26,7 +28,7 @@ async function create(user: Payload): Promise<Token> {
     expiresIn: '5s',
   });
   const refreshToken = jwt.sign(payload, process.env.JWT_REFRESH!, {
-    expiresIn: '5m',
+    expiresIn: '15m',
   });
   const sql = 'UPDATE users SET refresh = ? WHERE id = ?';
 
@@ -77,9 +79,10 @@ async function refresh(
       const decoded: Payload = jwt.decode(refreshToken) as Payload;
       const sql = `
             SELECT * FROM users u 
-            JOIN urls url 
-            ON u.id = url.userId
-            WHERE u.id = ? and u.refresh = ?`;
+            LEFT JOIN urls as ul
+            ON u.id = ul.userId
+            WHERE u.id = ? and u.refresh = ?
+            `;
 
       /*
                 추가할 보안 로직
@@ -91,25 +94,29 @@ async function refresh(
                 -> 단순 탈취로는 API 요청 불가능, 해당 수식에 맞춰 보내야함
 
                 해당 Encoding 수식 을 관리하는 방법
-            */
+      
+                */
 
       doQuery(sql, [decoded.id, refreshToken])
         .then(async (row) => {
           if (row.result[0]) {
             /* refresh 토큰 유효성 검증 후 재발급 */
-            const result = row.result[0];
-            console.log('[Success : Refresh Token ... ]');
-            create({
-              name: result.name ? result.name : result.id,
-              picture: result.picture,
-              email: result.email,
-              roles: 'user',
-              id: result.id,
-              url: row.result.map((each: any) => ({
-                url: each.url,
-                name: each.name,
-              })),
-            }).then((token) => {
+            const dbProfile: User = {
+              ...row.result[0],
+              email_verified: false,
+            };
+
+            const urls: Url[] = row.result
+            .map((each: any) => ({
+              url: each.url,
+              name: each.urlName,
+            }))
+            .filter(
+              (eachUrl: Url) => eachUrl.url !== null && eachUrl.name !== null,
+            );
+            
+            create({...dbProfile, url: urls, roles: 'user'}).then((token) => {
+              console.log('[Success : Refresh Token ... ]');
               const { accessToken, refreshToken } = token;
               req.user = {
                 accessToken,

@@ -29,14 +29,31 @@ passport.use(
     console.log('[Auto Login ... UUID ]', uuid);
 
     const sql_check_uuid = `
-      SELECT * FROM users WHERE uuid = ?
+      SELECT * FROM users u 
+      LEFT JOIN urls ul
+      ON ul.userId = u.id
+      WHERE u.uuid = ?
     `;
     const sql_data = [uuid];
 
     doQuery(sql_check_uuid, sql_data)
       .then((row) => {
         if (row.result[0]) {
-          return done(null, row.result[0]);
+          const dbProfile: User = {
+            ...row.result[0],
+            email_verified: false,
+          };
+
+          const urls: Url[] = row.result
+            .map((each: any) => ({
+              url: each.url,
+              name: each.urlName,
+            }))
+            .filter(
+              (eachUrl: Url) => eachUrl.url !== null && eachUrl.name !== null,
+            );
+
+          return done(null, { ...dbProfile, url: urls });
         }
 
         return done('Not Exist UUID ... ', null);
@@ -143,8 +160,6 @@ passport.use(
     },
     (accessToken, refreshToken, profile, done) => {
       const kakaoUser = profile._json;
-
-      console.log(profile);
       const remoteData: User = {
         id: kakaoUser.id.toString(),
         email: '',
@@ -273,7 +288,7 @@ async function updateUUID(
   `;
   const sql_uuid = create ? createUuid() : undefined;
 
-  return doQuery(sql_upadateUUID, [sql_uuid])
+  return doQuery(sql_upadateUUID, [sql_uuid, userId])
     .then(() => {
       return sql_uuid;
     })
@@ -294,8 +309,10 @@ async function checkAndLogin(
   done: (err?: Error, user?: User | null | any, info?: any) => void,
 ) {
   const sql_GetProfile = `
-  SELECT * FROM users
-  WHERE users.id = ?
+  SELECT * FROM users u 
+  LEFT JOIN urls as ul
+  ON u.id = ul.userId
+  WHERE u.id = ?
   `;
 
   doQuery(sql_GetProfile, [user.id]).then(async (row) => {
@@ -304,27 +321,35 @@ async function checkAndLogin(
       email_verified: false,
     };
 
+    /* urls null 전처리 -> 빈배열 */
+    const urls: Url[] = row.result
+      .map((each: any) => ({
+        url: each.url,
+        name: each.urlName,
+      }))
+      .filter((eachUrl: Url) => eachUrl.url !== null && eachUrl.name !== null);
+
     if (!row.result[0]) {
       /* 회원 가입 */
       await regist(user, autoLogin, done);
     } else {
       /* 로그인 */
       if (autoLogin) {
-        /* 자동 로그인 */
+        /* 자동 로그인 허용 */
         if (dbProfile.uuid) {
           console.log('[Auto Login] : Success , uuid exist');
-          done(undefined, dbProfile);
+          done(undefined, { ...dbProfile, url: urls });
         } else {
           updateUUID(dbProfile.id, true).then((uuid) => {
             console.log('[Auto Login] : Success , uuid create');
-            done(undefined, { ...dbProfile, uuid });
+            done(undefined, { ...dbProfile, uuid, url: urls });
           });
         }
       } else {
         /* 일시 로그인 */
         updateUUID(dbProfile.id).then((uuid) => {
           console.log('[Temp Login] : Success');
-          done(undefined, { ...dbProfile, uuid: undefined });
+          done(undefined, { ...dbProfile, uuid: uuid, url: urls });
         });
       }
     }

@@ -14,6 +14,9 @@ import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 import useAnchorEl from '../../../utils/hooks/useAnchorEl';
 import useEventTargetValue from '../../../utils/hooks/useEventTargetValue'
 
+import UserContext from '../../../utils/contexts/UserContext';
+import { Url } from '../../../shared/interfaces/user.interface';
+
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
@@ -103,23 +106,18 @@ const StyledMenu = withStyles({
   />
 ));
 
-const dummy: any[] = [
-  { url: 'www.naver.com', name: 'naver' },
-  { url: 'www.google.com', name: 'google' },
-  { url: 'www.github.com', name: 'github' },
-  { url: 'www.kakao.com', name: 'kakao' },
-];
 
 export default function FavicionList(): JSX.Element {
   const classes = useStyles({ dragActive: false });
   const defaultUrl = "https://icons.duckduckgo.com/ip3/";
+  const userContext = React.useContext(UserContext);
 
   /**
    * url 리스트 초기값은 userContext 에서 가져오며
    * 해당 userContext 에 추가 할 경우 DB 의 유저 정보에 url list 에 추가한다.
    */
   const [selectedUrlIndex, setSelectedUrlIndex] = React.useState<number>(0);
-  const [urlList, setUrlList] = React.useState<any[]>(dummy);
+  const [urlList, setUrlList] = React.useState<Url[]>([]);
 
   /* url 입력 popper 와 아바타 popover ref */
   const menuAnchorEl = useAnchorEl();
@@ -128,6 +126,11 @@ export default function FavicionList(): JSX.Element {
   /* url 과 url name 입력 */
   const urlInput = useEventTargetValue();
   const nameInput = useEventTargetValue();
+
+  React.useEffect(() => {
+    if (userContext.user.url.length > 0)
+      setUrlList(userContext.user.url);
+  }, [userContext.user.url])
 
   const handleAddUrl = (url: string, name: string) => {
     setUrlList([...urlList, { url, name }])

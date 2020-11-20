@@ -3,12 +3,15 @@ import useAxios from 'axios-hooks';
 import { AxiosError } from 'axios';
 import cookie from 'react-cookies';
 
-export interface UserInfo {
-  name: string | null;
-  picture: string | null;
-  email: string | null;
-  roles: 'user' | 'admin';
-}
+import { Payload as UserInfo } from '../../shared/interfaces/token.interface'; 
+
+// export interface UserInfo {
+//   name: string | null;
+//   picture: string | null;
+//   email: string | null;
+//   roles: 'user' | 'admin';
+//   url: 
+// }
 
 export interface UserContextValue {
   user: UserInfo;
@@ -23,6 +26,8 @@ export const defaultUser: UserInfo = {
   picture: null,
   email: null,
   roles: 'user',
+  url: [],
+  id: null
 };
 
 const UserContext = React.createContext<UserContextValue>({
