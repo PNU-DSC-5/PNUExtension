@@ -44,7 +44,7 @@ router.post(
       VALUES(?,?,?)
       `;
 
-      doQuery(sql_addUrl, [url.name, url.url, payload.id])
+      doQuery(sql_addUrl, [url.urlName, url.url, payload.id])
         .then(() => {
           console.log('[URL Add] : Success');
           response.Helper.ok(req, res, true);

@@ -112,7 +112,7 @@ async function refresh(
               name: each.urlName,
             }))
             .filter(
-              (eachUrl: Url) => eachUrl.url !== null && eachUrl.name !== null,
+              (eachUrl: Url) => eachUrl.url !== null && eachUrl.urlName !== null,
             );
             
             create({...dbProfile, url: urls, roles: 'user'}).then((token) => {

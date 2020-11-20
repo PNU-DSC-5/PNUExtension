@@ -1,7 +1,7 @@
 export interface Url {
-  name: string;
+  urlName: string;
   url: string;
-  index: number;
+  index?: number;
   userId: string;
 }
 

@@ -29,14 +29,14 @@ const useStyles = makeStyles((theme: Theme) =>
       border: `2px solid ${fade(theme.palette.primary.light, 0.5)}`,
       borderRadius: 4
     },
-    avatar: (props: { dragActive: boolean }) => ({
+    avatar: {
       margin: '16px',
       height: '40px',
       width: '40px',
       padding: '8px',
       boxShadow: theme.shadows[4],
       backgroundColor: fade(theme.palette.primary.light, 0.5),
-    }),
+    },
     avatarWrapper: {
       display: 'flex',
       flexDirection: 'column',
@@ -111,7 +111,7 @@ const StyledMenu = withStyles({
 
 
 export default function FavicionList(): JSX.Element {
-  const classes = useStyles({ dragActive: false });
+  const classes = useStyles();
   const defaultUrl = "https://icons.duckduckgo.com/ip3/";
   const userContext = React.useContext(UserContext);
 
@@ -147,14 +147,21 @@ export default function FavicionList(): JSX.Element {
   const urlInput = useEventTargetValue();
   const nameInput = useEventTargetValue();
 
-  React.useEffect(() => {
+  const handleUrlDupleCheck = (urlList: Url[], newUrl: Url) => {
+    console.log(urlList, newUrl)
+    return urlList.find((each) =>
+      each.url === newUrl.url
+      || each.urlName === newUrl.urlName);
+  }
 
+  React.useEffect(() => {
     getUrlRequest({
       params: {
         userId: userContext.user.id
       }
     });
   }, [userContext.user])
+
 
   return (
     // <ClickAwayListener onClickAway={addAnchorEl.handleAnchorClose}>
@@ -166,7 +173,7 @@ export default function FavicionList(): JSX.Element {
       }}
     >
       { urlsData && !urlError && !urlLoading && urlsData.map((each, index) => (
-        <Button className={classes.avatarWrapper}>
+        <Button className={classes.avatarWrapper} key={each.index}>
           <div
             style={{
               display: 'flex',
@@ -210,6 +217,7 @@ export default function FavicionList(): JSX.Element {
           alignItems: 'flex-end', padding: '4px',
           marginTop: '30px'
         }}
+        disabled={!userContext.user.id}
         onClick={(e) => { addAnchorEl.handleAnchorOpen(e); }}
       >
 
@@ -245,10 +253,9 @@ export default function FavicionList(): JSX.Element {
           dense
           button
           onClick={() => {
-            // setUrlList(urlList.filter((each) => each.name !== urlList[selectedUrlIndex].name));
             deleteUrlRequest({
               data: {
-                name: urlsData[selectedUrlIndex].name,
+                name: urlsData[selectedUrlIndex].urlName,
                 userId: urlsData[selectedUrlIndex].userId,
                 url: urlsData[selectedUrlIndex].url,
                 index: urlsData[selectedUrlIndex].index,
@@ -339,19 +346,28 @@ export default function FavicionList(): JSX.Element {
           }}
           disabled={!(nameInput.value && regUrl.test(urlInput.value))}
           onClick={() => {
-            postUrlRequest({
-              data: {
-                url: urlInput.value,
-                name: nameInput.value
-              }
-            }).then(() => {
-              getUrlRequest({
-                params: {
-                  userId: userContext.user.id
+            const newUrl: Url = {
+              url: urlInput.value,
+              urlName: nameInput.value,
+              userId: userContext.user.id ? userContext.user.id : '',
+            }
+            if (handleUrlDupleCheck(urlsData, newUrl)) {
+              alert('중복된 url 입니다.')
+            } else {
+              postUrlRequest({
+                data: {
+                  url: urlInput.value,
+                  name: nameInput.value
                 }
-              });
-              addAnchorEl.handleAnchorClose();
-            })
+              }).then(() => {
+                getUrlRequest({
+                  params: {
+                    userId: userContext.user.id
+                  }
+                });
+                addAnchorEl.handleAnchorClose();
+              })
+            }
           }}
         >
           추가하기

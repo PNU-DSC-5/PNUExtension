@@ -1,5 +1,5 @@
 export interface Url {
-  name: string;
+  urlName: string;
   url: string;
   index: number;
   userId: string;

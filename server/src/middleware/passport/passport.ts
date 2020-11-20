@@ -50,7 +50,7 @@ passport.use(
               name: each.urlName,
             }))
             .filter(
-              (eachUrl: Url) => eachUrl.url !== null && eachUrl.name !== null,
+              (eachUrl: Url) => eachUrl.url !== null && eachUrl.urlName !== null,
             );
 
           return done(null, { ...dbProfile, url: urls });
@@ -327,7 +327,7 @@ async function checkAndLogin(
         url: each.url,
         name: each.urlName,
       }))
-      .filter((eachUrl: Url) => eachUrl.url !== null && eachUrl.name !== null);
+      .filter((eachUrl: Url) => eachUrl.url !== null && eachUrl.urlName !== null);
 
     if (!row.result[0]) {
       /* 회원 가입 */
