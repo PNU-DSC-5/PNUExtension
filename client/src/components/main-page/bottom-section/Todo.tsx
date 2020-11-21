@@ -10,7 +10,6 @@ const useStyles = makeStyles((theme: Theme) =>
       height: '100%',
       width: '100%',
       textAlign: 'center',
-      margin: 15,
     },
   }),
 );
