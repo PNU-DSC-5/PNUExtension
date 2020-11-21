@@ -1,9 +1,9 @@
 import React from 'react';
-import CrawlingCard from './CrawlingCard';
-import Timetable from './Timetable';
-import MealPlanner from './MealPlanner';
-import Todo from './Todo';
-import CategoryButton from './CategoryButton';
+import CrawlingCard from './card/CrawlingCard';
+import Timetable from './time-table/Timetable';
+import MealPlanner from './meal-planner/MealPlanner';
+import Todo from './to-do/Todo';
+import CategoryButton from './category/CategoryButton';
 
 // styles
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
@@ -148,6 +148,7 @@ export default function BottomTest(): JSX.Element {
   return (
     <div>
       <CategoryButton />
+      {SpecialSection()}
       <GridList
         cellHeight={400}
         className={classes.gridList}

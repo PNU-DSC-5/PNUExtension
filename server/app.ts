@@ -9,43 +9,45 @@ import path from 'path';
 // routes
 import testRouter from './src/resource/users/index';
 import userRouter from './src/resource/users/index';
+import urlRouter from './src/resource/url/index';
 
 class PNUApi {
-  public app : express.Express
+  public app: express.Express;
 
-  constructor(){
+  constructor() {
     this.app = express();
     this.initializeAppSettings();
     this.initializeRouters();
   }
 
   private initializeAppSettings(): void {
-
-    this.app.use((req, res, next) => {  
-      res.setHeader('Access-Control-Allow-Origin', "*");
-      res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, DELETE');
-      res.setHeader('Access-Control-Allow-Headers', 'authorization, content-type');
+    this.app.use((req, res, next) => {
+      res.setHeader('Access-Control-Allow-Origin', '*');
+      res.setHeader(
+        'Access-Control-Allow-Methods',
+        'GET, POST, OPTIONS, PUT, DELETE',
+      );
+      res.setHeader(
+        'Access-Control-Allow-Headers',
+        'authorization, content-type',
+      );
       next();
     });
 
     /* http 통신 origin Url 설정 -> cors 옵션 설정 */
-    const whiteList = [
-      'http://localhost:3003',
-      'http://localhost:3000'
-     ];
-    
+    const whiteList = ['http://localhost:3003', 'http://localhost:3000'];
+
     const corsOptions = {
-       origin: whiteList,
-       credentials: true,
+      origin: whiteList,
+      credentials: true,
     };
-    
+
     this.app.use(cors(corsOptions));
 
-    
     this.app.use(express.json());
     this.app.use(bodyParser.json());
-    this.app.use(bodyParser.urlencoded({extended : false}));
-    
+    this.app.use(bodyParser.urlencoded({ extended: false }));
+
     this.app.use(express.urlencoded({ extended: false }));
     this.app.use(cookieParser());
     this.app.use(express.static(path.join(__dirname, 'public')));
@@ -60,24 +62,28 @@ class PNUApi {
 
     this.app.use('/', testRouter);
     this.app.use('/users', userRouter);
+    this.app.use('/url', urlRouter);
 
-    this.app.use(() => (
-      req: express.Request,
-      res: express.Response,
-      next: express.NextFunction
-      ) => next(createError(404)));
+    this.app.use(
+      () => (
+        req: express.Request,
+        res: express.Response,
+        next: express.NextFunction,
+      ) => next(createError(404)),
+    );
 
-      interface Err {
-        status?: number;
-        stack?: string;
-        message?: string; 
-      }
+    interface Err {
+      status?: number;
+      stack?: string;
+      message?: string;
+    }
 
-      this.app.use((
-        err: Err, 
-        req: express.Request, 
-        res: express.Response, 
-        next: express.NextFunction
+    this.app.use(
+      (
+        err: Err,
+        req: express.Request,
+        res: express.Response,
+        next: express.NextFunction,
       ) => {
         const serverErrorMessage = 'Internal Server Error';
         res.locals.message = err.message;
@@ -86,15 +92,16 @@ class PNUApi {
           if (process.env.NODE_ENV === 'development') {
             console.log(err.stack);
           }
-        
+
           res.status(err.status || 500);
           res.send({
             code: err.status,
-            message: err.message || serverErrorMessage
+            message: err.message || serverErrorMessage,
           });
         }
-      });
-    }
+      },
+    );
+  }
 }
 
 module.exports = PNUApi;

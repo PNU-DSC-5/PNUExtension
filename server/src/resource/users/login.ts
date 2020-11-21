@@ -1,8 +1,12 @@
 import express, { Request, Response, NextFunction } from 'express';
 import passport from '../../middleware/passport/passport';
-import JwtToken, { Payload, Token } from '../../middleware/jwt/jwtToken';
+import JwtToken from '../../middleware/jwt/jwtToken';
 import response from '../../middleware/responseHelper/helper';
 import { HttpError } from 'http-errors';
+
+// shared interfaces
+import { Payload, Token } from '../../shared/interfaces/token.interface';
+import { User, Url } from '../../shared/interfaces/user.interface';
 
 const router = express.Router();
 
@@ -40,17 +44,6 @@ router.get(
   },
 );
 
-interface User {
-  id: string;
-  sub: string;
-  name: string;
-  picture: string;
-  email: string;
-  email_verified: boolean;
-  locale: string;
-  uuid: string;
-}
-
 /* auto login 수행 부 */
 router.post(
   '/auto-login',
@@ -59,7 +52,8 @@ router.post(
     try {
       const user: User = req.user as User;
       console.log('[Auto Login Success ]');
-      
+      console.log(user);
+
       const { accessToken, refreshToken } = await JwtToken.create({
         ...user,
         roles: 'user',
@@ -92,7 +86,8 @@ router.get(
   async (req, res) => {
     try {
       const user: User = req.user as User;
-      console.log('[Google Login Success]', user.email);
+      console.log('[Google Login Success]');
+      console.log(user);
 
       const { accessToken, refreshToken } = await JwtToken.create({
         ...user,
@@ -121,7 +116,8 @@ router.get(
   async (req, res) => {
     try {
       const user: User = req.user as User;
-      console.log('[Kakao Login Success]', user.id);
+      console.log('[Kakao Login Success]');
+      console.log(user);
 
       const { accessToken, refreshToken } = await JwtToken.create({
         ...user,
@@ -156,7 +152,8 @@ router.get(
   async (req, res) => {
     try {
       const user: User = req.user as User;
-      console.log('[GitHub Login Success]', user.name ? user.name : user.id);
+      console.log('[GitHub Login Success]');
+      console.log(user);
 
       const { accessToken, refreshToken } = await JwtToken.create({
         ...user,
@@ -185,7 +182,8 @@ router.get(
   async (req, res) => {
     try {
       const user: User = req.user as User;
-      console.log('[Naver Login Success]', user.email);
+      console.log('[Naver Login Success]');
+      console.log(user);
 
       const { accessToken, refreshToken } = await JwtToken.create({
         ...user,
