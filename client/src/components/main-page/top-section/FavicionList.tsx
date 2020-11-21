@@ -154,6 +154,39 @@ export default function FavicionList(): JSX.Element {
       || each.urlName === newUrl.urlName);
   }
 
+  const handleAddUrl = (): void => {
+    const newUrl: Url = {
+      url: urlInput.value,
+      urlName: nameInput.value,
+      userId: userContext.user.id ? userContext.user.id : '',
+    }
+    if (handleUrlDupleCheck(urlsData, newUrl)) {
+      alert('중복된 url 입니다.')
+    } else {
+      postUrlRequest({
+        data: {
+          url: urlInput.value,
+          name: nameInput.value
+        }
+      }).then(() => {
+        getUrlRequest({
+          params: {
+            userId: userContext.user.id
+          }
+        });
+        addAnchorEl.handleAnchorClose();
+      })
+    }
+  }
+
+  const handleKeyboard = (
+    e: React.KeyboardEvent<HTMLButtonElement | HTMLTextAreaElement | HTMLInputElement | HTMLDivElement>)
+    : void => {
+    if (e.key === 'Enter') {
+      handleAddUrl();
+    }
+  }
+
   React.useEffect(() => {
     getUrlRequest({
       params: {
@@ -315,6 +348,10 @@ export default function FavicionList(): JSX.Element {
               fontWeight: 'bold',
             },
           }}
+          onKeyDown={(e) => {
+            if (regUrl.test(urlInput.value) && nameInput.value)
+              handleKeyboard(e)
+          }}
         />
 
         <TextField
@@ -336,6 +373,10 @@ export default function FavicionList(): JSX.Element {
               fontWeight: 'bold',
             },
           }}
+          onKeyDown={(e) => {
+            if (regUrl.test(urlInput.value) && nameInput.value)
+              handleKeyboard(e)
+          }}
         />
 
         <Button
@@ -345,30 +386,7 @@ export default function FavicionList(): JSX.Element {
             marginTop: '16px'
           }}
           disabled={!(nameInput.value && regUrl.test(urlInput.value))}
-          onClick={() => {
-            const newUrl: Url = {
-              url: urlInput.value,
-              urlName: nameInput.value,
-              userId: userContext.user.id ? userContext.user.id : '',
-            }
-            if (handleUrlDupleCheck(urlsData, newUrl)) {
-              alert('중복된 url 입니다.')
-            } else {
-              postUrlRequest({
-                data: {
-                  url: urlInput.value,
-                  name: nameInput.value
-                }
-              }).then(() => {
-                getUrlRequest({
-                  params: {
-                    userId: userContext.user.id
-                  }
-                });
-                addAnchorEl.handleAnchorClose();
-              })
-            }
-          }}
+          onClick={() => handleAddUrl()}
         >
           추가하기
         </Button>
