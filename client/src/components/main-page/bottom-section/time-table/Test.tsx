@@ -31,7 +31,8 @@ interface TestProps {
     실습: number;
     교수명: string;
     제한인원: number;
-    시간표: string;}[]
+    시간표: string;
+  }[]
 }
 
 interface Block {
@@ -62,7 +63,7 @@ export default function Test(props: TestProps): JSX.Element {
   const eachWeek = (week: Block[]):JSX.Element => (
       <div>
         {week.map((each, index) => {
-        
+    
           return (
           <ListItem
             button
@@ -71,7 +72,6 @@ export default function Test(props: TestProps): JSX.Element {
               width: '130px',
               borderTop: index %4 === 0 ? '1px solid black' : 'none',
               borderRight: '1px solid black',
-              // borderLeft: 
               margin: 0,
               padding: 0,
               backgroundColor: each.isInclude? 'red' : 'gray'
@@ -136,15 +136,20 @@ export default function Test(props: TestProps): JSX.Element {
     })
   }
 
-  React.useEffect(() => {
-    // userClassList.forEach((eachClass) => {
-    //   const indexs = timeFormmater(eachClass['시간표']);
-    //   if(indexs.length > 1) handleSchedule([indexs[0],indexs[1]])
-    //   else handleSchedule([indexs[0],[-1]])
-    // }, Promise.resolve());
-    processArray(userClassList);
+  // React.useEffect(() => {
+  //   // userClassList.forEach((eachClass) => {
+  //   //   const indexs = timeFormmater(eachClass['시간표']);
+  //   //   if(indexs.length > 1) handleSchedule([indexs[0],indexs[1]])
+  //   //   else handleSchedule([indexs[0],[-1]])
+  //   // }, Promise.resolve());
+  //   processArray(userClassList);
 
-  },[userClassList])
+  // },[userClassList])
+
+
+  React.useEffect(() => {
+    processArray(userClassList);
+  },[])
 
   const handleClassList = (newClass: typeof dummy[0], isRemove?: true) => {
     if(isRemove){
