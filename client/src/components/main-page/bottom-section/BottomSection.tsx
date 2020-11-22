@@ -110,10 +110,14 @@ export default function BottomTest(): JSX.Element {
   const SpecialSection = (): JSX.Element => {
     return (
       <GridList
-        cellHeight={129}
+        cellHeight={150}
         className={classes.gridList}
         cols={1}
         spacing={5}
+        style={{
+          width: '300px',
+          position: 'fixed'
+        }}
       >
         <GridListTile cols={1}>
           <Timetable />
