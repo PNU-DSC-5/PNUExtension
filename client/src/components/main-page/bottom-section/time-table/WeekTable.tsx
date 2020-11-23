@@ -1,13 +1,14 @@
 import React from 'react';
 
 import {
-  List, ListItem, Button,
+  List, ListItem, Button, Drawer,
   Paper, IconButton, Typography, Dialog, DialogTitle, DialogContent
 } from '@material-ui/core';
 
 import { makeStyles, createStyles, Theme, fade } from '@material-ui/core/styles';
 
 import SettingsIcon from '@material-ui/icons/Settings';
+import DoubleArrowIcon from '@material-ui/icons/DoubleArrow';
 
 import useBasicDialog from '../../../../utils/hooks/useBasicDialog';
 
@@ -89,6 +90,7 @@ export default function WeekTable(props: WeekTableProps): JSX.Element {
   const classes = useStyles();
   /* 다이얼로그 */
   const { open, handleClose, handleOpen } = useBasicDialog();
+  const [drawerOpen, setDrawerOpen] = React.useState<boolean>(false);
 
   /* 2차원 배열 정의시 setState 비동기로 인해 문제 발생 -> 일단 6분할 */
   const [mon, setMon] = React.useState<SchoolClass[]>(schoolClasses.filter((each) => splitTimeString(each['시간표'])[0][0] === '월' || splitTimeString(each['시간표'])[1][0] === '월'));
@@ -116,6 +118,19 @@ export default function WeekTable(props: WeekTableProps): JSX.Element {
   const handleSubClassToWeek = (reomveClass: SchoolClass, targetWeek: string) => {
     const targetIndex = days.indexOf(targetWeek);
     weeks[targetIndex].func(weeks[targetIndex].state.filter((eachClass) => eachClass['연번'] !== reomveClass['연번']));
+  }
+
+  const handleDrawer = (isOpen: boolean) => (event: React.KeyboardEvent | React.MouseEvent,) => {
+    setDrawerOpen(isOpen);
+    if (
+      event.type === 'keydown' &&
+      ((event as React.KeyboardEvent).key === 'Tab' ||
+        (event as React.KeyboardEvent).key === 'Shift')
+    ) {
+      return;
+    }
+
+
   }
 
   return (
@@ -166,7 +181,7 @@ export default function WeekTable(props: WeekTableProps): JSX.Element {
 
         <DialogContent
           style={{
-            width: '1500px',
+            width: '1200px',
             height: '900px',
             color: 'white'
           }}
@@ -175,7 +190,8 @@ export default function WeekTable(props: WeekTableProps): JSX.Element {
           <div
             style={{
               display: 'flex',
-              flexDirection: 'row'
+              flexDirection: 'row',
+              justifyContent: 'center'
             }}
           >
 
@@ -186,13 +202,36 @@ export default function WeekTable(props: WeekTableProps): JSX.Element {
               />
             ))}
 
-            <div
+            {/* <div
               style={{
                 marginLeft: '32px'
               }}
             >
               <TodayLine />
-            </div>
+            </div> */}
+
+            <IconButton
+              style={{
+                alignSelf: 'center',
+                position: 'absolute',
+                marginLeft: 1100
+              }}
+              onClick={handleDrawer(true)}
+            >
+              <DoubleArrowIcon style={{ color: 'white', fontSize: '40px' }} />
+            </IconButton>
+
+
+            <Drawer
+              anchor="bottom"
+              open={drawerOpen}
+              onClose={handleDrawer(false)}
+              color="primary"
+            >
+              <Typography variant='h1'>
+                is oK
+              </Typography>
+            </Drawer>
 
           </div>
         </DialogContent>
