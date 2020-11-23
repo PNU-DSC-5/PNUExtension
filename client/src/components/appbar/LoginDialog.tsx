@@ -4,81 +4,81 @@ import React from 'react';
 import {
   Dialog,
   DialogContent, Typography, AppBar, Toolbar, FormControlLabel,
-  DialogTitle, Button, Grid, Switch, Avatar
+  DialogTitle, Button, Grid, Switch, Avatar,
 } from '@material-ui/core';
 
 // custom icon
+import {
+  createStyles, makeStyles, Theme, fade, withStyles,
+} from '@material-ui/core/styles';
+import classnames from 'classnames';
+import cookie from 'react-cookies';
 import GoogleIcon from '../../atoms/icons/GoogleIcon';
 import GithubIcon from '../../atoms/icons/GithubIcon';
 import KakaoIcon from '../../atoms/icons/KakaoIcon';
 import NaverIcon from '../../atoms/icons/NaverIcon';
 
 // styles
-import { createStyles, makeStyles, Theme, fade, withStyles } from '@material-ui/core/styles';
 
 // classnames
-import classnames from 'classnames';
 
 // cookie
-import cookie from 'react-cookies';
 
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    dialogContents: {
-      minWidth: 'auto',
-      height: 'auto',
-      display: 'flex',
-      flexDirection: 'column',
-      justifyContent: 'center',
-      flex: 1,
-      backgroundColor: fade(theme.palette.primary.main, 0.1),
-      padding: theme.spacing(4),
-      borderRadius: 16
+const useStyles = makeStyles((theme: Theme) => createStyles({
+  dialogContents: {
+    minWidth: 'auto',
+    height: 'auto',
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    flex: 1,
+    backgroundColor: fade(theme.palette.primary.main, 0.1),
+    padding: theme.spacing(4),
+    borderRadius: 16,
+  },
+  buttonCommon: {
+    width: '200px',
+    heigth: '62px',
+    marginBottom: '15px',
+    padding: 0,
+    borderRadius: 32,
+    margin: theme.spacing(2),
+  },
+  github: {
+    backgroundColor: '#9775fa',
+    '&:hover,select': {
+      backgroundColor: '#d0bfff',
     },
-    buttonCommon: {
-      width: '200px',
-      heigth: '62px',
-      marginBottom: '15px',
-      padding: 0,
-      borderRadius: 32,
-      margin: theme.spacing(2)
+  },
+  google: {
+    backgroundColor: '#ffff',
+  },
+  naver: {
+    backgroundColor: '#2b8a3e',
+    '&:hover,select': {
+      backgroundColor: '#69db7c',
     },
-    github: {
-      backgroundColor: "#9775fa",
-      '&:hover,select': {
-        backgroundColor: '#d0bfff',
-      },
+  },
+  kakao: {
+    backgroundColor: '#ffd43b',
+    '&:hover,select': {
+      backgroundColor: '#ffec99',
     },
-    google: {
-      backgroundColor: '#ffff',
-    },
-    naver: {
-      backgroundColor: '#2b8a3e',
-      '&:hover,select': {
-        backgroundColor: '#69db7c',
-      },
-    },
-    kakao: {
-      backgroundColor: '#ffd43b',
-      '&:hover,select': {
-        backgroundColor: '#ffec99',
-      },
-    },
-    buttonIcon: {
-      fontSize: '50px',
-      marginRight: theme.spacing(1),
-      marginTop: '5px',
-      marginLeft: theme.spacing(2)
-    },
-    buttonText: {
-      fontWeight: 'bold',
-      textAlign: 'left'
-    },
-    switchLabel: {
-      color: theme.palette.primary.contrastText,
-    }
-  })
-);
+  },
+  buttonIcon: {
+    fontSize: '50px',
+    marginRight: theme.spacing(1),
+    marginTop: '5px',
+    marginLeft: theme.spacing(2),
+  },
+  buttonText: {
+    fontWeight: 'bold',
+    textAlign: 'left',
+  },
+  switchLabel: {
+    color: theme.palette.primary.contrastText,
+  },
+}));
 
 interface DialogProps {
   open: boolean;
@@ -92,23 +92,23 @@ interface DialogProps {
 const WithStyledSwitch = withStyles({
   switchBase: {
     color: '#f03e3e',
-    "&$checked + $track": {
-      color: "black",
-      backgroundColor: "#69db7c",
-      opacity: 1
-    }
+    '&$checked + $track': {
+      color: 'black',
+      backgroundColor: '#69db7c',
+      opacity: 1,
+    },
   },
   colorSecondary: {
-    "&$checked": {
-      color: "#2b8a3e",
-    }
+    '&$checked': {
+      color: '#2b8a3e',
+    },
   },
   checked: {},
   disabled: {},
   track: {
-    background: "#ff8787",
+    background: '#ff8787',
     opacity: 1,
-  }
+  },
 })(Switch);
 
 export default function LoginDialog(props: DialogProps): JSX.Element {
@@ -119,14 +119,14 @@ export default function LoginDialog(props: DialogProps): JSX.Element {
 
   const handleAutoLogin = (e: React.ChangeEvent<HTMLInputElement>) => {
     setAutoLogin(e.target.checked);
-  }
+  };
 
   React.useEffect(() => {
     cookie.save('autoLogin', (() => {
       if (autoLogin) return 1;
       return 0;
     })(), {});
-  }, [autoLogin])
+  }, [autoLogin]);
 
   return (
     <Dialog
@@ -137,14 +137,14 @@ export default function LoginDialog(props: DialogProps): JSX.Element {
       PaperProps={{
         style: {
           backgroundColor: fade('#495057', 0.8),
-          borderRadius: 32
-        }
+          borderRadius: 32,
+        },
       }}
     >
       <DialogTitle style={{ textAlign: 'center', fontWeight: 900, marginTop: '16px' }}>
         <Typography variant="h4" className={classes.switchLabel}>
           Login
-          </Typography>
+        </Typography>
       </DialogTitle>
 
       <DialogContent
@@ -160,9 +160,9 @@ export default function LoginDialog(props: DialogProps): JSX.Element {
           <Button
             variant="contained"
             className={classnames([
-              classes.buttonCommon, classes.google
+              classes.buttonCommon, classes.google,
             ])}
-            href={'http://localhost:3000/users/login/google'}
+            href="http://localhost:3000/users/login/google"
           >
             <Grid container alignItems="center" style={{ width: '100%', height: '100%', padding: '-30px' }}>
 
@@ -173,7 +173,7 @@ export default function LoginDialog(props: DialogProps): JSX.Element {
               <Grid item xs={6}>
                 <Typography variant="h6" color="primary" className={classes.buttonText}>
                   Google
-              </Typography>
+                </Typography>
               </Grid>
             </Grid>
 
@@ -182,9 +182,9 @@ export default function LoginDialog(props: DialogProps): JSX.Element {
           <Button
             variant="contained"
             className={classnames([
-              classes.buttonCommon, classes.naver
+              classes.buttonCommon, classes.naver,
             ])}
-            href={'http://localhost:3000/users/login/naver'}
+            href="http://localhost:3000/users/login/naver"
           >
             <Grid container alignItems="center" style={{ width: '100%', height: '100%' }}>
 
@@ -195,7 +195,7 @@ export default function LoginDialog(props: DialogProps): JSX.Element {
               <Grid item xs={6}>
                 <Typography variant="h6" style={{ color: 'white' }} className={classes.buttonText}>
                   Naver
-              </Typography>
+                </Typography>
               </Grid>
             </Grid>
 
@@ -212,9 +212,9 @@ export default function LoginDialog(props: DialogProps): JSX.Element {
           <Button
             variant="contained"
             className={classnames([
-              classes.buttonCommon, classes.github
+              classes.buttonCommon, classes.github,
             ])}
-            href={'http://localhost:3000/users/login/github'}
+            href="http://localhost:3000/users/login/github"
           >
             <Grid container alignItems="center" style={{ width: '100%', height: '100%' }}>
 
@@ -225,7 +225,7 @@ export default function LoginDialog(props: DialogProps): JSX.Element {
               <Grid item xs={6}>
                 <Typography variant="h6" style={{ color: 'white' }} className={classes.buttonText}>
                   Github
-              </Typography>
+                </Typography>
               </Grid>
             </Grid>
 
@@ -234,9 +234,9 @@ export default function LoginDialog(props: DialogProps): JSX.Element {
           <Button
             variant="contained"
             className={classnames([
-              classes.buttonCommon, classes.kakao
+              classes.buttonCommon, classes.kakao,
             ])}
-            href={'http://localhost:3000/users/login/kakao'}
+            href="http://localhost:3000/users/login/kakao"
           >
             <Grid container alignItems="center" style={{ width: '100%', height: '100%' }}>
 
@@ -247,22 +247,21 @@ export default function LoginDialog(props: DialogProps): JSX.Element {
               <Grid item xs={6}>
                 <Typography variant="h6" style={{ color: 'white' }} className={classes.buttonText}>
                   Kakao
-              </Typography>
+                </Typography>
               </Grid>
             </Grid>
 
           </Button>
         </div>
 
-
         <FormControlLabel
-          control={
+          control={(
             <WithStyledSwitch
               checked={autoLogin}
               onChange={handleAutoLogin}
               name="checked"
             />
-          }
+          )}
 
           label={(
             <Typography
@@ -270,7 +269,7 @@ export default function LoginDialog(props: DialogProps): JSX.Element {
               color="primary"
               style={{ fontWeight: 'bold' }}
               className={classnames({
-                [classes.switchLabel]: autoLogin
+                [classes.switchLabel]: autoLogin,
               })}
             >
               Auto Login
@@ -282,5 +281,5 @@ export default function LoginDialog(props: DialogProps): JSX.Element {
       </DialogContent>
 
     </Dialog>
-  )
+  );
 }

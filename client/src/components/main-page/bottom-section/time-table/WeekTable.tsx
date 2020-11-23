@@ -2,20 +2,22 @@ import React from 'react';
 
 import {
   List, ListItem, Button, Drawer,
-  Paper, IconButton, Typography, Dialog, DialogTitle, DialogContent
+  Paper, IconButton, Typography, Dialog, DialogTitle, DialogContent,
 } from '@material-ui/core';
 
-import { makeStyles, createStyles, Theme, fade } from '@material-ui/core/styles';
+import {
+  makeStyles, createStyles, Theme, fade,
+} from '@material-ui/core/styles';
 
 import SettingsIcon from '@material-ui/icons/Settings';
 import DoubleArrowIcon from '@material-ui/icons/DoubleArrow';
 
-import useBasicDialog from '../../../../utils/hooks/useBasicDialog';
-
 import moment from 'moment';
+import useBasicDialog from '../../../../utils/hooks/useBasicDialog';
 
 import WeekLine from './WeekLine';
 import TodayLine from './TodayLine';
+import FilterDrawer from './FilterDrawer';
 
 import { SchoolClass } from '../shared/interfaces/timeTable.inteface';
 
@@ -23,33 +25,32 @@ interface WeekTableProps {
   schoolClasses: SchoolClass[]
 }
 
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    section: {
-      height: '100%',
-      width: '100%',
+const useStyles = makeStyles((theme: Theme) => createStyles({
+  section: {
+    height: '100%',
+    width: '100%',
 
-      display: 'flex',
-      flexDirection: 'column'
-    },
-    root: {
-      display: 'flex',
-      flexDirection: 'row',
-      justifyContent: 'flex-start'
-    },
-    weekLineWrapper: {
-      width: '10%',
-      height: '780px',
-      marginRight: '4px',
-      // border: '1px solid black',
-    }
-  }),
-);
+    display: 'flex',
+    flexDirection: 'column',
+  },
+  root: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+  },
+  weekLineWrapper: {
+    width: '10%',
+    height: '780px',
+    marginRight: '4px',
+    // border: '1px solid black',
+  },
+}));
 
 function splitTimeString(str: string) {
   const result = str.split(',');
-  if (result.length > 1)
+  if (result.length > 1) {
     return result;
+  }
   result.push('일');
 
   // console.log(result)
@@ -62,27 +63,27 @@ interface WeeksType {
 }
 
 const addDummy = {
-  "연번": 1523,
-  "대학명": "공과대학",
-  "주관학과": 346734,
-  "주관학과명": "토목공학전공",
-  "학년": 2,
-  "교과목코드": "CR15220",
-  "분반": "047",
-  "교과목명": "일반화학실험(I)",
-  "영문교과목명": "GENERAL CHEMISTRY LABORATORY(I)",
-  "교과구분": "전공선택",
-  "학점": 1,
-  "이론": 0,
-  "실습": 2,
-  "교수명": "박영상",
-  "제한인원": 10,
-  "시간표": "금 17:00(100) 606-416",
-  "교양영역": "",
-  "원어": "",
-  "팀티칭": "",
-  "원격": "",
-  "비고": ""
+  연번: 1523,
+  대학명: '공과대학',
+  주관학과: 346734,
+  주관학과명: '토목공학전공',
+  학년: 2,
+  교과목코드: 'CR15220',
+  분반: '047',
+  교과목명: '일반화학실험(I)',
+  영문교과목명: 'GENERAL CHEMISTRY LABORATORY(I)',
+  교과구분: '전공선택',
+  학점: 1,
+  이론: 0,
+  실습: 2,
+  교수명: '박영상',
+  제한인원: 10,
+  시간표: '금 17:00(100) 606-416',
+  교양영역: '',
+  원어: '',
+  팀티칭: '',
+  원격: '',
+  비고: '',
 };
 
 export default function WeekTable(props: WeekTableProps): JSX.Element {
@@ -113,25 +114,23 @@ export default function WeekTable(props: WeekTableProps): JSX.Element {
   const handleAddClassToWeek = (newClass: SchoolClass, targetWeek: string) => {
     const targetIndex = days.indexOf(targetWeek);
     weeks[targetIndex].func([...weeks[targetIndex].state, newClass]);
-  }
+  };
 
   const handleSubClassToWeek = (reomveClass: SchoolClass, targetWeek: string) => {
     const targetIndex = days.indexOf(targetWeek);
     weeks[targetIndex].func(weeks[targetIndex].state.filter((eachClass) => eachClass['연번'] !== reomveClass['연번']));
-  }
+  };
 
-  const handleDrawer = (isOpen: boolean) => (event: React.KeyboardEvent | React.MouseEvent,) => {
+  const handleDrawer = (isOpen: boolean) => (event: React.KeyboardEvent | React.MouseEvent) => {
     setDrawerOpen(isOpen);
     if (
-      event.type === 'keydown' &&
-      ((event as React.KeyboardEvent).key === 'Tab' ||
-        (event as React.KeyboardEvent).key === 'Shift')
+      event.type === 'keydown'
+      && ((event as React.KeyboardEvent).key === 'Tab'
+        || (event as React.KeyboardEvent).key === 'Shift')
     ) {
-      return;
+
     }
-
-
-  }
+  };
 
   return (
     <Paper className={classes.section}>
@@ -141,13 +140,13 @@ export default function WeekTable(props: WeekTableProps): JSX.Element {
           display: 'inline-flex',
           flexDirection: 'row',
           alignItems: 'center',
-          justifyContent: 'center'
+          justifyContent: 'center',
         }}
       >
         <Typography
           variant="h6"
           style={{
-            verticalAlign: 'middle'
+            verticalAlign: 'middle',
           }}
         >
           Timetable
@@ -169,8 +168,8 @@ export default function WeekTable(props: WeekTableProps): JSX.Element {
         PaperProps={{
           style: {
             backgroundColor: fade('#495057', 0.9),
-            borderRadius: 32
-          }
+            borderRadius: 32,
+          },
         }}
       >
         <DialogTitle>
@@ -183,7 +182,7 @@ export default function WeekTable(props: WeekTableProps): JSX.Element {
           style={{
             width: '1200px',
             height: '900px',
-            color: 'white'
+            color: 'white',
           }}
         >
 
@@ -191,7 +190,7 @@ export default function WeekTable(props: WeekTableProps): JSX.Element {
             style={{
               display: 'flex',
               flexDirection: 'row',
-              justifyContent: 'center'
+              justifyContent: 'center',
             }}
           >
 
@@ -214,24 +213,17 @@ export default function WeekTable(props: WeekTableProps): JSX.Element {
               style={{
                 alignSelf: 'center',
                 position: 'absolute',
-                marginLeft: 1100
+                marginLeft: 1100,
               }}
               onClick={handleDrawer(true)}
             >
               <DoubleArrowIcon style={{ color: 'white', fontSize: '40px' }} />
             </IconButton>
 
-
-            <Drawer
-              anchor="bottom"
-              open={drawerOpen}
-              onClose={handleDrawer(false)}
-              color="primary"
-            >
-              <Typography variant='h1'>
-                is oK
-              </Typography>
-            </Drawer>
+            <FilterDrawer
+              drawerOpen={drawerOpen}
+              handleDrawer={handleDrawer}
+            />
 
           </div>
         </DialogContent>
@@ -239,7 +231,7 @@ export default function WeekTable(props: WeekTableProps): JSX.Element {
 
     </Paper>
 
-  )
+  );
 }
 /* <WeekLine schoolClasses={mon} targetWeek="월" />
       <WeekLine schoolClasses={tue} targetWeek="화" />

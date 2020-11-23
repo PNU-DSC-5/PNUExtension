@@ -5,94 +5,95 @@ import {
   MenuItem, MenuProps,
   ListItemIcon, Typography, TextField,
 } from '@material-ui/core';
-import { makeStyles, Theme, createStyles, fade, withStyles } from '@material-ui/core/styles';
+import {
+  makeStyles, Theme, createStyles, fade, withStyles,
+} from '@material-ui/core/styles';
 import CloseIcon from '@material-ui/icons/Close';
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz';
 import AddIcon from '@material-ui/icons/Add';
 import CreateIcon from '@material-ui/icons/Create';
 import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
+
+import useAxios from 'axios-hooks';
+
+import userEvent from '@testing-library/user-event';
 import useAnchorEl from '../../../utils/hooks/useAnchorEl';
-import useEventTargetValue from '../../../utils/hooks/useEventTargetValue'
+import useEventTargetValue from '../../../utils/hooks/useEventTargetValue';
 
 import UserContext from '../../../utils/contexts/UserContext';
 import { Url } from '../../../shared/interfaces/user.interface';
 
-import useAxios from 'axios-hooks';
-import userEvent from '@testing-library/user-event';
+const useStyles = makeStyles((theme: Theme) => createStyles({
+  root: {
+    backgroundColor: fade(theme.palette.primary.light, 0.5),
+    width: '696px',
+    zIndex: 999,
+    border: `2px solid ${fade(theme.palette.primary.light, 0.5)}`,
+    borderRadius: 4,
+  },
+  avatar: {
+    margin: '16px',
+    height: '40px',
+    width: '40px',
+    padding: '8px',
+    boxShadow: theme.shadows[4],
+    backgroundColor: fade(theme.palette.primary.light, 0.5),
+  },
+  avatarWrapper: {
+    display: 'flex',
+    flexDirection: 'column',
+    '&:hover,select': {
+      backgroundColor: fade(theme.palette.primary.light, 0.5),
+      boxShadow: theme.shadows[0],
+      '& $addIcon': {
+        color: 'purple',
+      },
+    },
 
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    root: {
-      backgroundColor: fade(theme.palette.primary.light, 0.5),
-      width: '696px',
-      zIndex: 999,
-      border: `2px solid ${fade(theme.palette.primary.light, 0.5)}`,
-      borderRadius: 4
+  },
+  iconButton: {
+    width: '32px',
+    color: theme.palette.primary.dark,
+    justifySelf: 'flex-end',
+  },
+  listPaper: {
+    backgroundColor: fade(theme.palette.primary.light, 0.5),
+  },
+  popperRoot: {
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    backgroundColor: theme.palette.primary.light,
+    border: `2px solid ${theme.palette.primary.light}`,
+    borderRadius: 10,
+    zIndex: 999,
+    padding: '0 16px 16px 16px',
+    boxShadow: theme.shadows[4],
+  },
+  popperBox: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+  },
+  textField: {
+    '& label.Mui-focused': {
+      color: 'green',
     },
-    avatar: {
-      margin: '16px',
-      height: '40px',
-      width: '40px',
-      padding: '8px',
-      boxShadow: theme.shadows[4],
-      backgroundColor: fade(theme.palette.primary.light, 0.5),
+    '& .MuiInput-underline:after': {
+      borderBottomColor: 'green',
     },
-    avatarWrapper: {
-      display: 'flex',
-      flexDirection: 'column',
-      '&:hover,select': {
-        backgroundColor: fade(theme.palette.primary.light, 0.5),
-        boxShadow: theme.shadows[0],
-        "& $addIcon": {
-          color: "purple"
-        }
+    '& .MuiOutlinedInput-root': {
+      '&.Mui-focused fieldset': {
+        borderColor: 'green',
       },
-
     },
-    iconButton: {
-      width: '32px',
-      color: theme.palette.primary.dark,
-      justifySelf: 'flex-end'
-    },
-    listPaper: {
-      backgroundColor: fade(theme.palette.primary.light, 0.5),
-    },
-    popperRoot: {
-      display: 'flex',
-      flexDirection: 'column',
-      justifyContent: 'center',
-      backgroundColor: theme.palette.primary.light,
-      border: `2px solid ${theme.palette.primary.light}`,
-      borderRadius: 10,
-      zIndex: 999,
-      padding: '0 16px 16px 16px',
-      boxShadow: theme.shadows[4],
-    },
-    popperBox: {
-      display: 'flex',
-      flexDirection: 'row',
-      justifyContent: 'flex-start',
-    },
-    textField: {
-      '& label.Mui-focused': {
-        color: 'green',
-      },
-      '& .MuiInput-underline:after': {
-        borderBottomColor: 'green',
-      },
-      '& .MuiOutlinedInput-root': {
-        '&.Mui-focused fieldset': {
-          borderColor: 'green',
-        },
-      },
-    }
-  }),
-);
+  },
+}));
 
 const StyledMenu = withStyles({
   paper: {
     backgroundColor: fade('#adb5bd', 0.9),
-  }
+  },
 })((props: MenuProps) => (
   <Menu
     elevation={1}
@@ -109,25 +110,24 @@ const StyledMenu = withStyles({
   />
 ));
 
-
 export default function FavicionList(): JSX.Element {
   const classes = useStyles();
-  const defaultUrl = "https://icons.duckduckgo.com/ip3/";
+  const defaultUrl = 'https://icons.duckduckgo.com/ip3/';
   const userContext = React.useContext(UserContext);
 
   const [, postUrlRequest] = useAxios<any>({
     url: 'http://localhost:3000/url',
-    method: 'post'
+    method: 'post',
   }, { manual: true });
 
   const [{ data: urlsData, error: urlError, loading: urlLoading }, getUrlRequest] = useAxios<Url[]>({
     url: 'http://localhost:3000/url',
-    method: 'get'
+    method: 'get',
   }, { manual: true });
 
   const [, deleteUrlRequest] = useAxios<any>({
     url: 'http://localhost:3000/url',
-    method: 'delete'
+    method: 'delete',
   }, { manual: true });
 
   /**
@@ -148,53 +148,51 @@ export default function FavicionList(): JSX.Element {
   const nameInput = useEventTargetValue();
 
   const handleUrlDupleCheck = (urlList: Url[], newUrl: Url) => {
-    console.log(urlList, newUrl)
-    return urlList.find((each) =>
-      each.url === newUrl.url
+    console.log(urlList, newUrl);
+    return urlList.find((each) => each.url === newUrl.url
       || each.urlName === newUrl.urlName);
-  }
+  };
 
   const handleAddUrl = (): void => {
     const newUrl: Url = {
       url: urlInput.value,
       urlName: nameInput.value,
       userId: userContext.user.id ? userContext.user.id : '',
-    }
-    if (handleUrlDupleCheck(urlsData, newUrl)) {
-      alert('중복된 url 입니다.')
+    };
+    if (urlsData && handleUrlDupleCheck(urlsData, newUrl)) {
+      alert('중복된 url 입니다.');
     } else {
       postUrlRequest({
         data: {
           url: urlInput.value,
-          name: nameInput.value
-        }
+          name: nameInput.value,
+        },
       }).then(() => {
         getUrlRequest({
           params: {
-            userId: userContext.user.id
-          }
+            userId: userContext.user.id,
+          },
         });
         addAnchorEl.handleAnchorClose();
-      })
+      });
     }
-  }
+  };
 
   const handleKeyboard = (
-    e: React.KeyboardEvent<HTMLButtonElement | HTMLTextAreaElement | HTMLInputElement | HTMLDivElement>)
-    : void => {
+    e: React.KeyboardEvent<HTMLButtonElement | HTMLTextAreaElement | HTMLInputElement | HTMLDivElement>,
+  ): void => {
     if (e.key === 'Enter') {
       handleAddUrl();
     }
-  }
+  };
 
   React.useEffect(() => {
     getUrlRequest({
       params: {
-        userId: userContext.user.id
-      }
+        userId: userContext.user.id,
+      },
     });
-  }, [userContext.user])
-
+  }, [userContext.user]);
 
   return (
     // <ClickAwayListener onClickAway={addAnchorEl.handleAnchorClose}>
@@ -229,29 +227,31 @@ export default function FavicionList(): JSX.Element {
                 padding: '4px',
               }}
               onClick={() => {
-                window.location.assign('http://' + each.url)
+                window.location.assign(`http://${each.url}`);
               }}
             >
               <Avatar
                 variant="rounded"
                 className={classes.avatar}
               >
-                <img height="100%" width="100%" src={defaultUrl + each.url + '.ico'} />
+                <img height="100%" width="100%" src={`${defaultUrl + each.url}.ico`} alt="favicon" />
               </Avatar>
             </Button>
           </div>
         </Button>
-      ))
-      }
+      ))}
 
       <Button
         className={classes.avatarWrapper}
         style={{
-          alignItems: 'flex-end', padding: '4px',
-          marginTop: '30px'
+          alignItems: 'flex-end',
+          padding: '4px',
+          marginTop: '30px',
         }}
         disabled={!userContext.user.id}
-        onClick={(e) => { addAnchorEl.handleAnchorOpen(e); }}
+        onClick={(e) => {
+          addAnchorEl.handleAnchorOpen(e);
+        }}
       >
 
         <Avatar
@@ -286,21 +286,23 @@ export default function FavicionList(): JSX.Element {
           dense
           button
           onClick={() => {
-            deleteUrlRequest({
-              data: {
-                name: urlsData[selectedUrlIndex].urlName,
-                userId: urlsData[selectedUrlIndex].userId,
-                url: urlsData[selectedUrlIndex].url,
-                index: urlsData[selectedUrlIndex].index,
-              }
-            }).then(() => {
-              menuAnchorEl.handleAnchorClose();
-              getUrlRequest({
-                params: {
-                  userId: userContext.user.id
-                }
+            if (urlsData) {
+              deleteUrlRequest({
+                data: {
+                  name: urlsData[selectedUrlIndex].urlName,
+                  userId: urlsData[selectedUrlIndex].userId,
+                  url: urlsData[selectedUrlIndex].url,
+                  index: urlsData[selectedUrlIndex].index,
+                },
+              }).then(() => {
+                menuAnchorEl.handleAnchorClose();
+                getUrlRequest({
+                  params: {
+                    userId: userContext.user.id,
+                  },
+                });
               });
-            })
+            }
           }}
         >
           <ListItemIcon>
@@ -311,7 +313,6 @@ export default function FavicionList(): JSX.Element {
           </Typography>
         </MenuItem>
       </StyledMenu>
-
 
       <Popper
         className={classes.popperRoot}
@@ -349,8 +350,9 @@ export default function FavicionList(): JSX.Element {
             },
           }}
           onKeyDown={(e) => {
-            if (regUrl.test(urlInput.value) && nameInput.value)
-              handleKeyboard(e)
+            if (regUrl.test(urlInput.value) && nameInput.value) {
+              handleKeyboard(e);
+            }
           }}
         />
 
@@ -364,7 +366,7 @@ export default function FavicionList(): JSX.Element {
           error={nameInput.value.length === 0}
           helperText="url 이름을 입력해 주세요"
           style={{
-            marginTop: '16px'
+            marginTop: '16px',
           }}
           inputProps={{
             style: {
@@ -374,8 +376,9 @@ export default function FavicionList(): JSX.Element {
             },
           }}
           onKeyDown={(e) => {
-            if (regUrl.test(urlInput.value) && nameInput.value)
-              handleKeyboard(e)
+            if (regUrl.test(urlInput.value) && nameInput.value) {
+              handleKeyboard(e);
+            }
           }}
         />
 
@@ -383,7 +386,7 @@ export default function FavicionList(): JSX.Element {
           variant="contained"
           color="primary"
           style={{
-            marginTop: '16px'
+            marginTop: '16px',
           }}
           disabled={!(nameInput.value && regUrl.test(urlInput.value))}
           onClick={() => handleAddUrl()}
@@ -393,7 +396,7 @@ export default function FavicionList(): JSX.Element {
 
       </Popper>
 
-    </Grid >
+    </Grid>
     //* </ClickAwayListener> */ }
-  )
+  );
 }
