@@ -1,6 +1,6 @@
 import React from 'react';
 import CrawlingCard from './card/CrawlingCard';
-import Timetable from './time-table/Timetable';
+import WeekTable from './time-table/WeekTable';
 import MealPlanner from './meal-planner/MealPlanner';
 import Todo from './to-do/Todo';
 import CategoryButton from './category/CategoryButton';
@@ -27,6 +27,101 @@ const useStyles = makeStyles((theme: Theme) =>
     },
   }),
 );
+
+const dummy = [
+  {
+    "연번": 1699,
+    "대학명": "사범대학",
+    "주관학과": 362100,
+    "주관학과명": "교육학과",
+    "학년": 3,
+    "교과목코드": "XA40360",
+    "분반": "005",
+    "교과목명": "학교폭력예방및학생의이해",
+    "영문교과목명": "UNDERSTANDING STUDENTS AND SCHOOL VIOLENCE PREVENTION",
+    "교과구분": "교직과목",
+    "학점": 2,
+    "이론": 2,
+    "실습": 0,
+    "교수명": "설정희",
+    "제한인원": 25,
+    "시간표": "화 17:00 (100) 417-510",
+    "교양영역": "",
+    "원어": "",
+    "팀티칭": "",
+    "원격": "",
+    "비고": ""
+  },
+  {
+    "연번": 1716,
+    "대학명": "사범대학",
+    "주관학과": 362300,
+    "주관학과명": "유아교육과",
+    "학년": 2,
+    "교과목코드": "ER34348",
+    "분반": "076",
+    "교과목명": "아동수학지도",
+    "영문교과목명": "MATHEMATICS INSTRUCTION FOR CHILDREN",
+    "교과구분": "전공선택",
+    "학점": 3,
+    "이론": 3,
+    "실습": 0,
+    "교수명": "정혜영",
+    "제한인원": 19,
+    "시간표": "화 15:00 (75) 211-A202,목 15:00 (75) 211-A202",
+    "교양영역": "",
+    "원어": "",
+    "팀티칭": "",
+    "원격": "",
+    "비고": ""
+  },
+  {
+    "연번": 1754,
+    "대학명": "사범대학",
+    "주관학과": 363060,
+    "주관학과명": "통합사회전공",
+    "학년": 3,
+    "교과목코드": "SD34599",
+    "분반": "075",
+    "교과목명": "통합사회논리및논술",
+    "영문교과목명": "LOGIC & WRITING OF INTEGRATED SOCIAL SCIENCE EDUCATION",
+    "교과구분": "전공선택",
+    "학점": 3,
+    "이론": 3,
+    "실습": 0,
+    "교수명": "백종성/김효성/장혜진/박미향",
+    "제한인원": 15,
+    "시간표": "금 14:00 (180) 417-102",
+    "교양영역": "",
+    "원어": "",
+    "팀티칭": "Y",
+    "원격": "",
+    "비고": ""
+  },
+  {
+    "연번": 1,
+    "대학명": "교육혁신과",
+    "주관학과": 127100,
+    "주관학과명": "교육혁신과",
+    "학년": 0,
+    "교과목코드": "EA12620",
+    "분반": "001",
+    "교과목명": "소비문화",
+    "영문교과목명": "CONSUMER CULTURE",
+    "교과구분": "일반선택",
+    "학점": 3,
+    "이론": 3,
+    "실습": 0,
+    "교수명": "",
+    "제한인원": 30,
+    "시간표": "토 10:00 (180)",
+    "교양영역": "",
+    "원어": "",
+    "팀티칭": "",
+    "원격": "Y",
+    "비고": "KNU-9"
+  },
+]
 
 export default function BottomTest(): JSX.Element {
   const classes = useStyles();
@@ -120,7 +215,9 @@ export default function BottomTest(): JSX.Element {
         }}
       >
         <GridListTile cols={1}>
-          <Timetable />
+          <WeekTable
+            schoolClasses={dummy}
+          />
         </GridListTile>
         <GridListTile cols={1}>
           <MealPlanner />

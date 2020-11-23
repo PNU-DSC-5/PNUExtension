@@ -1,14 +1,13 @@
 import React from 'react';
-import { makeStyles, createStyles, Theme ,fade} from '@material-ui/core/styles';
-import { Paper, IconButton, Typography, Dialog, DialogTitle, DialogContent} from '@material-ui/core';
-import regular202002 from '../../../../shared/data/regular-2020-2.json';
+import { makeStyles, createStyles, Theme, fade } from '@material-ui/core/styles';
+import { Paper, IconButton, Typography, Dialog, DialogTitle, DialogContent } from '@material-ui/core';
+import regular202002 from '../shared/data/regular-2020-2.json';
 import SettingsIcon from '@material-ui/icons/Settings';
-import useBasicDialog from '../../../../utils/hooks/useBasicDialog';
-import BottomTest from '../BottomSection';
+import useBasicDialog from '../utils/hooks/useBasicDialog';
+import BottomTest from '../components/main-page/bottom-section/BottomSection';
 
-import Schedule from './Schedule';
-import Test from './Test';
-import Ctest from './CSSschedule';
+import WeekTable from '../components/main-page/bottom-section/time-table/WeekTable';
+
 const dummy = [
   {
     "연번": 1699,
@@ -103,12 +102,14 @@ const dummy = [
     "비고": "KNU-9"
   },
 ]
+
+
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     section: {
       height: '100%',
       width: '100%',
-      
+
       display: 'flex',
       flexDirection: 'column'
     },
@@ -117,7 +118,7 @@ const useStyles = makeStyles((theme: Theme) =>
 
 export default function Timetable(): JSX.Element {
   const classes = useStyles();
-  const {open, handleClose, handleOpen} = useBasicDialog();
+  const { open, handleClose, handleOpen } = useBasicDialog();
 
   return (
     <Paper className={classes.section}>
@@ -129,7 +130,7 @@ export default function Timetable(): JSX.Element {
           justifyContent: 'center'
         }}
       >
-        <Typography 
+        <Typography
           variant="h6"
           style={{
             verticalAlign: 'middle'
@@ -137,7 +138,7 @@ export default function Timetable(): JSX.Element {
         >
           Timetable
         </Typography>
- 
+
         <IconButton
           onClick={handleOpen}
         >
@@ -159,7 +160,7 @@ export default function Timetable(): JSX.Element {
       >
         <DialogTitle
         >
-          <Typography variant="h6" align="center" style={{color: 'white'}}>
+          <Typography variant="h6" align="center" style={{ color: 'white' }}>
             시간표
           </Typography>
         </DialogTitle>
@@ -173,12 +174,12 @@ export default function Timetable(): JSX.Element {
           {/* <Test
             dummy={dummy}
           /> */}
-          <Ctest
-            dummy={dummy}
+          <WeekTable
+            schoolClasses={dummy}
           />
         </DialogContent>
       </Dialog>
-     
+
     </Paper>
   );
 }
