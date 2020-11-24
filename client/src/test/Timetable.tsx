@@ -1,7 +1,7 @@
 import React from 'react';
 import { makeStyles, createStyles, Theme, fade } from '@material-ui/core/styles';
 import { Paper, IconButton, Typography, Dialog, DialogTitle, DialogContent } from '@material-ui/core';
-import regular202002 from '../shared/data/regular-2020-2.json';
+import regular202002 from '../shared/data/form-2020-2.json';
 import SettingsIcon from '@material-ui/icons/Settings';
 import useBasicDialog from '../utils/hooks/useBasicDialog';
 import BottomTest from '../components/main-page/bottom-section/BottomSection';
@@ -25,7 +25,7 @@ const dummy = [
     "실습": 0,
     "교수명": "설정희",
     "제한인원": 25,
-    "시간표": "화 17:00 (100) 417-510",
+    "시간표": "화 17:00(100) 417-510",
     "교양영역": "",
     "원어": "",
     "팀티칭": "",
@@ -48,7 +48,7 @@ const dummy = [
     "실습": 0,
     "교수명": "정혜영",
     "제한인원": 19,
-    "시간표": "화 15:00 (75) 211-A202,목 15:00 (75) 211-A202",
+    "시간표": "화 15:00(75) 211-A202,목 15:00(75) 211-A202",
     "교양영역": "",
     "원어": "",
     "팀티칭": "",
@@ -71,7 +71,7 @@ const dummy = [
     "실습": 0,
     "교수명": "백종성/김효성/장혜진/박미향",
     "제한인원": 15,
-    "시간표": "금 14:00 (180) 417-102",
+    "시간표": "금 14:00(180) 417-102",
     "교양영역": "",
     "원어": "",
     "팀티칭": "Y",
@@ -94,7 +94,7 @@ const dummy = [
     "실습": 0,
     "교수명": "",
     "제한인원": 30,
-    "시간표": "토 10:00 (180)",
+    "시간표": "토 10:00(180)",
     "교양영역": "",
     "원어": "",
     "팀티칭": "",

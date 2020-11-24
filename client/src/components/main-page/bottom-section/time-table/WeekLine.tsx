@@ -51,7 +51,6 @@ function splitTimeString(str: string) {
   if (result.length > 1)
     return result;
   result.push('일');
-  // console.log(result)
   return result;
 }
 
@@ -84,23 +83,24 @@ export default function WeekLine(props: WeekTimeLineProps): JSX.Element {
           }
 
           const times = splitTimeString(eachClass['시간표']);
-          const firstClass = times[0].split(' ');
+
+          const firstClass = times[0].split(' '); // 월 13:00(100) 415
           const secondClass = times[1].split(' ');
 
           if (firstClass[0] === targetWeek) {
             const time = moment('2020/10/10 ' + firstClass[1].slice(0, 5) + ':00');
-            pos.height = firstClass[2][4] === ')' ? Number(firstClass[2].slice(1, 4)) : Number(firstClass[2].slice(1, 3));
+            pos.height = firstClass[1][9] === ')' ? Number(firstClass[1].slice(6, 9)) : Number(firstClass[1].slice(6, 8));
             pos.marginTop = (time.diff(moment('2020/10/10 09:00:00'), 'minutes'))
 
-          } else if (secondClass[0] === targetWeek) {
+          } else if (secondClass && secondClass[0] === targetWeek) {
             const time = moment('2020/10/10 ' + secondClass[1].slice(0, 5) + ':00');
-            pos.height = secondClass[2][4] === ')' ? Number(secondClass[2].slice(1, 4)) : Number(secondClass[2].slice(1, 3));
+            pos.height = secondClass[1][9] === ')' ? Number(secondClass[1].slice(6, 9)) : Number(secondClass[1].slice(6, 8));
             pos.marginTop = (time.diff(moment('2020/10/10 09:00:00'), 'minutes'))
           }
 
           return (
             <ListItem
-              button
+
               className={classes.classItem}
               style={{
                 marginTop: pos.marginTop,

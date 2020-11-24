@@ -1,4 +1,4 @@
-export interface SchoolClass{
+export interface SchoolClass {
     연번: number;
     대학명: string;
     주관학과: number;
@@ -20,6 +20,10 @@ export interface SchoolClass{
     원어: string;
     원격: string;
     교양영역: string;
+}
+
+export interface ClassCategory {
+    [key: string]: string[];
 }
 
 // "연번": 3755,

@@ -53,7 +53,6 @@ function splitTimeString(str: string) {
   }
   result.push('일');
 
-  // console.log(result)
   return result;
 }
 
@@ -61,30 +60,6 @@ interface WeeksType {
   state: SchoolClass[];
   func: React.Dispatch<React.SetStateAction<SchoolClass[]>>;
 }
-
-const addDummy = {
-  연번: 1523,
-  대학명: '공과대학',
-  주관학과: 346734,
-  주관학과명: '토목공학전공',
-  학년: 2,
-  교과목코드: 'CR15220',
-  분반: '047',
-  교과목명: '일반화학실험(I)',
-  영문교과목명: 'GENERAL CHEMISTRY LABORATORY(I)',
-  교과구분: '전공선택',
-  학점: 1,
-  이론: 0,
-  실습: 2,
-  교수명: '박영상',
-  제한인원: 10,
-  시간표: '금 17:00(100) 606-416',
-  교양영역: '',
-  원어: '',
-  팀티칭: '',
-  원격: '',
-  비고: '',
-};
 
 export default function WeekTable(props: WeekTableProps): JSX.Element {
   const { schoolClasses } = props;
@@ -101,36 +76,65 @@ export default function WeekTable(props: WeekTableProps): JSX.Element {
   const [fri, setFri] = React.useState<SchoolClass[]>(schoolClasses.filter((each) => splitTimeString(each['시간표'])[0][0] === '금' || splitTimeString(each['시간표'])[1][0] === '금'));
   const [sat, setSat] = React.useState<SchoolClass[]>(schoolClasses.filter((each) => splitTimeString(each['시간표'])[0][0] === '토' || splitTimeString(each['시간표'])[1][0] === '토'));
 
-  /* 요일 라인을 합친 상태값 */
-  const [weeks, setWeeks] = React.useState<WeeksType[]>([
-    { state: mon, func: setMon },
-    { state: tue, func: setTue },
-    { state: wen, func: setWen },
-    { state: thu, func: setThu },
-    { state: fri, func: setFri },
-    { state: sat, func: setSat }]);
   const days = ['월', '화', '수', '목', '금', '토'];
 
-  const handleAddClassToWeek = (newClass: SchoolClass, targetWeek: string) => {
-    const targetIndex = days.indexOf(targetWeek);
-    weeks[targetIndex].func([...weeks[targetIndex].state, newClass]);
-  };
+  const checkAlreadyExistClass = (): boolean => {
 
-  const handleSubClassToWeek = (reomveClass: SchoolClass, targetWeek: string) => {
-    const targetIndex = days.indexOf(targetWeek);
-    weeks[targetIndex].func(weeks[targetIndex].state.filter((eachClass) => eachClass['연번'] !== reomveClass['연번']));
-  };
+    return true;
+  }
+  const checkPossibleClassTime = (newClass: SchoolClass, targetList: SchoolClass[]): boolean => {
 
+    const timeStrList = targetList.map((each) => each['시간표'].split(','));
+    const newTime = newClass['시간표'];
+
+    if (targetList.indexOf(newClass) > 0) {
+      alert('이미 해당 수업이 존재 합니다.')
+      return false;
+    } else if (false) {
+
+
+      return false;
+    }
+    else
+      return true;
+  }
+
+  const handleMon = (newClass: SchoolClass) => {
+    setMon([...mon, newClass]);
+  }
+  const handleTue = (newClass: SchoolClass) => {
+    setTue([...tue, newClass]);
+  }
+  const handleWen = (newClass: SchoolClass) => {
+    setWen([...wen, newClass]);
+  }
+  const handleThu = (newClass: SchoolClass) => {
+    setThu([...thu, newClass]);
+  }
+  const handleFri = (newClass: SchoolClass) => {
+    setFri([...fri, newClass]);
+  }
+  const handleSat = (newClass: SchoolClass) => {
+    setSat([...sat, newClass]);
+  }
+
+  /**
+   * @param isOpen 수업 검색 drawer open state
+   */
   const handleDrawer = (isOpen: boolean) => (event: React.KeyboardEvent | React.MouseEvent) => {
-    setDrawerOpen(isOpen);
     if (
       event.type === 'keydown'
       && ((event as React.KeyboardEvent).key === 'Tab'
         || (event as React.KeyboardEvent).key === 'Shift')
     ) {
-
+      setDrawerOpen(false);
     }
+    setDrawerOpen(isOpen);
   };
+
+  React.useEffect(() => {
+    console.log(mon[0] === mon[1])
+  }, [mon])
 
   return (
     <Paper className={classes.section}>
@@ -167,7 +171,7 @@ export default function WeekTable(props: WeekTableProps): JSX.Element {
         scroll="paper"
         PaperProps={{
           style: {
-            backgroundColor: fade('#495057', 0.9),
+            backgroundColor: fade('#495057', 1),
             borderRadius: 32,
           },
         }}
@@ -194,20 +198,36 @@ export default function WeekTable(props: WeekTableProps): JSX.Element {
             }}
           >
 
-            {weeks.map((week, index) => (
+            {/* {weeks.map((week, index) => (
               <WeekLine
                 schoolClasses={week.state}
                 targetWeek={days[index]}
               />
-            ))}
-
-            {/* <div
-              style={{
-                marginLeft: '32px'
-              }}
-            >
-              <TodayLine />
-            </div> */}
+            ))} */}
+            <WeekLine
+              schoolClasses={mon}
+              targetWeek={'월'}
+            />
+            <WeekLine
+              schoolClasses={tue}
+              targetWeek={'화'}
+            />
+            <WeekLine
+              schoolClasses={wen}
+              targetWeek={'수'}
+            />
+            <WeekLine
+              schoolClasses={thu}
+              targetWeek={'목'}
+            />
+            <WeekLine
+              schoolClasses={fri}
+              targetWeek={'금'}
+            />
+            <WeekLine
+              schoolClasses={sat}
+              targetWeek={'토'}
+            />
 
             <IconButton
               style={{
@@ -223,6 +243,7 @@ export default function WeekTable(props: WeekTableProps): JSX.Element {
             <FilterDrawer
               drawerOpen={drawerOpen}
               handleDrawer={handleDrawer}
+              handlers={[handleMon, handleTue, handleWen, handleThu, handleFri, handleSat]}
             />
 
           </div>
@@ -233,9 +254,3 @@ export default function WeekTable(props: WeekTableProps): JSX.Element {
 
   );
 }
-/* <WeekLine schoolClasses={mon} targetWeek="월" />
-      <WeekLine schoolClasses={tue} targetWeek="화" />
-      <WeekLine schoolClasses={wen} targetWeek="수" />
-      <WeekLine schoolClasses={thu} targetWeek="목" />
-      <WeekLine schoolClasses={fri} targetWeek="금" />
-      <WeekLine schoolClasses={sat} targetWeek="토" /> */
