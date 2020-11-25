@@ -16,14 +16,11 @@ import moment from 'moment';
 import useBasicDialog from '../../../../utils/hooks/useBasicDialog';
 
 import WeekLine from './WeekLine';
-import TodayLine from './TodayLine';
 import FilterDrawer from './FilterDrawer';
 
 import { SchoolClass } from '../shared/interfaces/timeTable.inteface';
 
-interface WeekTableProps {
-  schoolClasses: SchoolClass[]
-}
+
 
 const useStyles = makeStyles((theme: Theme) => createStyles({
   section: {
@@ -41,7 +38,7 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
   weekLineWrapper: {
     width: '10%',
     height: '780px',
-    marginRight: '4px',
+    // marginRight: '4px',
     // border: '1px solid black',
   },
 }));
@@ -56,13 +53,13 @@ function splitTimeString(str: string) {
   return result;
 }
 
-interface WeeksType {
-  state: SchoolClass[];
-  func: React.Dispatch<React.SetStateAction<SchoolClass[]>>;
+export interface WeekTableProps {
+  schoolClasses: SchoolClass[];
+  handleAddSchoolClassRequest: (newClass: SchoolClass) => void;
 }
 
 export default function WeekTable(props: WeekTableProps): JSX.Element {
-  const { schoolClasses } = props;
+  const { schoolClasses, handleAddSchoolClassRequest } = props;
   const classes = useStyles();
   /* 다이얼로그 */
   const { open, handleClose, handleOpen } = useBasicDialog();
@@ -78,44 +75,39 @@ export default function WeekTable(props: WeekTableProps): JSX.Element {
 
   const days = ['월', '화', '수', '목', '금', '토'];
 
-  const checkAlreadyExistClass = (): boolean => {
-
-    return true;
-  }
   const checkPossibleClassTime = (newClass: SchoolClass, targetList: SchoolClass[]): boolean => {
+    // 월 13:00(139)
+    const timeStrList = targetList.map((each) => each['시간표'].split(',')[0].slice(2, 7));
+    const newTime = newClass['시간표'].split(',')[0].slice(2, 7);
 
-    const timeStrList = targetList.map((each) => each['시간표'].split(','));
-    const newTime = newClass['시간표'];
-
-    if (targetList.indexOf(newClass) > 0) {
-      alert('이미 해당 수업이 존재 합니다.')
-      return false;
-    } else if (false) {
-
-
+    if (timeStrList.includes(newTime)) {
+      /* 겹치는 시간이 존재 하는지 확인 요일, 시간 */
+      alert('수업 시간이 겹쳐 추가 할 수 없습니다.');
       return false;
     }
-    else
+    else {
+      handleAddSchoolClassRequest(newClass);
       return true;
+    }
   }
 
   const handleMon = (newClass: SchoolClass) => {
-    setMon([...mon, newClass]);
+    if (checkPossibleClassTime(newClass, mon)) setMon([...mon, newClass]);
   }
   const handleTue = (newClass: SchoolClass) => {
-    setTue([...tue, newClass]);
+    if (checkPossibleClassTime(newClass, tue)) setTue([...tue, newClass]);
   }
   const handleWen = (newClass: SchoolClass) => {
-    setWen([...wen, newClass]);
+    if (checkPossibleClassTime(newClass, wen)) setWen([...wen, newClass]);
   }
   const handleThu = (newClass: SchoolClass) => {
-    setThu([...thu, newClass]);
+    if (checkPossibleClassTime(newClass, thu)) setThu([...thu, newClass]);
   }
   const handleFri = (newClass: SchoolClass) => {
-    setFri([...fri, newClass]);
+    if (checkPossibleClassTime(newClass, fri)) setFri([...fri, newClass]);
   }
   const handleSat = (newClass: SchoolClass) => {
-    setSat([...sat, newClass]);
+    if (checkPossibleClassTime(newClass, sat)) setSat([...sat, newClass]);
   }
 
   /**
@@ -195,38 +187,33 @@ export default function WeekTable(props: WeekTableProps): JSX.Element {
               display: 'flex',
               flexDirection: 'row',
               justifyContent: 'center',
+              padding: 0
             }}
           >
 
-            {/* {weeks.map((week, index) => (
-              <WeekLine
-                schoolClasses={week.state}
-                targetWeek={days[index]}
-              />
-            ))} */}
             <WeekLine
               schoolClasses={mon}
-              targetWeek={'월'}
+              targetWeek={days[0]}
             />
             <WeekLine
               schoolClasses={tue}
-              targetWeek={'화'}
+              targetWeek={days[1]}
             />
             <WeekLine
               schoolClasses={wen}
-              targetWeek={'수'}
+              targetWeek={days[2]}
             />
             <WeekLine
               schoolClasses={thu}
-              targetWeek={'목'}
+              targetWeek={days[3]}
             />
             <WeekLine
               schoolClasses={fri}
-              targetWeek={'금'}
+              targetWeek={days[4]}
             />
             <WeekLine
               schoolClasses={sat}
-              targetWeek={'토'}
+              targetWeek={days[5]}
             />
 
             <IconButton

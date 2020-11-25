@@ -174,9 +174,9 @@ export default function Timetable(): JSX.Element {
           {/* <Test
             dummy={dummy}
           /> */}
-          <WeekTable
+          {/* <WeekTable
             schoolClasses={dummy}
-          />
+          /> */}
         </DialogContent>
       </Dialog>
 

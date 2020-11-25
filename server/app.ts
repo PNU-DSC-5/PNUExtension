@@ -10,6 +10,7 @@ import path from 'path';
 import testRouter from './src/resource/users/index';
 import userRouter from './src/resource/users/index';
 import urlRouter from './src/resource/url/index';
+import schoolClassRouter from './src/resource/school-class/index';
 
 class PNUApi {
   public app: express.Express;
@@ -63,6 +64,7 @@ class PNUApi {
     this.app.use('/', testRouter);
     this.app.use('/users', userRouter);
     this.app.use('/url', urlRouter);
+    this.app.use('/school-class', schoolClassRouter);
 
     this.app.use(
       () => (

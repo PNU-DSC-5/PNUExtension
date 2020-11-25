@@ -21,9 +21,8 @@ const useStyles = makeStyles((theme: Theme) =>
       marginBottom: '16px'
     },
     weekLineWrapper: {
-      width: '10%',
+      width: '14%',
       height: '780px',
-      marginRight: '4px',
     },
     list: {
       border: '1px solid gray',
@@ -84,7 +83,7 @@ export default function WeekLine(props: WeekTimeLineProps): JSX.Element {
 
           const times = splitTimeString(eachClass['시간표']);
 
-          const firstClass = times[0].split(' '); // 월 13:00(100) 415
+          const firstClass = times[0].split(' ');
           const secondClass = times[1].split(' ');
 
           if (firstClass[0] === targetWeek) {
@@ -100,14 +99,15 @@ export default function WeekLine(props: WeekTimeLineProps): JSX.Element {
 
           return (
             <ListItem
-
               className={classes.classItem}
               style={{
                 marginTop: pos.marginTop,
                 height: pos.height,
               }}
             >
-              {eachClass['교과목명']}
+              <Typography variant='body1'>
+                {eachClass['교과목명'].length > 10 ? eachClass['교과목명'].slice(0, 11) + '..' : eachClass['교과목명']}
+              </Typography>
             </ListItem>
           )
         })}

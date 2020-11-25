@@ -21,7 +21,7 @@ export interface SchoolClass {
     원격: string;
     교양영역: string;
 }
-
+``
 export interface ClassCategory {
     [key: string]: string[];
 }

@@ -1,13 +1,59 @@
 import React from 'react';
 import {
   Drawer, List, ListItem, Accordion, AccordionSummary,
-  AccordionDetails, Typography, Box, Button
+  AccordionDetails, Typography, Box, Button, Divider, TextField,
+  AppBar, Toolbar
 } from '@material-ui/core';
+import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
+
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
 import SchoolClassData from '../../../../shared/data/form-2020-2.json';
 import CategoryData from '../../../../shared/data/category.json';
 
 import { SchoolClass, ClassCategory } from '../shared/interfaces/timeTable.inteface';
+
+
+const useStyles = makeStyles((theme: Theme) => createStyles({
+  drawer: {
+    backgroundColor: '#e9ecef'
+  },
+  root: {
+    display: 'flex',
+    flexDirection: 'row',
+    height: '600px',
+  },
+  accordian: {
+
+  },
+  filterBox: {
+    display: 'inline-flex',
+    flexDirection: 'column',
+    position: 'fixed',
+    width: '500px',
+    backgroundColor: '#e9ecef',
+  },
+  listBox: {
+    width: '100%',
+    marginLeft: '516px',
+    marginRight: '32px',
+    border: '1px solid gray',
+    borderRadius: 16,
+    marginTop: '16px',
+    height: 'fit-content',
+    minHeight: '400px',
+    backgroundColor: 'white',
+  },
+  schoolListItem: {
+    borderRadious: 16
+  },
+  schoolListItemText: {
+    display: 'inline-flex',
+    flexDirection: 'row',
+    padding: 16,
+    width: '100%'
+  }
+}));
 
 export interface FilterDrawerProps {
   drawerOpen: boolean;
@@ -25,18 +71,14 @@ export interface FilterDrawerProps {
  */
 export default function FilterDrawer(props: FilterDrawerProps): JSX.Element {
   const { drawerOpen, handleDrawer, handlers } = props;
+  const classes = useStyles();
 
   const [classList, setClassList] = React.useState<SchoolClass[]>([]);
   const originCategory: ClassCategory = CategoryData;
   const college: string[] = Object.keys(CategoryData);
   const categorys = (collegeName: string) => originCategory[collegeName];
 
-  const [selectedDepartment, setSelectedDepartment] = React.useState<string>('');
   const [selectedCategory, setSelectedCategory] = React.useState<string>('');
-
-  const handleSelectDepartment = (department: string) => {
-    setSelectedDepartment(department);
-  }
 
   const handleSelectCategory = (department: string, category: string) => {
     const filtered = SchoolClassData as SchoolClass[]
@@ -51,33 +93,22 @@ export default function FilterDrawer(props: FilterDrawerProps): JSX.Element {
       anchor="bottom"
       open={drawerOpen}
       onClose={handleDrawer(false)}
+      classes={{ paper: classes.drawer }}
     >
-      <div
-        style={{
-          display: 'flex',
-          flexDirection: 'row',
-          height: '600px',
-        }}
-      >
-        <Box
-          border
-          style={{
-            display: 'inline-flex',
-            flexDirection: 'column',
-            position: 'fixed',
-            width: '400px',
-          }}
-        >
-          <Accordion
-            style={{
-              margin: 16,
-              marginBottom: 16
-            }}
-          >
+
+      <div className={classes.root}>
+        <Box className={classes.filterBox}>
+          <Accordion style={{
+            marginBottom: 16,
+            margin: 16,
+            border: "1px solid gray",
+            borderRadius: 16
+          }}>
             <AccordionSummary
               style={{
-                padding: 32
+                padding: 32,
               }}
+              expandIcon={<ExpandMoreIcon />}
             >
               <Typography variant="h6">
                 대학명/개설학과명
@@ -108,8 +139,9 @@ export default function FilterDrawer(props: FilterDrawerProps): JSX.Element {
                     style={{
                       padding: 0
                     }}
+                    expandIcon={<ExpandMoreIcon />}
                   >
-                    <Typography variant="h6" style={{ marginLeft: '16px' }}>
+                    <Typography variant="h5" style={{ marginLeft: '32px', padding: 8 }}>
                       {col}
                     </Typography>
                   </AccordionSummary>
@@ -121,7 +153,9 @@ export default function FilterDrawer(props: FilterDrawerProps): JSX.Element {
                       overflowX: 'hidden',
                     }}
                   >
-                    <List>
+                    <List
+
+                    >
                       {categorys(col).map((category) => (
                         <ListItem
                           button
@@ -129,7 +163,7 @@ export default function FilterDrawer(props: FilterDrawerProps): JSX.Element {
                             handleSelectCategory(col, category)
                           }}
                         >
-                          <Typography variant="body1">
+                          <Typography variant="h6" style={{ padding: 4 }}>
                             {category}
                           </Typography>
 
@@ -144,12 +178,13 @@ export default function FilterDrawer(props: FilterDrawerProps): JSX.Element {
             </AccordionDetails>
           </Accordion>
 
-          <Accordion
-            style={{
-              margin: 16
-            }}
-          >
-            <AccordionSummary>
+          <Accordion style={{
+            marginBottom: 16,
+            margin: 16,
+            border: "1px solid gray",
+            borderRadius: 16
+          }}>
+            <AccordionSummary expandIcon={<ExpandMoreIcon />}>
               <Typography variant="h6" style={{ padding: 32 }}>
                 과목명 검색
               </Typography>
@@ -159,48 +194,37 @@ export default function FilterDrawer(props: FilterDrawerProps): JSX.Element {
                 maxHeight: '400px',
               }}
             >
-              <Typography>
-                TEST2
-              </Typography>
+              <div style={{ padding: 32 }}>
+                <TextField />
+              </div>
             </AccordionDetails>
           </Accordion>
         </Box>
 
-        <Box
-          style={{
-            marginLeft: '450px',
-            width: '100%',
-          }}
-        >
+        <Box className={classes.listBox}>
           <List>
             {selectedCategory &&
               classList
                 .map((info) => {
                   return (
-                    <ListItem
-                      button
-                      style={{
-                        borderBottom: '1px solid gray'
-                      }}
-                      onClick={() => {
-                        const targetWeek = info['시간표'].split(',');
-                        handlers[days.indexOf(targetWeek[0][0])](info);
-                        if (targetWeek.length > 1) handlers[days.indexOf(targetWeek[1][0])](info);
-                      }}
-                    >
-                      <div
-                        style={{
-                          display: 'inline-flex',
-                          flexDirection: 'row',
-                          padding: 16,
-                          width: '100%'
+                    <div>
+                      <ListItem
+                        button
+                        className={classes.schoolListItem}
+                        onClick={() => {
+                          const targetWeek = info['시간표'].split(',');
+                          handlers[days.indexOf(targetWeek[0][0])](info);
+                          if (targetWeek.length > 1) handlers[days.indexOf(targetWeek[1][0])](info);
                         }}
                       >
-                        <Typography style={{ width: '15%' }}>{info['교과목명']}</Typography>
-                        <Typography style={{ width: '15%' }} align="center">{info['분반']}</Typography>
-                        <Typography style={{ width: '15%' }}>{info['시간표']}</Typography>
-                      </div>
-                    </ListItem>
+                        <div className={classes.schoolListItemText}>
+                          <Typography variant="h6" style={{ width: '30%' }}>{info['교과목명']}</Typography>
+                          <Typography variant="h6" style={{ width: '15%' }} align="center">{info['분반']}</Typography>
+                          <Typography variant="h6" style={{ width: '40%' }}>{info['시간표']}</Typography>
+                        </div>
+                      </ListItem>
+                      <Divider />
+                    </div>
                   )
 
                 })}
