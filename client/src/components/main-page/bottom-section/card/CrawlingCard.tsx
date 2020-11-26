@@ -27,9 +27,10 @@ interface Props {
   title: string;
   href: string;
   content: string;
+  category: string;
 }
 
-const CrawlingCard = ({ id, title, href, content }: Props) => {
+const CrawlingCard = ({ id, title, href, content, category }: Props) => {
   const classes = useStyles();
 
   return (
@@ -42,6 +43,9 @@ const CrawlingCard = ({ id, title, href, content }: Props) => {
           image="/images/space.jpg"
           title="Space"
         />
+        <Typography color="textSecondary" variant="caption">
+          {category}
+        </Typography>
         <CardContent>
           <Typography gutterBottom variant="h6" component="h2">
             {title}
