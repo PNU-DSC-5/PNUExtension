@@ -20,6 +20,7 @@ export interface SchoolClass {
     원어: string;
     원격: string;
     교양영역: string;
+    color?: string;
 }
 
 export interface ClassCategory {

@@ -16,7 +16,18 @@ const globalTheme: ThemeOptions = {
         }
     },
     typography: {
-        fontFamily: '"NotoSansKR-Regular", "Sunflower", sans-serif'
+        fontFamily: [
+            '-apple-system',
+            'BlinkMacSystemFont',
+            '"Segoe UI"',
+            'Roboto',
+            '"Helvetica Neue"',
+            'Arial',
+            'sans-serif',
+            '"Apple Color Emoji"',
+            '"Segoe UI Emoji"',
+            '"Segoe UI Symbol"',
+        ].join(','),
     },
     // shadows: [
     //     // 23 default values of 'shadows' array from https://material-ui-1dab0.firebaseapp.com/customization/themes/

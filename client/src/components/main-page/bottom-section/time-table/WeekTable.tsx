@@ -1,8 +1,8 @@
 import React from 'react';
 
 import {
-  List, ListItem, Button, Drawer, Backdrop,
-  Paper, IconButton, Typography, Dialog, DialogTitle, DialogContent,
+  List, ListItem, Button, Drawer, Backdrop, Container,
+  Paper, IconButton, Typography, Dialog, DialogTitle, DialogContent, GridList, Grid
 } from '@material-ui/core';
 
 import {
@@ -19,6 +19,11 @@ import useBasicDialog from '../../../../utils/hooks/useBasicDialog';
 
 import WeekLine from './WeekLine';
 import FilterDrawer from './FilterDrawer';
+import CardTimeLine from './CardTimeLine'
+import Carousel from 'react-material-ui-carousel'
+import 'slick-carousel/slick/slick.css';
+import 'slick-carousel/slick/slick-theme.css';
+import Slider from 'react-slick';
 
 import { SchoolClass } from '../shared/interfaces/timeTable.inteface';
 
@@ -41,6 +46,25 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
     // marginRight: '4px',
     // border: '1px solid black',
   },
+  slider: {
+    '&>ul>li': {
+      width: 50,
+    },
+    width: '95%',
+    margin: 'auto',
+    height: 'px'
+  },
+  '@keyframes blinker': {
+    from: { opacity: 1 },
+    to: { opacity: 0.3 }
+  },
+  blinkIcon: {
+    animationName: '$blinker',
+    animationDuration: '1000ms',
+    animationIterationCount: 'infinite',
+    animationDirection: 'alternate',
+    animationTimingFunction: 'ease-in-out',
+  }
 }));
 
 function splitTimeString(str: string) {
@@ -52,7 +76,10 @@ function splitTimeString(str: string) {
 
   return result;
 }
-
+const colors = [
+  '#0c8599', '#ffd8a8', '#748ffc', '#1971c2', '#a5d8ff', '#ffa8a8', '#f08c00',
+  '#40c057', '#f08c00', '#51cf66', '#99e9f2', '#495057', '#495057',
+];
 export interface WeekTableProps {
   schoolClasses: SchoolClass[];
   handleAddSchoolClassRequest: (newClass: SchoolClass) => void;
@@ -83,6 +110,11 @@ export default function WeekTable(): JSX.Element {
   const [sat, setSat] = React.useState<SchoolClass[]>([]);
   const days = ['월', '화', '수', '목', '금', '토'];
 
+
+  /**
+   * str -> number
+   * @param timeStr hh:mm
+   */
   const checkPossibleClassTime = (newClass: SchoolClass, targetList: SchoolClass[]): boolean => {
     // 월 13:00(139)
     const timeStrList = targetList.map((each) => each['시간표'].split(',')[0].slice(2, 7));
@@ -119,13 +151,15 @@ export default function WeekTable(): JSX.Element {
   };
 
   React.useEffect(() => {
+
     if (schoolData) {
-      setMon(schoolData.filter((each) => splitTimeString(each['시간표'])[0][0] === '월' || splitTimeString(each['시간표'])[1][0] === '월'));
-      setTue(schoolData.filter((each) => splitTimeString(each['시간표'])[0][0] === '화' || splitTimeString(each['시간표'])[1][0] === '화'));
-      setWen(schoolData.filter((each) => splitTimeString(each['시간표'])[0][0] === '수' || splitTimeString(each['시간표'])[1][0] === '수'));
-      setThu(schoolData.filter((each) => splitTimeString(each['시간표'])[0][0] === '목' || splitTimeString(each['시간표'])[1][0] === '목'));
-      setFri(schoolData.filter((each) => splitTimeString(each['시간표'])[0][0] === '금' || splitTimeString(each['시간표'])[1][0] === '금'));
-      setSat(schoolData.filter((each) => splitTimeString(each['시간표'])[0][0] === '토' || splitTimeString(each['시간표'])[1][0] === '토'));
+      const colored = schoolData.map((each, index) => ({ ...each, color: colors[index] }));
+      setMon(colored.filter((each) => splitTimeString(each['시간표'])[0][0] === '월' || splitTimeString(each['시간표'])[1][0] === '월'));
+      setTue(colored.filter((each) => splitTimeString(each['시간표'])[0][0] === '화' || splitTimeString(each['시간표'])[1][0] === '화'));
+      setWen(colored.filter((each) => splitTimeString(each['시간표'])[0][0] === '수' || splitTimeString(each['시간표'])[1][0] === '수'));
+      setThu(colored.filter((each) => splitTimeString(each['시간표'])[0][0] === '목' || splitTimeString(each['시간표'])[1][0] === '목'));
+      setFri(colored.filter((each) => splitTimeString(each['시간표'])[0][0] === '금' || splitTimeString(each['시간표'])[1][0] === '금'));
+      setSat(colored.filter((each) => splitTimeString(each['시간표'])[0][0] === '토' || splitTimeString(each['시간표'])[1][0] === '토'));
     }
   }, [schoolData]);
 
@@ -143,32 +177,59 @@ export default function WeekTable(): JSX.Element {
     setDrawerOpen(isOpen);
   };
 
+  /**
+   * 지난 수업인지 체크
+   * @param target 수업
+   */
+  const checkIsCurrentClass = (target: SchoolClass) => {
+    // 월 13:00(100)
+    const time = Number(target.시간표.split(',')[0].slice(2, 7));
+    const interval = Number(target.시간표.split(',')[0][11] === ')' ?
+      target.시간표.split(',')[0].slice(8, 11) : target.시간표.split(',')[0].slice(8, 10)) / 60;
+
+    const currTime = Number(moment(new Date()).format('HH'));
+
+    return currTime <= time + interval
+  }
+
+  const settings = {
+    // dots: true,
+    infinite: true,
+    speed: 1000,
+    slidesToShow: 1,
+    slidesToScroll: 1,
+    arrows: false,
+  };
+
   return (
     <Paper className={classes.section}>
       {addClassLoading && <Backdrop open />}
+
       {/* 카드 뷰 컴포넌트 */}
       <div
         style={{
           display: 'inline-flex',
-          flexDirection: 'row',
-          alignItems: 'center',
-          justifyContent: 'center',
+          height: '100%',
+          paddingLeft: 24,
+          paddingRight: 24,
+          flexDirection: 'column',
+          backgroundColor: '#adb5bd',
+          borderRadius: 4
         }}
       >
-        <Typography
-          variant="h6"
-          style={{
-            verticalAlign: 'middle',
-          }}
-        >
-          Timetable
-        </Typography>
+        <Button onClick={handleOpen}>
+          <Typography variant="body1" align="center" style={{ fontWeight: 'bold' }}>
+            Time Table
+          </Typography>
+        </Button>
 
-        <IconButton
-          onClick={handleOpen}
-        >
-          <SettingsIcon />
-        </IconButton>
+        <Slider {...settings} className={classes.slider}>
+          {schoolData && schoolData.map((each, index) => ({ ...each, color: colors[index] }))
+            .filter((each) => checkIsCurrentClass(each))
+            .map((each) => (
+              <CardTimeLine schoolClass={each} />
+            ))}
+        </Slider>
       </div>
 
       {/* 다이얼로그 컴포넌트 */}
@@ -195,6 +256,8 @@ export default function WeekTable(): JSX.Element {
             width: '1200px',
             height: '900px',
             color: 'white',
+            display: 'flex',
+            flexDirection: 'column'
           }}
         >
 
@@ -231,29 +294,28 @@ export default function WeekTable(): JSX.Element {
               schoolClasses={sat}
               targetWeek={days[5]}
             />
-
-            <IconButton
-              style={{
-                alignSelf: 'center',
-                position: 'absolute',
-                marginLeft: 1100,
-              }}
-              onClick={handleDrawer(true)}
-            >
-              <DoubleArrowIcon style={{ color: 'white', fontSize: '40px' }} />
-            </IconButton>
-
-            <FilterDrawer
-              drawerOpen={drawerOpen}
-              handleDrawer={handleDrawer}
-              handlers={[handleMon, handleTue, handleWen, handleThu, handleFri, handleSat]}
-            />
-
           </div>
+
+          <IconButton
+            style={{
+              marginTop: 56,
+              alignSelf: 'center',
+              transform: "rotate(-90deg)"
+            }}
+            onClick={handleDrawer(true)}
+          >
+            <DoubleArrowIcon style={{ color: 'white', fontSize: '40px' }} className={classes.blinkIcon} />
+          </IconButton>
+
         </DialogContent>
       </Dialog>
 
-    </Paper>
+      <FilterDrawer
+        drawerOpen={drawerOpen}
+        handleDrawer={handleDrawer}
+        handlers={[handleMon, handleTue, handleWen, handleThu, handleFri, handleSat]}
+      />
+    </Paper >
 
   );
 }

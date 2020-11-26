@@ -17,7 +17,7 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
   modal: {
     position: 'absolute',
     width: 500,
-    backgroundColor: 'white',
+    backgroundColor: theme.palette.primary.dark,
     borderRadius: '10px',
   },
   clock: {
@@ -95,7 +95,7 @@ export default function Timer(): JSX.Element {
     <div>
       <IconButton // 타이머 버튼
         style={{
-          backgroundColor: 'white', borderRadius: 30, height: 40, margin: 10,
+          backgroundColor: '#adb5bd', borderRadius: 30, height: 40, margin: 10,
         }}
         onClick={handleClickOpen}
         size="small"
@@ -107,7 +107,7 @@ export default function Timer(): JSX.Element {
           duration={settingTime}
           initialRemainingTime={currentTime}
           trailColor="#FFFFFF"
-          colors="#FF0000"
+          colors="#212529"
         >
           {remainTime}
           {/* {{({ remainingTime }) => remainingTime}} */}

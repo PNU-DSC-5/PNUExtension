@@ -7,6 +7,7 @@ import {
 } from '@material-ui/core/styles';
 
 import moment from 'moment';
+import classname from 'classnames';
 import { SchoolClass } from '../shared/interfaces/timeTable.inteface';
 
 interface WeekTimeLineProps {
@@ -23,14 +24,33 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
   title: {
     marginBottom: '16px',
   },
+  titleCurrWeek: {
+    fontWeight: 'bold'
+  },
   weekLineWrapper: {
     width: '14%',
     height: '780px',
+  },
+  '@keyframes blinker': {
+    from: { opacity: 1 },
+    to: { opacity: 0.5 }
+  },
+  blinkIcon: {
+    animationName: '$blinker',
+    animationDuration: '1000ms',
+    animationIterationCount: 'infinite',
+    animationDirection: 'alternate',
+    animationTimingFunction: 'ease-in-out',
   },
   list: {
     border: '1px solid gray',
     height: 780,
     padding: 0,
+    borderRadius: 4,
+    overflowY: 'hidden'
+  },
+  listCurrWeek: {
+    border: '1.5px solid white',
     borderRadius: 4,
   },
   classItem: {
@@ -60,8 +80,8 @@ function splitTimeString(str: string) {
 const makeCardColor = (timeString: string): string => {
   const real = Number(timeString.split(',')[0].slice(2, 4)) - 9;
   const colors = [
-    '#99e9f2', '#ffd8a8', '#c0eb75', '#e8590c', '#a5d8ff', '#ffa8a8', '#748ffc',
-    '#40c057', '#f08c00', '#51cf66', '#0c8599', '#1971c2', '#495057',
+    '#0c8599', '#ffd8a8', '#748ffc', '#1971c2', '#a5d8ff', '#ffa8a8', '#f08c00',
+    '#40c057', '#f08c00', '#51cf66', '#99e9f2', '#495057', '#495057',
   ];
 
   return colors[real];
@@ -72,13 +92,23 @@ export default function WeekLine(props: WeekTimeLineProps): JSX.Element {
   const { schoolClasses, targetWeek } = props;
   const schoolTimes = [9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21];
 
+  const days = ['월', '화', '수', '목', '금', '토'];
+  const isCurrWeek = days[moment().day() - 1] === targetWeek;
+
   return (
     <div className={classes.weekLineWrapper}>
-      <Typography variant="h6" align="center" className={classes.title}>
+      <Typography variant="h6" align="center" className={classname({
+        [classes.title]: true,
+        [classes.titleCurrWeek]: isCurrWeek
+      })}>
         {targetWeek}
       </Typography>
 
-      <List className={classes.list}>
+      <List className={classname({
+        [classes.list]: true,
+        [classes.listCurrWeek]: isCurrWeek,
+        [classes.blinkIcon]: isCurrWeek
+      })}>
         {schoolTimes.map((each) => (
           <ListItem
             className={classes.backgroundItem}
@@ -113,10 +143,10 @@ export default function WeekLine(props: WeekTimeLineProps): JSX.Element {
               style={{
                 marginTop: pos.marginTop,
                 height: pos.height,
-                backgroundColor: makeCardColor(eachClass['시간표']),
+                backgroundColor: eachClass.color ? eachClass.color : '#ffff',
               }}
             >
-              <Typography variant="body1">
+              <Typography variant="body1" align="left">
                 {eachClass['교과목명'].length > 10 ? `${eachClass['교과목명'].slice(0, 11)}..` : eachClass['교과목명']}
               </Typography>
             </ListItem>

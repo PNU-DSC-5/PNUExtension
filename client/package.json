@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@mailtop/horizontal-timeline": "^2.1.4",
     "@material-ui/core": "^4.11.0",
     "@material-ui/icons": "^4.9.1",
     "@material-ui/lab": "^4.0.0-alpha.56",
@@ -32,8 +33,11 @@
     "react-dom": "^16.13.1",
     "react-favicon": "^0.0.18",
     "react-google-places-autocomplete": "^3.0.0",
+    "react-material-ui-carousel": "^2.1.1",
     "react-router-dom": "^5.2.0",
     "react-scripts": "3.4.3",
+    "react-slick": "^0.27.13",
+    "slick-carousel": "^1.8.1",
     "typescript": "~3.7.2"
   },
   "scripts": {
@@ -72,7 +76,7 @@
     "@types/shortid": "0.0.29",
     "@typescript-eslint/eslint-plugin": "^3.9.0",
     "@typescript-eslint/parser": "^3.9.0",
-    "core-js": "^3.6.5",
+    "core-js": "^3.8.0",
     "eslint": "^6.6.0",
     "eslint-config-airbnb": "^18.2.0",
     "eslint-config-prettier": "^6.11.0",
