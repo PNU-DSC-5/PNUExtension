@@ -110,7 +110,7 @@ export default function FilterDrawer(props: FilterDrawerProps): JSX.Element {
               }}
               expandIcon={<ExpandMoreIcon />}
             >
-              <Typography variant="h6">
+              <Typography variant="h6" color="textSecondary">
                 대학명/개설학과명
               </Typography>
             </AccordionSummary>
@@ -141,7 +141,7 @@ export default function FilterDrawer(props: FilterDrawerProps): JSX.Element {
                     }}
                     expandIcon={<ExpandMoreIcon />}
                   >
-                    <Typography variant="h5" style={{ marginLeft: '32px', padding: 8 }}>
+                    <Typography variant="h5" color="textSecondary" style={{ marginLeft: '32px', padding: 8 }}>
                       {col}
                     </Typography>
                   </AccordionSummary>
@@ -161,7 +161,7 @@ export default function FilterDrawer(props: FilterDrawerProps): JSX.Element {
                             handleSelectCategory(col, category);
                           }}
                         >
-                          <Typography variant="h6" style={{ padding: 4 }}>
+                          <Typography variant="h6" color="textSecondary" style={{ padding: 4 }}>
                             {category}
                           </Typography>
 
@@ -184,7 +184,7 @@ export default function FilterDrawer(props: FilterDrawerProps): JSX.Element {
           }}
           >
             <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-              <Typography variant="h6" style={{ padding: 32 }}>
+              <Typography variant="h6" color="textSecondary" style={{ padding: 32 }}>
                 과목명 검색
               </Typography>
             </AccordionSummary>
@@ -194,13 +194,19 @@ export default function FilterDrawer(props: FilterDrawerProps): JSX.Element {
               }}
             >
               <div style={{ padding: 32 }}>
-                <TextField />
+                <TextField
+                  inputProps={{
+                    style: {
+                      color: 'black',
+                    },
+                  }}
+                />
               </div>
             </AccordionDetails>
           </Accordion>
         </Box>
 
-        <Box className={classes.listBox}>
+        <Box className={classes.listBox} boxShadow={1}>
           <List>
             {selectedCategory
               && classList
@@ -216,9 +222,9 @@ export default function FilterDrawer(props: FilterDrawerProps): JSX.Element {
                       }}
                     >
                       <div className={classes.schoolListItemText}>
-                        <Typography variant="h6" style={{ width: '30%' }}>{info['교과목명']}</Typography>
-                        <Typography variant="h6" style={{ width: '15%' }} align="center">{info['분반']}</Typography>
-                        <Typography variant="h6" style={{ width: '40%' }}>{info['시간표']}</Typography>
+                        <Typography variant="h6" color="textSecondary" style={{ width: '30%' }}>{info['교과목명']}</Typography>
+                        <Typography variant="h6" color="textSecondary" style={{ width: '15%' }} align="center">{info['분반']}</Typography>
+                        <Typography variant="h6" color="textSecondary" style={{ width: '40%' }}>{info['시간표']}</Typography>
                       </div>
                     </ListItem>
                     <Divider />

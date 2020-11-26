@@ -63,7 +63,7 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'center',
-    backgroundColor: theme.palette.primary.light,
+    backgroundColor: theme.palette.background.paper,
     border: `2px solid ${theme.palette.primary.light}`,
     borderRadius: 10,
     zIndex: 999,
@@ -76,17 +76,17 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
     justifyContent: 'flex-start',
   },
   textField: {
-    '& label.Mui-focused': {
-      color: 'green',
-    },
-    '& .MuiInput-underline:after': {
-      borderBottomColor: 'green',
-    },
-    '& .MuiOutlinedInput-root': {
-      '&.Mui-focused fieldset': {
-        borderColor: 'green',
-      },
-    },
+    // '& label.Mui-focused': {
+    //   color: 'green',
+    // },
+    // '& .MuiInput-underline:after': {
+    //   borderBottomColor: 'green',
+    // },
+    // '& .MuiOutlinedInput-root': {
+    //   '&.Mui-focused fieldset': {
+    //     borderColor: 'green',
+    //   },
+    // },
   },
 }));
 
@@ -147,11 +147,8 @@ export default function FavicionList(): JSX.Element {
   const urlInput = useEventTargetValue();
   const nameInput = useEventTargetValue();
 
-  const handleUrlDupleCheck = (urlList: Url[], newUrl: Url) => {
-    console.log(urlList, newUrl);
-    return urlList.find((each) => each.url === newUrl.url
+  const handleUrlDupleCheck = (urlList: Url[], newUrl: Url) => urlList.find((each) => each.url === newUrl.url
       || each.urlName === newUrl.urlName);
-  };
 
   const handleAddUrl = (): void => {
     const newUrl: Url = {
@@ -279,7 +276,7 @@ export default function FavicionList(): JSX.Element {
           }}
         >
           <ListItemIcon>
-            <CreateIcon color="primary" style={{ fontWeight: 'bold' }} />
+            <CreateIcon style={{ fontWeight: 'bold' }} />
           </ListItemIcon>
           <Typography variant="body1">
             변경
@@ -340,16 +337,18 @@ export default function FavicionList(): JSX.Element {
           className={classes.textField}
           variant="outlined"
           label="URL"
-          placeholder="www.example.com"
+          placeholder="example.com"
+          color="primary"
           value={urlInput.value}
           onChange={urlInput.handleChange}
           error={!regUrl.test(urlInput.value)}
-          helperText="올바른 url 을 입력해 주세요 example.com"
+          // helperText="올바른 url 을 입력해 주세요 example.com"
           inputProps={{
             style: {
               fontFamily: 'AppleSDGothicNeo',
               fontSize: '18px',
               fontWeight: 'bold',
+              color: 'black',
             },
           }}
           onKeyDown={(e) => {
@@ -364,10 +363,11 @@ export default function FavicionList(): JSX.Element {
           variant="outlined"
           label="Name"
           placeholder="url name"
+          color="primary"
           value={nameInput.value}
           onChange={nameInput.handleChange}
           error={nameInput.value.length === 0}
-          helperText="url 이름을 입력해 주세요"
+          // helperText="url 이름을 입력해 주세요"
           style={{
             marginTop: '16px',
           }}
@@ -376,6 +376,7 @@ export default function FavicionList(): JSX.Element {
               fontFamily: 'AppleSDGothicNeo',
               fontSize: '18px',
               fontWeight: 'bold',
+              color: 'black',
             },
           }}
           onKeyDown={(e) => {

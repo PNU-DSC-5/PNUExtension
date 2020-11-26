@@ -1,4 +1,4 @@
-import React from 'react'
+import React from 'react';
 
 // styles
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
@@ -19,17 +19,15 @@ import {
 import SearchBox from '../top-section/SearchBox';
 import FaviconList from '../top-section/FavicionList';
 
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    root: {
+const useStyles = makeStyles((theme: Theme) => createStyles({
+  root: {
 
-    }
-  }),
-);
+  },
+}));
 
 export default function TopSectionLayout(): JSX.Element {
   return (
-    <Grid container direction="column" justify="center" alignContent="center">
+    <Grid container direction="column" justify="center">
 
       <Grid style={{ display: 'flex', justifyContent: 'center', width: '100%' }}>
         <SearchBox />
@@ -39,6 +37,6 @@ export default function TopSectionLayout(): JSX.Element {
         <FaviconList />
       </Grid>
 
-    </Grid >
-  )
+    </Grid>
+  );
 }

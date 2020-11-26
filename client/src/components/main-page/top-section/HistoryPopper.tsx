@@ -16,9 +16,9 @@ import CheckIcon from '@material-ui/icons/Check';
 const useStyles = makeStyles((theme: Theme) => createStyles({
   root: {
     backgroundColor: fade(theme.palette.primary.dark, 0.9),
-    width: '696px',
+    width: '694px',
     zIndex: 999,
-    border: `3px solid ${fade('#fff', 1)}`,
+    border: '4px solid white',
     borderRadius: 4,
   },
 }));
@@ -90,6 +90,7 @@ export default function HistoryPopper(props: HistoryPopperProps): JSX.Element {
                   fontWeight: 'bold',
                   color: '#69db7c',
                   alignSelf: 'flex-end',
+                  fontSize: '32px',
                 }}
               />
             )}

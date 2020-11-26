@@ -35,9 +35,10 @@ import Timer from './Timer';
 const useStyles = makeStyles((theme: Theme) => createStyles({
   root: {
     flexGrow: 1,
+    height: 'auto',
   },
   appBar: {
-    backgroundColor: fade(theme.palette.primary.main, 0.5),
+    backgroundColor: fade(theme.palette.primary.main, 0.8),
   },
   menuButton: {
     marginRight: theme.spacing(2),
@@ -98,7 +99,7 @@ export function LayoutAppBar(): JSX.Element {
     <div className={classes.root}>
       <AppBar position="fixed" className={classes.appBar}>
         <Toolbar style={{ justifyContent: 'space-between' }}>
-          <Typography variant="h5">
+          <Typography variant="h6">
             PNU Extension
           </Typography>
           {userContext.state === 'logined' ? UserInterfaces() : LoginButton()}

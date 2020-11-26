@@ -25,7 +25,7 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
     marginBottom: '16px',
   },
   titleCurrWeek: {
-    fontWeight: 'bold'
+    fontWeight: 'bold',
   },
   weekLineWrapper: {
     width: '14%',
@@ -33,7 +33,7 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
   },
   '@keyframes blinker': {
     from: { opacity: 1 },
-    to: { opacity: 0.5 }
+    to: { opacity: 0.5 },
   },
   blinkIcon: {
     animationName: '$blinker',
@@ -43,15 +43,16 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
     animationTimingFunction: 'ease-in-out',
   },
   list: {
-    border: '1px solid gray',
+    border: `1px solid ${theme.palette.secondary.dark}`,
     height: 780,
     padding: 0,
     borderRadius: 4,
-    overflowY: 'hidden'
+    overflowY: 'hidden',
   },
   listCurrWeek: {
-    border: '1.5px solid white',
+    border: `2px solid ${theme.palette.primary.main}`,
     borderRadius: 4,
+    backgroundColor: theme.palette.secondary.dark,
   },
   classItem: {
     // backgroundColor: '#74c0fc',
@@ -77,15 +78,15 @@ function splitTimeString(str: string) {
 }
 
 // 월 13
-const makeCardColor = (timeString: string): string => {
-  const real = Number(timeString.split(',')[0].slice(2, 4)) - 9;
-  const colors = [
-    '#0c8599', '#ffd8a8', '#748ffc', '#1971c2', '#a5d8ff', '#ffa8a8', '#f08c00',
-    '#40c057', '#f08c00', '#51cf66', '#99e9f2', '#495057', '#495057',
-  ];
+// const makeCardColor = (timeString: string): string => {
+//   const real = Number(timeString.split(',')[0].slice(2, 4)) - 9;
+//   const colors = [
+//     '#0c8599', '#ffd8a8', '#748ffc', '#1971c2', '#a5d8ff', '#ffa8a8', '#f08c00',
+//     '#40c057', '#f08c00', '#51cf66', '#99e9f2', '#495057', '#495057',
+//   ];
 
-  return colors[real];
-};
+//   return colors[real];
+// };
 
 export default function WeekLine(props: WeekTimeLineProps): JSX.Element {
   const classes = useStyles();
@@ -97,18 +98,27 @@ export default function WeekLine(props: WeekTimeLineProps): JSX.Element {
 
   return (
     <div className={classes.weekLineWrapper}>
-      <Typography variant="h6" align="center" className={classname({
-        [classes.title]: true,
-        [classes.titleCurrWeek]: isCurrWeek
-      })}>
+      <Typography
+        variant="h6"
+        align="center"
+        color="textSecondary"
+        style={{
+          fontWeight: 'bold',
+        }}
+        className={classname({
+          [classes.title]: true,
+          [classes.titleCurrWeek]: isCurrWeek,
+        })}
+      >
         {targetWeek}
       </Typography>
 
       <List className={classname({
         [classes.list]: true,
         [classes.listCurrWeek]: isCurrWeek,
-        [classes.blinkIcon]: isCurrWeek
-      })}>
+        // [classes.blinkIcon]: isCurrWeek,
+      })}
+      >
         {schoolTimes.map((each) => (
           <ListItem
             className={classes.backgroundItem}

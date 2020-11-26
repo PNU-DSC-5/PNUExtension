@@ -2,7 +2,7 @@ import React from 'react';
 
 import {
   List, ListItem, Button, Drawer, Backdrop, Container,
-  Paper, IconButton, Typography, Dialog, DialogTitle, DialogContent, GridList, Grid
+  Paper, IconButton, Typography, Dialog, DialogTitle, DialogContent, GridList, Grid,
 } from '@material-ui/core';
 
 import {
@@ -15,15 +15,15 @@ import DoubleArrowIcon from '@material-ui/icons/DoubleArrow';
 import moment from 'moment';
 import { AxiosPromise } from 'axios';
 import useAxios from 'axios-hooks';
+import Carousel from 'react-material-ui-carousel';
+import Slider from 'react-slick';
 import useBasicDialog from '../../../../utils/hooks/useBasicDialog';
 
 import WeekLine from './WeekLine';
 import FilterDrawer from './FilterDrawer';
-import CardTimeLine from './CardTimeLine'
-import Carousel from 'react-material-ui-carousel'
+import CardTimeLine from './CardTimeLine';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
-import Slider from 'react-slick';
 
 import { SchoolClass } from '../shared/interfaces/timeTable.inteface';
 
@@ -31,7 +31,6 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
   section: {
     height: '100%',
     width: '100%',
-
     display: 'flex',
     flexDirection: 'column',
   },
@@ -39,6 +38,15 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'flex-start',
+  },
+  cardWrapper: {
+    display: 'inline-flex',
+    height: '100%',
+    paddingLeft: 24,
+    paddingRight: 24,
+    flexDirection: 'column',
+    backgroundColor: theme.palette.primary.main,
+    borderRadius: 4,
   },
   weekLineWrapper: {
     width: '10%',
@@ -52,11 +60,11 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
     },
     width: '95%',
     margin: 'auto',
-    height: 'px'
+    height: 'px',
   },
   '@keyframes blinker': {
     from: { opacity: 1 },
-    to: { opacity: 0.3 }
+    to: { opacity: 0.3 },
   },
   blinkIcon: {
     animationName: '$blinker',
@@ -64,7 +72,7 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
     animationIterationCount: 'infinite',
     animationDirection: 'alternate',
     animationTimingFunction: 'ease-in-out',
-  }
+  },
 }));
 
 function splitTimeString(str: string) {
@@ -109,7 +117,7 @@ export default function WeekTable(): JSX.Element {
   const [fri, setFri] = React.useState<SchoolClass[]>([]);
   const [sat, setSat] = React.useState<SchoolClass[]>([]);
   const days = ['월', '화', '수', '목', '금', '토'];
-
+  const schoolTimes = [9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22];
 
   /**
    * str -> number
@@ -151,7 +159,6 @@ export default function WeekTable(): JSX.Element {
   };
 
   React.useEffect(() => {
-
     if (schoolData) {
       const colored = schoolData.map((each, index) => ({ ...each, color: colors[index] }));
       setMon(colored.filter((each) => splitTimeString(each['시간표'])[0][0] === '월' || splitTimeString(each['시간표'])[1][0] === '월'));
@@ -184,13 +191,13 @@ export default function WeekTable(): JSX.Element {
   const checkIsCurrentClass = (target: SchoolClass) => {
     // 월 13:00(100)
     const time = Number(target.시간표.split(',')[0].slice(2, 7));
-    const interval = Number(target.시간표.split(',')[0][11] === ')' ?
-      target.시간표.split(',')[0].slice(8, 11) : target.시간표.split(',')[0].slice(8, 10)) / 60;
+    const interval = Number(target.시간표.split(',')[0][11] === ')'
+      ? target.시간표.split(',')[0].slice(8, 11) : target.시간표.split(',')[0].slice(8, 10)) / 60;
 
     const currTime = Number(moment(new Date()).format('HH'));
 
-    return currTime <= time + interval
-  }
+    return currTime <= time + interval;
+  };
 
   const settings = {
     // dots: true,
@@ -206,19 +213,9 @@ export default function WeekTable(): JSX.Element {
       {addClassLoading && <Backdrop open />}
 
       {/* 카드 뷰 컴포넌트 */}
-      <div
-        style={{
-          display: 'inline-flex',
-          height: '100%',
-          paddingLeft: 24,
-          paddingRight: 24,
-          flexDirection: 'column',
-          backgroundColor: '#adb5bd',
-          borderRadius: 4
-        }}
-      >
+      <div className={classes.cardWrapper}>
         <Button onClick={handleOpen}>
-          <Typography variant="body1" align="center" style={{ fontWeight: 'bold' }}>
+          <Typography variant="body1" align="center" color="textPrimary" style={{ fontWeight: 'bold' }}>
             Time Table
           </Typography>
         </Button>
@@ -240,13 +237,13 @@ export default function WeekTable(): JSX.Element {
         scroll="paper"
         PaperProps={{
           style: {
-            backgroundColor: fade('#495057', 1),
+            backgroundColor: fade('#ffff', 0.9),
             borderRadius: 32,
           },
         }}
       >
         <DialogTitle>
-          <Typography variant="h6" align="center" style={{ color: 'white' }}>
+          <Typography variant="h5" align="center" color="textSecondary" style={{ marginTop: '8px', fontWeight: 'bold' }}>
             시간표
           </Typography>
         </DialogTitle>
@@ -254,10 +251,10 @@ export default function WeekTable(): JSX.Element {
         <DialogContent
           style={{
             width: '1200px',
-            height: '900px',
+            height: '1000px',
             color: 'white',
             display: 'flex',
-            flexDirection: 'column'
+            flexDirection: 'column',
           }}
         >
 
@@ -269,6 +266,19 @@ export default function WeekTable(): JSX.Element {
               padding: 0,
             }}
           >
+            <div
+              style={{
+                marginRight: 16,
+                paddingTop: 32,
+              }}
+            >
+              {schoolTimes.map((each) => (
+                <Typography variant="h6" color="textSecondary" style={{ marginBottom: 28 }}>
+                  {each < 10 ? `0${each}:00` : `${each}:00`}
+                </Typography>
+              ))}
+
+            </div>
 
             <WeekLine
               schoolClasses={mon}
@@ -298,13 +308,13 @@ export default function WeekTable(): JSX.Element {
 
           <IconButton
             style={{
-              marginTop: 56,
+              marginTop: 0,
               alignSelf: 'center',
-              transform: "rotate(-90deg)"
+              transform: 'rotate(-90deg)',
             }}
             onClick={handleDrawer(true)}
           >
-            <DoubleArrowIcon style={{ color: 'white', fontSize: '40px' }} className={classes.blinkIcon} />
+            <DoubleArrowIcon style={{ color: 'black', fontSize: '32px' }} className={classes.blinkIcon} />
           </IconButton>
 
         </DialogContent>
@@ -315,7 +325,7 @@ export default function WeekTable(): JSX.Element {
         handleDrawer={handleDrawer}
         handlers={[handleMon, handleTue, handleWen, handleThu, handleFri, handleSat]}
       />
-    </Paper >
+    </Paper>
 
   );
 }
