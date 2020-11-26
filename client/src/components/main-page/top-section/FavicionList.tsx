@@ -192,7 +192,7 @@ export default function FavicionList(): JSX.Element {
         userId: userContext.user.id,
       },
     });
-  }, [userContext.user]);
+  }, [userContext.user, getUrlRequest]);
 
   return (
     // <ClickAwayListener onClickAway={addAnchorEl.handleAnchorClose}>
@@ -257,6 +257,9 @@ export default function FavicionList(): JSX.Element {
         <Avatar
           variant="rounded"
           className={classes.avatar}
+          style={{
+            marginTop: '20px',
+          }}
         >
           <AddIcon />
         </Avatar>

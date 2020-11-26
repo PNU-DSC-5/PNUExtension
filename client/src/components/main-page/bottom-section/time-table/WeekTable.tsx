@@ -1,7 +1,7 @@
 import React from 'react';
 
 import {
-  List, ListItem, Button, Drawer,
+  List, ListItem, Button, Drawer, Backdrop,
   Paper, IconButton, Typography, Dialog, DialogTitle, DialogContent,
 } from '@material-ui/core';
 
@@ -13,14 +13,14 @@ import SettingsIcon from '@material-ui/icons/Settings';
 import DoubleArrowIcon from '@material-ui/icons/DoubleArrow';
 
 import moment from 'moment';
+import { AxiosPromise } from 'axios';
+import useAxios from 'axios-hooks';
 import useBasicDialog from '../../../../utils/hooks/useBasicDialog';
 
 import WeekLine from './WeekLine';
 import FilterDrawer from './FilterDrawer';
 
 import { SchoolClass } from '../shared/interfaces/timeTable.inteface';
-
-
 
 const useStyles = makeStyles((theme: Theme) => createStyles({
   section: {
@@ -58,21 +58,29 @@ export interface WeekTableProps {
   handleAddSchoolClassRequest: (newClass: SchoolClass) => void;
 }
 
-export default function WeekTable(props: WeekTableProps): JSX.Element {
-  const { schoolClasses, handleAddSchoolClassRequest } = props;
+export default function WeekTable(): JSX.Element {
   const classes = useStyles();
   /* 다이얼로그 */
   const { open, handleClose, handleOpen } = useBasicDialog();
   const [drawerOpen, setDrawerOpen] = React.useState<boolean>(false);
 
-  /* 2차원 배열 정의시 setState 비동기로 인해 문제 발생 -> 일단 6분할 */
-  const [mon, setMon] = React.useState<SchoolClass[]>(schoolClasses.filter((each) => splitTimeString(each['시간표'])[0][0] === '월' || splitTimeString(each['시간표'])[1][0] === '월'));
-  const [tue, setTue] = React.useState<SchoolClass[]>(schoolClasses.filter((each) => splitTimeString(each['시간표'])[0][0] === '화' || splitTimeString(each['시간표'])[1][0] === '화'));
-  const [wen, setWen] = React.useState<SchoolClass[]>(schoolClasses.filter((each) => splitTimeString(each['시간표'])[0][0] === '수' || splitTimeString(each['시간표'])[1][0] === '수'));
-  const [thu, setThu] = React.useState<SchoolClass[]>(schoolClasses.filter((each) => splitTimeString(each['시간표'])[0][0] === '목' || splitTimeString(each['시간표'])[1][0] === '목'));
-  const [fri, setFri] = React.useState<SchoolClass[]>(schoolClasses.filter((each) => splitTimeString(each['시간표'])[0][0] === '금' || splitTimeString(each['시간표'])[1][0] === '금'));
-  const [sat, setSat] = React.useState<SchoolClass[]>(schoolClasses.filter((each) => splitTimeString(each['시간표'])[0][0] === '토' || splitTimeString(each['시간표'])[1][0] === '토'));
+  const [{ data: schoolData }] = useAxios<SchoolClass[]>({
+    url: '/school-class',
+    method: 'GET',
+  });
 
+  const [{ loading: addClassLoading }, addSchoolClass] = useAxios<boolean>({
+    url: '/school-class',
+    method: 'POST',
+  }, { manual: true });
+
+  /* 2차원 배열 정의시 setState 비동기로 인해 문제 발생 -> 일단 6분할 */
+  const [mon, setMon] = React.useState<SchoolClass[]>([]);
+  const [tue, setTue] = React.useState<SchoolClass[]>([]);
+  const [wen, setWen] = React.useState<SchoolClass[]>([]);
+  const [thu, setThu] = React.useState<SchoolClass[]>([]);
+  const [fri, setFri] = React.useState<SchoolClass[]>([]);
+  const [sat, setSat] = React.useState<SchoolClass[]>([]);
   const days = ['월', '화', '수', '목', '금', '토'];
 
   const checkPossibleClassTime = (newClass: SchoolClass, targetList: SchoolClass[]): boolean => {
@@ -80,35 +88,46 @@ export default function WeekTable(props: WeekTableProps): JSX.Element {
     const timeStrList = targetList.map((each) => each['시간표'].split(',')[0].slice(2, 7));
     const newTime = newClass['시간표'].split(',')[0].slice(2, 7);
 
-    if (timeStrList.includes(newTime)) {
+    if (timeStrList.includes(newTime) || addClassLoading) {
       /* 겹치는 시간이 존재 하는지 확인 요일, 시간 */
       alert('수업 시간이 겹쳐 추가 할 수 없습니다.');
       return false;
     }
-    else {
-      handleAddSchoolClassRequest(newClass);
-      return true;
-    }
-  }
+    addSchoolClass({
+      data: { newClass },
+    });
+    return true;
+  };
 
   const handleMon = (newClass: SchoolClass) => {
     if (checkPossibleClassTime(newClass, mon)) setMon([...mon, newClass]);
-  }
+  };
   const handleTue = (newClass: SchoolClass) => {
     if (checkPossibleClassTime(newClass, tue)) setTue([...tue, newClass]);
-  }
+  };
   const handleWen = (newClass: SchoolClass) => {
     if (checkPossibleClassTime(newClass, wen)) setWen([...wen, newClass]);
-  }
+  };
   const handleThu = (newClass: SchoolClass) => {
     if (checkPossibleClassTime(newClass, thu)) setThu([...thu, newClass]);
-  }
+  };
   const handleFri = (newClass: SchoolClass) => {
     if (checkPossibleClassTime(newClass, fri)) setFri([...fri, newClass]);
-  }
+  };
   const handleSat = (newClass: SchoolClass) => {
     if (checkPossibleClassTime(newClass, sat)) setSat([...sat, newClass]);
-  }
+  };
+
+  React.useEffect(() => {
+    if (schoolData) {
+      setMon(schoolData.filter((each) => splitTimeString(each['시간표'])[0][0] === '월' || splitTimeString(each['시간표'])[1][0] === '월'));
+      setTue(schoolData.filter((each) => splitTimeString(each['시간표'])[0][0] === '화' || splitTimeString(each['시간표'])[1][0] === '화'));
+      setWen(schoolData.filter((each) => splitTimeString(each['시간표'])[0][0] === '수' || splitTimeString(each['시간표'])[1][0] === '수'));
+      setThu(schoolData.filter((each) => splitTimeString(each['시간표'])[0][0] === '목' || splitTimeString(each['시간표'])[1][0] === '목'));
+      setFri(schoolData.filter((each) => splitTimeString(each['시간표'])[0][0] === '금' || splitTimeString(each['시간표'])[1][0] === '금'));
+      setSat(schoolData.filter((each) => splitTimeString(each['시간표'])[0][0] === '토' || splitTimeString(each['시간표'])[1][0] === '토'));
+    }
+  }, [schoolData]);
 
   /**
    * @param isOpen 수업 검색 drawer open state
@@ -124,12 +143,9 @@ export default function WeekTable(props: WeekTableProps): JSX.Element {
     setDrawerOpen(isOpen);
   };
 
-  React.useEffect(() => {
-    console.log(mon[0] === mon[1])
-  }, [mon])
-
   return (
     <Paper className={classes.section}>
+      {addClassLoading && <Backdrop open />}
       {/* 카드 뷰 컴포넌트 */}
       <div
         style={{
@@ -187,7 +203,7 @@ export default function WeekTable(props: WeekTableProps): JSX.Element {
               display: 'flex',
               flexDirection: 'row',
               justifyContent: 'center',
-              padding: 0
+              padding: 0,
             }}
           >
 

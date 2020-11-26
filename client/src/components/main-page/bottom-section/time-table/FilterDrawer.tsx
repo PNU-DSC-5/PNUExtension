@@ -2,7 +2,7 @@ import React from 'react';
 import {
   Drawer, List, ListItem, Accordion, AccordionSummary,
   AccordionDetails, Typography, Box, Button, Divider, TextField,
-  AppBar, Toolbar
+  AppBar, Toolbar,
 } from '@material-ui/core';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 
@@ -13,10 +13,9 @@ import CategoryData from '../../../../shared/data/category.json';
 
 import { SchoolClass, ClassCategory } from '../shared/interfaces/timeTable.inteface';
 
-
 const useStyles = makeStyles((theme: Theme) => createStyles({
   drawer: {
-    backgroundColor: '#e9ecef'
+    backgroundColor: '#e9ecef',
   },
   root: {
     display: 'flex',
@@ -45,14 +44,14 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
     backgroundColor: 'white',
   },
   schoolListItem: {
-    borderRadious: 16
+    borderRadious: 16,
   },
   schoolListItemText: {
     display: 'inline-flex',
     flexDirection: 'row',
     padding: 16,
-    width: '100%'
-  }
+    width: '100%',
+  },
 }));
 
 export interface FilterDrawerProps {
@@ -81,10 +80,10 @@ export default function FilterDrawer(props: FilterDrawerProps): JSX.Element {
   const [selectedCategory, setSelectedCategory] = React.useState<string>('');
 
   const handleSelectCategory = (department: string, category: string) => {
-    const filtered = SchoolClassData as SchoolClass[]
+    const filtered = SchoolClassData as SchoolClass[];
     setSelectedCategory(category);
-    setClassList(filtered.filter((each) => each['대학명'] === department && each['주관학과명'] === category))
-  }
+    setClassList(filtered.filter((each) => each['대학명'] === department && each['주관학과명'] === category));
+  };
 
   const days = ['월', '화', '수', '목', '금', '토'];
 
@@ -101,9 +100,10 @@ export default function FilterDrawer(props: FilterDrawerProps): JSX.Element {
           <Accordion style={{
             marginBottom: 16,
             margin: 16,
-            border: "1px solid gray",
-            borderRadius: 16
-          }}>
+            border: '1px solid gray',
+            borderRadius: 16,
+          }}
+          >
             <AccordionSummary
               style={{
                 padding: 32,
@@ -122,7 +122,7 @@ export default function FilterDrawer(props: FilterDrawerProps): JSX.Element {
                 overflow: 'scroll',
                 overflowX: 'hidden',
                 padding: 0,
-                width: '100%'
+                width: '100%',
               }}
             >
               {college.map((col) => (
@@ -131,13 +131,13 @@ export default function FilterDrawer(props: FilterDrawerProps): JSX.Element {
                   style={{
                     width: 'auto',
                     height: '100%',
-                    marginRight: '16px'
+                    marginRight: '16px',
                   }}
                 >
 
                   <AccordionSummary
                     style={{
-                      padding: 0
+                      padding: 0,
                     }}
                     expandIcon={<ExpandMoreIcon />}
                   >
@@ -153,14 +153,12 @@ export default function FilterDrawer(props: FilterDrawerProps): JSX.Element {
                       overflowX: 'hidden',
                     }}
                   >
-                    <List
-
-                    >
+                    <List>
                       {categorys(col).map((category) => (
                         <ListItem
                           button
                           onClick={() => {
-                            handleSelectCategory(col, category)
+                            handleSelectCategory(col, category);
                           }}
                         >
                           <Typography variant="h6" style={{ padding: 4 }}>
@@ -181,9 +179,10 @@ export default function FilterDrawer(props: FilterDrawerProps): JSX.Element {
           <Accordion style={{
             marginBottom: 16,
             margin: 16,
-            border: "1px solid gray",
-            borderRadius: 16
-          }}>
+            border: '1px solid gray',
+            borderRadius: 16,
+          }}
+          >
             <AccordionSummary expandIcon={<ExpandMoreIcon />}>
               <Typography variant="h6" style={{ padding: 32 }}>
                 과목명 검색
@@ -203,34 +202,31 @@ export default function FilterDrawer(props: FilterDrawerProps): JSX.Element {
 
         <Box className={classes.listBox}>
           <List>
-            {selectedCategory &&
-              classList
-                .map((info) => {
-                  return (
-                    <div>
-                      <ListItem
-                        button
-                        className={classes.schoolListItem}
-                        onClick={() => {
-                          const targetWeek = info['시간표'].split(',');
-                          handlers[days.indexOf(targetWeek[0][0])](info);
-                          if (targetWeek.length > 1) handlers[days.indexOf(targetWeek[1][0])](info);
-                        }}
-                      >
-                        <div className={classes.schoolListItemText}>
-                          <Typography variant="h6" style={{ width: '30%' }}>{info['교과목명']}</Typography>
-                          <Typography variant="h6" style={{ width: '15%' }} align="center">{info['분반']}</Typography>
-                          <Typography variant="h6" style={{ width: '40%' }}>{info['시간표']}</Typography>
-                        </div>
-                      </ListItem>
-                      <Divider />
-                    </div>
-                  )
-
-                })}
+            {selectedCategory
+              && classList
+                .map((info) => (
+                  <div>
+                    <ListItem
+                      button
+                      className={classes.schoolListItem}
+                      onClick={() => {
+                        const targetWeek = info['시간표'].split(',');
+                        handlers[days.indexOf(targetWeek[0][0])](info);
+                        if (targetWeek.length > 1) handlers[days.indexOf(targetWeek[1][0])](info);
+                      }}
+                    >
+                      <div className={classes.schoolListItemText}>
+                        <Typography variant="h6" style={{ width: '30%' }}>{info['교과목명']}</Typography>
+                        <Typography variant="h6" style={{ width: '15%' }} align="center">{info['분반']}</Typography>
+                        <Typography variant="h6" style={{ width: '40%' }}>{info['시간표']}</Typography>
+                      </div>
+                    </ListItem>
+                    <Divider />
+                  </div>
+                ))}
           </List>
         </Box>
       </div>
-    </Drawer >
+    </Drawer>
   );
 }

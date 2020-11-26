@@ -3,7 +3,7 @@ import useAxios from 'axios-hooks';
 import { AxiosError } from 'axios';
 import cookie from 'react-cookies';
 
-import { Payload as UserInfo } from '../../shared/interfaces/token.interface'; 
+import { Payload as UserInfo } from '../../shared/interfaces/token.interface';
 
 // export interface UserInfo {
 //   name: string | null;
@@ -18,7 +18,7 @@ export interface UserContextValue {
   handleProfile: () => void;
   handleLogout: () => void;
   handleAutoLogin: () => void;
-  state: "logined" | "static" | undefined;
+  state: 'logined' | 'static' | undefined;
 }
 
 export const defaultUser: UserInfo = {
@@ -27,11 +27,11 @@ export const defaultUser: UserInfo = {
   email: null,
   roles: 'user',
   url: [],
-  id: null
+  id: null,
 };
 
 const UserContext = React.createContext<UserContextValue>({
-  user : defaultUser,
+  user: defaultUser,
   handleProfile: () => {},
   handleLogout: () => {},
   handleAutoLogin: () => {},
@@ -42,64 +42,65 @@ export function useUser(): UserContextValue {
   const [user, setUser] = React.useState<UserInfo>(defaultUser);
   const [state, setState] = React.useState<'logined' | 'static' | undefined>(undefined);
 
-  const [{ 
-    data: profileData, 
-    error: profileError, 
-    loading: profileLoading }, 
-    excuteGetProfile ] = useAxios<UserInfo>({
+  const [{
+    data: profileData,
+    error: profileError,
+    loading: profileLoading,
+  },
+  excuteGetProfile] = useAxios<UserInfo>({
     url: 'http://localhost:3000/users/login/check-profile',
-  },{ manual: true });
+  }, { manual: true });
 
-  const [{ 
-    data: autoLoginData, 
-    error: autoLoginError, 
-    loading: autoLoginLoading }, 
-    excuteAutoLogin ] = useAxios<UserInfo>({
+  const [{
+    data: autoLoginData,
+    error: autoLoginError,
+    loading: autoLoginLoading,
+  },
+  excuteAutoLogin] = useAxios<UserInfo>({
     url: 'http://localhost:3000/users/login/auto-login',
-    method: 'post'
-  },{ manual: true });
+    method: 'post',
+  }, { manual: true });
 
   const handleAutoLogin = () => {
     const uuid = window.localStorage.getItem('uuid');
-    if(uuid && uuid.length > 10){
+    if (uuid && uuid.length > 10) {
       console.log('[Auto Login Start ... ]');
       return excuteAutoLogin({
-          data: {
-            uuid
-          }
-        })
+        data: {
+          uuid,
+        },
+      })
         .then((res) => {
           console.log('[UserContext Setting By Auto Login ...]');
           setUser(res.data);
           setState('logined');
         })
         .catch((err) => {
-          console.log('[UserContext Error : AutoLogin ...]',err);
-        })
+          console.log('[UserContext Error : AutoLogin ...]', err);
+        });
     }
-  }
+  };
 
   const handleProfile = React.useCallback(() => {
     console.log('[Profile Check Start ... ]');
-    if(cookie.load('accessToken')){
+    if (cookie.load('accessToken')) {
       return excuteGetProfile({
         headers: {
-          accessToken: cookie.load('accessToken')
-        }
+          accessToken: cookie.load('accessToken'),
+        },
       })
-      .then((res) => {
-        if(res.data){
-          console.log('[UserContext Setting ...]');
-          setUser(res.data);
-          setState('logined');
-        }
-      })
-      .catch((err) => {
-        console.log('[UserContext Error : Get Profile ...]',err);
-      })
+        .then((res) => {
+          if (res.data) {
+            console.log('[UserContext Setting ...]');
+            setUser(res.data);
+            setState('logined');
+          }
+        })
+        .catch((err) => {
+          console.log('[UserContext Error : Get Profile ...]', err);
+        });
     }
-    
-  },[excuteGetProfile, cookie.load('accessToken')])
+  }, [excuteGetProfile, cookie.load('accessToken')]);
 
   const handleLogout = () => {
     cookie.remove('accessToken');
@@ -108,17 +109,17 @@ export function useUser(): UserContextValue {
     cookie.remove('uuid');
 
     window.localStorage.removeItem('uuid');
-  
+
     setUser(defaultUser);
     setState(undefined);
-  }
+  };
 
   return {
-   user,
-   state,
-   handleProfile,
-   handleLogout,
-   handleAutoLogin
+    user,
+    state,
+    handleProfile,
+    handleLogout,
+    handleAutoLogin,
   };
 }
 

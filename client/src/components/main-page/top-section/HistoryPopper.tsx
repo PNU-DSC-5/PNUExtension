@@ -15,10 +15,10 @@ import CheckIcon from '@material-ui/icons/Check';
 
 const useStyles = makeStyles((theme: Theme) => createStyles({
   root: {
-    backgroundColor: fade(theme.palette.primary.light, 0.9),
+    backgroundColor: fade(theme.palette.primary.dark, 0.9),
     width: '696px',
     zIndex: 999,
-    border: `2px solid ${fade(theme.palette.primary.light, 0.9)}`,
+    border: `3px solid ${fade('#fff', 1)}`,
     borderRadius: 4,
   },
 }));

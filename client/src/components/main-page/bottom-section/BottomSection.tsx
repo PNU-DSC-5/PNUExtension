@@ -3,13 +3,13 @@ import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import GridList from '@material-ui/core/GridList';
 import GridListTile from '@material-ui/core/GridListTile';
+import useAxios from 'axios-hooks';
 import CrawlingCard from './card/CrawlingCard';
 import WeekTable from './time-table/WeekTable';
 import MealPlanner from './meal-planner/MealPlanner';
 import Todo from './to-do/Todo';
 import CategoryButton from './category/CategoryButton';
 
-import useAxios from 'axios-hooks';
 import { SchoolClass } from './shared/interfaces/timeTable.inteface';
 
 const useStyles = makeStyles((theme: Theme) => createStyles({
@@ -89,24 +89,8 @@ const category: any[] = [
   // },
 ];
 
-
 export default function BottomTest(): JSX.Element {
   const classes = useStyles();
-
-  const userClassList = React.useState<SchoolClass[]>([]);
-
-  const [{ data: SchoolClassData }, addSchoolClass] = useAxios<any>({
-    url: '/school-class',
-    method: 'POST'
-  }, { manual: true });
-
-  const handleAddSchoolClassRequest = (newClass: SchoolClass) => {
-    addSchoolClass({
-      data: {
-        newClass,
-      }
-    })
-  }
 
   // Card에 데이터 전달
   const CrawlingSection = (
@@ -129,10 +113,7 @@ export default function BottomTest(): JSX.Element {
       }}
     >
       <GridListTile cols={1}>
-        <WeekTable
-          schoolClasses={[]}
-          handleAddSchoolClassRequest={handleAddSchoolClassRequest}
-        />
+        <WeekTable />
       </GridListTile>
       <GridListTile cols={1}>
         <MealPlanner />
