@@ -1,18 +1,17 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import {
+  BrowserRouter, Switch, Route, Redirect, Router,
+} from 'react-router-dom';
+import { configure } from 'axios-hooks';
+import { createMuiTheme, ThemeProvider } from '@material-ui/core';
+import cookie from 'react-cookies';
 import * as serviceWorker from './serviceWorker';
 
 // 브라우저 라우팅 라이브러리
-import {
-  BrowserRouter,
-  Switch,
-  Route,
-  Redirect,
-  Router,
-} from 'react-router-dom';
+
 
 // axios 설정 파일
-import { configure } from 'axios-hooks';
 import axios from './utils/axios';
 
 // page
@@ -21,10 +20,8 @@ import { LayoutAppBar } from './components/appbar/AppBar';
 
 // style
 import globalTheme from './theme';
-import { createMuiTheme, ThemeProvider } from '@material-ui/core';
 
 // cookie
-import cookie from 'react-cookies';
 
 // contexts
 import UserContext, { useUser } from './utils/contexts/UserContext';
@@ -69,9 +66,10 @@ function Index(): JSX.Element {
   }, [handleProfile]);
 
   React.useEffect(() => {
-    if (!cookie.load('accessToken') && localStorage.getItem('uuid'))
+    if (!cookie.load('accessToken') && localStorage.getItem('uuid')) {
       handleAutoLogin();
-  }, []);
+    }
+  }, [handleAutoLogin]);
 
   return (
     <ThemeProvider theme={THEME}>
@@ -85,19 +83,19 @@ function Index(): JSX.Element {
           state,
           handleAutoLogin,
         }}
-      >
-        <BrowserRouter>
-          {/* 상단 고정 앱 바 */}
-          <LayoutAppBar />
+  >
+    <BrowserRouter>
+      {/* 상단 고정 앱 바 */}
+      <LayoutAppBar />
 
-          {/* 라우팅 스위치 */}
-          <Switch>
-            {/* 메인 페이지 */}
-            <Route path="/" component={Main} />
-          </Switch>
-        </BrowserRouter>
-      </UserContext.Provider>
-    </ThemeProvider>
+      {/* 라우팅 스위치 */}
+      <Switch>
+        {/* 메인 페이지 */}
+        <Route path="/" component={Main} />
+      </Switch>
+    </BrowserRouter>
+  </UserContext.Provider>
+    </ThemeProvider >
   );
 }
 

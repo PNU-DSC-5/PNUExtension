@@ -11,15 +11,14 @@ import { JsxAttribute } from 'typescript';
 //yarn add react-marquee-slider
 //yarn add lodash styled-components
 
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    section: {
-      height: '100%',
-      width: '100%',
-      textAlign: 'center',
-    },
-  }),
-);
+const useStyles = makeStyles((theme: Theme) => createStyles({
+  section: {
+    height: '100%',
+    width: '100%',
+    textAlign: 'center',
+    background: theme.palette.primary.main,
+  },
+}));
 
 const marqueeText: JSX.Element[] = [
   <LocalDiningOutlinedIcon fontSize="small" />,

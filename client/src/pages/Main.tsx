@@ -9,27 +9,27 @@ import TopSectionLayout from '../components/main-page/layout/TopSectionLayout';
 
 import BackGround from '../public/space.jpg';
 
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    root: {
-      display: 'flex',
-      flex: 1,
-      flexDirection: 'column',
-    },
-    topSection: {
-      minHeight: '500px',
-      backgroundColor: theme.palette.primary.dark,
-      paddingTop: '20px',
-      // backgroundImage: `url(${BackGround})`,
-      // backgroundSize: 'cover',
-    },
-    bottomSection: {
-      minHeight: '2300px',
-      backgroundColor: theme.palette.primary.dark,
-      paddingTop: '20px',
-    },
-  }),
-);
+const useStyles = makeStyles((theme: Theme) => createStyles({
+  root: {
+    display: 'flex',
+    flex: 1,
+    flexDirection: 'column',
+  },
+  topSection: {
+    minHeight: '400px',
+    backgroundColor: theme.palette.primary.main,
+    paddingTop: '64px',
+    // marginTop: '32px',
+  },
+  bottomSection: {
+    marginTop: theme.spacing(10),
+    minHeight: '2300px',
+    backgroundColor: theme.palette.background.paper,
+    paddingTop: '20px',
+    paddingLeft: theme.spacing(10),
+    paddingRight: theme.spacing(10),
+  },
+}));
 
 /*
   <제작 필요 컴포넌트>

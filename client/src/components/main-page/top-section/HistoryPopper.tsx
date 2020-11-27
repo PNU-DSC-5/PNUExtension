@@ -1,6 +1,8 @@
-import React from 'react'
+import React from 'react';
 
-import { makeStyles, Theme, createStyles, fade } from '@material-ui/core/styles';
+import {
+  makeStyles, Theme, createStyles, fade,
+} from '@material-ui/core/styles';
 
 import {
   TextField, ClickAwayListener, Popper, List, ListItem,
@@ -11,17 +13,15 @@ import {
 import SearchIcon from '@material-ui/icons/Search';
 import CheckIcon from '@material-ui/icons/Check';
 
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    root: {
-      backgroundColor: fade(theme.palette.primary.light, 0.9),
-      width: '696px',
-      zIndex: 999,
-      border: `2px solid ${fade(theme.palette.primary.light, 0.9)}`,
-      borderRadius: 4
-    }
-  }),
-);
+const useStyles = makeStyles((theme: Theme) => createStyles({
+  root: {
+    backgroundColor: fade(theme.palette.primary.dark, 0.9),
+    width: '694px',
+    zIndex: 999,
+    border: '4px solid white',
+    borderRadius: 4,
+  },
+}));
 
 interface HistoryPopperProps {
   anchorEl: HTMLElement | null;
@@ -32,7 +32,9 @@ interface HistoryPopperProps {
 }
 
 export default function HistoryPopper(props: HistoryPopperProps): JSX.Element {
-  const { anchorEl, open, history, selectedIndex, setValue } = props;
+  const {
+    anchorEl, open, history, selectedIndex, setValue,
+  } = props;
   const classes = useStyles();
 
   return (
@@ -51,7 +53,7 @@ export default function HistoryPopper(props: HistoryPopperProps): JSX.Element {
       <List
         style={{
           maxHeight: '200px',
-          overflowY: 'hidden'
+          overflowY: 'hidden',
         }}
       >
         {history.map((eachHistory, index) => (
@@ -60,7 +62,7 @@ export default function HistoryPopper(props: HistoryPopperProps): JSX.Element {
             style={{
               display: 'flex',
               flexDirection: 'row',
-              justifyContent: 'space-between'
+              justifyContent: 'space-between',
             }}
             selected={selectedIndex === index}
             onClick={() => setValue(eachHistory)}
@@ -74,7 +76,7 @@ export default function HistoryPopper(props: HistoryPopperProps): JSX.Element {
               <SearchIcon
                 style={{
                   marginRight: '16px',
-                  color: 'white'
+                  color: 'white',
                 }}
               />
               <Typography color="secondary" variant="h5">
@@ -87,7 +89,8 @@ export default function HistoryPopper(props: HistoryPopperProps): JSX.Element {
                 style={{
                   fontWeight: 'bold',
                   color: '#69db7c',
-                  alignSelf: 'flex-end'
+                  alignSelf: 'flex-end',
+                  fontSize: '32px',
                 }}
               />
             )}
@@ -96,5 +99,5 @@ export default function HistoryPopper(props: HistoryPopperProps): JSX.Element {
         ))}
       </List>
     </Popper>
-  )
+  );
 }

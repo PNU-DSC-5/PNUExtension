@@ -10,58 +10,56 @@ import {
   FormControl,
   OutlinedInput,
   IconButton,
-  ClickAwayListener
+  ClickAwayListener,
 } from '@material-ui/core';
 
-import moment from 'moment'
+import moment from 'moment';
 
 // styles
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 
 // hooks
+import SearchIcon from '@material-ui/icons/Search';
+import { VerticalAlignTopRounded } from '@material-ui/icons';
 import useEventTargetValue from '../../../utils/hooks/useEventTargetValue';
 import useAnchorEl from '../../../utils/hooks/useAnchorEl';
 
-// material-ui icons
-import SearchIcon from '@material-ui/icons/Search';
+// material-ui icons 
 
 // sub component
 import HistoryPopper from './HistoryPopper';
 import { spreadKorean } from './spreadKorean';
-import { VerticalAlignTopRounded } from '@material-ui/icons';
 
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    textField: {
-      '& label.Mui-focused': {
-        color: 'white',
-      },
-      '& .MuiInput-underline:after': {
-        borderBottomColor: 'white',
-      },
-      '& .MuiOutlinedInput-root': {
-        '& fieldset': {
-          borderColor: theme.palette.secondary.light,
-        },
-        '&:hover fieldset': {
-          borderColor: 'white',
-        },
-        '&.Mui-focused fieldset': {
-          borderColor: 'white',
-          border: '3px solid'
-        },
-      },
-      width: '700px',
-      height: 'auto',
+const useStyles = makeStyles((theme: Theme) => createStyles({
+  textField: {
+    '& label.Mui-focused': {
+      color: 'white',
     },
-    searchBackground: {
-      padding: theme.spacing(1),
-      '&:hover': {
-        backgroundColor: theme.palette.primary.light,
+    '& .MuiInput-underline:after': {
+      borderBottomColor: 'white',
+    },
+    '& .MuiOutlinedInput-root': {
+      '& fieldset': {
+        borderColor: theme.palette.secondary.light,
+      },
+      '&:hover fieldset': {
+        borderColor: 'white',
+      },
+      '&.Mui-focused fieldset': {
+        borderColor: 'white',
+        border: '3px solid',
       },
     },
-  }),
-);
+    width: '700px',
+    height: 'auto',
+  },
+  searchBackground: {
+    padding: theme.spacing(1),
+    '&:hover': {
+      backgroundColor: theme.palette.primary.light,
+    },
+  },
+}));
 
 type EachHistory = { word: string, time: string }
 
@@ -72,7 +70,9 @@ interface SearchHistory {
 export default function SearchBox(): JSX.Element {
   const classes = useStyles();
   const { value, handleChange, setValue } = useEventTargetValue();
-  const { open, handleAnchorClose, handleAnchorOpen, anchorEl } = useAnchorEl();
+  const {
+    open, handleAnchorClose, handleAnchorOpen, anchorEl,
+  } = useAnchorEl();
   const [selectedIndex, setSelectedIndex] = React.useState<number>(-1);
 
   /* 로컬 스토리지 검색 기록으로 컴포넌트 history init */
@@ -80,13 +80,14 @@ export default function SearchBox(): JSX.Element {
     try {
       const localHistory: SearchHistory = JSON.parse(localStorage.getItem('history')!);
       const historyLine: EachHistory[] = localHistory.history.sort(
-        (a: EachHistory, b: EachHistory) => moment(a.time).isBefore(moment(b.time)) ? -1 : 1);
+        (a: EachHistory, b: EachHistory) => (moment(a.time).isBefore(moment(b.time)) ? -1 : 1),
+      );
 
       return historyLine.map((each) => each.word);
     } catch {
-      return []
+      return [];
     }
-  }
+  };
   const [history, setHistory] = React.useState<string[]>(initHistoryLine());
 
   /**
@@ -98,7 +99,7 @@ export default function SearchBox(): JSX.Element {
     if (localHistory) {
       const newHistory: EachHistory = {
         time: (new Date()).toISOString(),
-        word: newWord
+        word: newWord,
       };
 
       /* 중복 시 추가 안함 */
@@ -107,29 +108,31 @@ export default function SearchBox(): JSX.Element {
 
         /* 최신순으로 재정렬 */
         localHistory.history = localHistory.history.sort(
-          (a: EachHistory, b: EachHistory) => moment(a.time).isBefore(moment(b.time)) ? 1 : -1);
+          (a: EachHistory, b: EachHistory) => (moment(a.time).isBefore(moment(b.time)) ? 1 : -1),
+        );
 
         localStorage.setItem('history', JSON.stringify(localHistory));
-        setHistory(localHistory.history.map((each) => each.word))
+        setHistory(localHistory.history.map((each) => each.word));
       }
     } else {
-      console.log('[Error in search history logic ... ]')
+      console.log('[Error in search history logic ... ]');
       /* history 가 비어 있었을 경우에 , 알지 못 할 이유로 초기화 되어 있을 경우 예외 처리 */
 
       const initialHistory: SearchHistory = {
-        history: []
+        history: [],
       };
 
-      localStorage.setItem('history', JSON.stringify(initialHistory))
-      handleAddHistory(newWord)
+      localStorage.setItem('history', JSON.stringify(initialHistory));
+      handleAddHistory(newWord);
     }
-  }
+  };
 
   const handleSearchIconButton = () => {
-    if (value.length > 0)
+    if (value.length > 0) {
       window.location.assign(
-        'https://www.google.com/search?q=' + value,
+        `https://www.google.com/search?q=${value}`,
       );
+    }
   };
 
   /**
@@ -138,14 +141,14 @@ export default function SearchBox(): JSX.Element {
    * 
    * 추후 추가사항 -> 최대부분 집합에서 종속 순열 찾기로
    */
-  const filterKoeranSpread = (targetString: string): string[] => {
+  const filterKoeranSpread = (targetString: string): string[] =>
     /* 한글이 포함되어 있는 경우 자모 분리 */
-    return history.filter(
+    history.filter(
       (hist) => spreadKorean(targetString).split('').every(
-        (each) => spreadKorean(hist).split('').includes(each)
+        (each) => spreadKorean(hist).split('').includes(each),
       ),
     )
-  }
+  ;
 
   /**
    * up , down , enter 키보드 리스트 셀렉터
@@ -158,26 +161,23 @@ export default function SearchBox(): JSX.Element {
         /* -1 인덱스를 통해 enter 키의 편리 제공 */
         if (selectedIndex + 1 < history.length) setSelectedIndex(selectedIndex + 1);
       } else setSelectedIndex(-1);
-
     } else if (e.key === 'ArrowUp') {
       /* length 인덱스를 통해 enter 키의 편리 제공 */
       if (filterKoeranSpread(value)[selectedIndex - 1]) {
         if (selectedIndex - 1 >= 0) setSelectedIndex(selectedIndex - 1);
       } else setSelectedIndex(filterKoeranSpread(value).length);
-
     } else if (e.key === 'Enter') {
       if (value.length > 0) {
         if (selectedIndex != -1 && selectedIndex != history.length) {
-          setValue(filterKoeranSpread(value)[selectedIndex])
-          handleAddHistory(filterKoeranSpread(value)[selectedIndex])
+          setValue(filterKoeranSpread(value)[selectedIndex]);
+          handleAddHistory(filterKoeranSpread(value)[selectedIndex]);
           window.location.assign(
-            'https://www.google.com/search?q=' + filterKoeranSpread(value)[selectedIndex],
+            `https://www.google.com/search?q=${filterKoeranSpread(value)[selectedIndex]}`,
           );
-
         } else {
-          handleAddHistory(value)
+          handleAddHistory(value);
           window.location.assign(
-            'https://www.google.com/search?q=' + value,
+            `https://www.google.com/search?q=${value}`,
           );
         }
 
@@ -196,7 +196,7 @@ export default function SearchBox(): JSX.Element {
           <OutlinedInput
             value={value}
             onChange={handleChange}
-            endAdornment={
+            endAdornment={(
               <InputAdornment position="end">
                 <IconButton
                   onClick={handleSearchIconButton}
@@ -206,7 +206,7 @@ export default function SearchBox(): JSX.Element {
                   <SearchIcon fontSize="large" style={{ color: 'white' }} />
                 </IconButton>
               </InputAdornment>
-            }
+            )}
             inputProps={{
               style: {
                 marginLeft: '16px',
@@ -230,7 +230,7 @@ export default function SearchBox(): JSX.Element {
           selectedIndex={selectedIndex}
           setValue={setValue}
         />
-      </Grid >
+      </Grid>
 
     </ClickAwayListener>
   );

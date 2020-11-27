@@ -11,17 +11,19 @@ import CardMedia from '@material-ui/core/CardMedia';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    section: {
-      height: '100%',
-      width: '100%',
-      textAlign: 'center',
-    },
-  }),
-);
+const useStyles = makeStyles((theme: Theme) => createStyles({
+  section: {
+    height: '100%',
+    width: '100%',
+    textAlign: 'center',
+    background: theme.palette.primary.main,
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'flex-end',
+  },
+}));
 
-//input의 type
+// input의 type
 interface Props {
   id: number;
   title: string;
@@ -36,17 +38,14 @@ const CrawlingCard = ({ id, title, href, content, category }: Props) => {
   return (
     <Card className={classes.section}>
       <CardActionArea href={href}>
-        <CardMedia //사진 - 어떻게 설정하지?
+        {/* <CardMedia // 사진 - 어떻게 설정하지?
           component="img"
           alt="Contemplative Reptile"
           height="240"
-          image="/images/space.jpg"
+          // image="/images/space.jpg"
           title="Space"
-        />
-        <Typography color="textSecondary" variant="caption">
-          {category}
-        </Typography>
-        <CardContent>
+        /> */}
+        <CardContent style={{ alignSelf: 'flex-end' }}>
           <Typography gutterBottom variant="h6" component="h2">
             {title}
           </Typography>

@@ -19,27 +19,25 @@ import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
 import UserContext, { defaultUser } from '../../utils/contexts/UserContext';
 import { Payload as UserInfo } from '../../shared/interfaces/token.interface';
 
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    root: {
-      display: 'flex',
-    },
-    paper: {
-      marginRight: theme.spacing(2),
+const useStyles = makeStyles((theme: Theme) => createStyles({
+  root: {
+    display: 'flex',
+  },
+  paper: {
+    marginRight: theme.spacing(2),
 
+  },
+  menuItem: {
+    display: 'flex',
+    flexGrow: 0,
+    justifyContent: 'space-between',
+    color: theme.palette.primary.main,
+    '&:hover,select': {
+      backgroundColor: theme.palette.primary.light,
+      color: theme.palette.primary.contrastText,
     },
-    menuItem: {
-      display: 'flex',
-      flexGrow: 0,
-      justifyContent: 'space-between',
-      color: theme.palette.primary.main,
-      '&:hover,select': {
-        backgroundColor: theme.palette.primary.light,
-        color: theme.palette.primary.contrastText,
-      },
-    }
-  }),
-);
+  },
+}));
 
 export default function ProfilePopover() {
   const classes = useStyles();
@@ -79,20 +77,21 @@ export default function ProfilePopover() {
   }, [open]);
 
   React.useLayoutEffect(() => {
-    if (userContext.user)
+    if (userContext.user) {
       setProfile(userContext.user);
+    }
   }, [userContext.user]);
 
   const ProfileFace = (): JSX.Element => {
     if (profile.picture) {
       return (
         <Avatar src={profile.picture} />
-      )
+      );
     }
 
     return (
       <AccountCircleIcon fontSize="large" color="secondary" />
-    )
+    );
   };
 
   return (
@@ -127,16 +126,16 @@ export default function ProfilePopover() {
                 >
                   <MenuItem onClick={handleClose} className={classes.menuItem}>
                     <SupervisedUserCircleIcon style={{ marginRight: '15px' }} />
-                      Profile
-                    </MenuItem>
+                    Profile
+                  </MenuItem>
                   <MenuItem onClick={handleClose} className={classes.menuItem}>
                     <SettingsIcon />
-                      Setting
-                    </MenuItem>
+                    Setting
+                  </MenuItem>
                   <MenuItem onClick={userContext.handleLogout} className={classes.menuItem}>
                     <ExitToAppIcon />
-                      Logout
-                    </MenuItem>
+                    Logout
+                  </MenuItem>
                 </MenuList>
               </ClickAwayListener>
             </Paper>
