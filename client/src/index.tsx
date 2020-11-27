@@ -10,6 +10,7 @@ import * as serviceWorker from './serviceWorker';
 
 // 브라우저 라우팅 라이브러리
 
+
 // axios 설정 파일
 import axios from './utils/axios';
 
@@ -36,7 +37,10 @@ function Index(): JSX.Element {
   });
 
   const {
-    user, handleLogout, handleProfile, state,
+    user,
+    handleLogout,
+    handleProfile,
+    state,
     handleAutoLogin,
   } = useUser();
 
@@ -44,6 +48,7 @@ function Index(): JSX.Element {
   React.useEffect(() => {
     /* uuid 가 쿠키에 존재  */
     if (cookie.load('uuid')) {
+      //window.localStorage.clear();
       window.localStorage.removeItem('uuid');
 
       /* 로컬 스토리지에 삽입  */
@@ -51,7 +56,8 @@ function Index(): JSX.Element {
     }
 
     /* access token 이 쿠키에 존재 */
-    if (cookie.load('accessToken')) { // accessToken 을 axios 디폴트 요청 헤더에 삽입해야한다.
+    if (cookie.load('accessToken')) {
+      // accessToken 을 axios 디폴트 요청 헤더에 삽입해야한다.
       axios.setAxiosHeaders('accesstoken', cookie.load('accessToken'));
       handleProfile();
     } else if (!cookie.load('accessToken')) {
@@ -69,38 +75,30 @@ function Index(): JSX.Element {
     <ThemeProvider theme={THEME}>
       {/* 앱 전체 테마 설정 */}
       {/* 유저 컨택스트 제공자 설정 */}
-      <UserContext.Provider value={{
-        user,
-        handleLogout,
-        handleProfile,
-        state,
-        handleAutoLogin,
-      }}
-      >
-        <BrowserRouter>
+      <UserContext.Provider
+        value={{
+          user,
+          handleLogout,
+          handleProfile,
+          state,
+          handleAutoLogin,
+        }}
+  >
+    <BrowserRouter>
+      {/* 상단 고정 앱 바 */}
+      <LayoutAppBar />
 
-          {/* 상단 고정 앱 바 */}
-          <LayoutAppBar />
-
-          {/* 라우팅 스위치 */}
-          <Switch>
-
-            {/* 메인 페이지 */}
-            <Route path="/" component={Main} />
-
-          </Switch>
-
-        </BrowserRouter>
-
-      </UserContext.Provider>
-
-    </ThemeProvider>
+      {/* 라우팅 스위치 */}
+      <Switch>
+        {/* 메인 페이지 */}
+        <Route path="/" component={Main} />
+      </Switch>
+    </BrowserRouter>
+  </UserContext.Provider>
+    </ThemeProvider >
   );
 }
 
-ReactDOM.render(
-  <Index />,
-  document.getElementById('root'),
-);
+ReactDOM.render(<Index />, document.getElementById('root'));
 
 serviceWorker.unregister();

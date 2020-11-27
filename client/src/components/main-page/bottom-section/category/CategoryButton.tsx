@@ -16,6 +16,8 @@ import Typography from '@material-ui/core/Typography';
 import ToggleButton from '@material-ui/lab/ToggleButton';
 import ToggleButtonGroup from '@material-ui/lab/ToggleButtonGroup';
 
+import useAxios from 'axios-hooks';
+
 const styles = (theme: Theme) =>
   createStyles({
     root: {
@@ -70,9 +72,9 @@ const DialogActions = withStyles((theme: Theme) => ({
 export default function CategoryButton(): JSX.Element {
   const [open, setOpen] = React.useState(false);
   const [formats, setFormats] = React.useState(() => [
-    'hackathon',
-    'itnews',
-    'cse',
+    'Hackathon',
+    'ITNews',
+    'CSE',
   ]);
 
   const handleClickOpen = () => {
@@ -88,11 +90,44 @@ export default function CategoryButton(): JSX.Element {
   ) => {
     setFormats(newFormats);
   };
+
+  const handleSave = () => {
+    console.log(formats);
+    //서버에 데이터 보내기 ㅠㅠㅠㅠ
+    putUrlRequest({
+      data: {
+        category: formats,
+      },
+    });
+    setOpen(false);
+  };
+
+  const [, postUrlRequest] = useAxios<any>(
+    {
+      url: 'http://localhost:3000/url',
+      method: 'post',
+    },
+    { manual: true },
+  );
+
+  const [, putUrlRequest] = useAxios<any>(
+    {
+      url: 'http://localhost:3000/url',
+      method: 'put',
+    },
+    { manual: true },
+  );
+
   return (
-    <div>
+    <div style={{ margin: 5 }}>
       <Typography color="secondary">
         Your Category
-        <Button variant="outlined" color="secondary" onClick={handleClickOpen}>
+        <Button
+          variant="outlined"
+          color="secondary"
+          onClick={handleClickOpen}
+          style={{ margin: 5 }}
+        >
           ▼
         </Button>
       </Typography>
@@ -103,15 +138,16 @@ export default function CategoryButton(): JSX.Element {
         open={open}
       >
         <DialogTitle id="customized-dialog-title" onClose={handleClose}>
-          원하는 카테고리를 선택해주세요.
+          원하는 카테고리를 선택해주세요. &#160; &#160; &#160;
         </DialogTitle>
 
-        <DialogContent dividers>
+        <DialogContent dividers style={{ textAlign: 'center' }}>
           <ToggleButtonGroup
             value={formats}
             orientation="vertical"
             onChange={handleFormat}
             aria-label="category"
+            size="large"
           >
             <ToggleButton value="Hackathon" aria-label="Hackathon">
               해커톤
@@ -125,8 +161,8 @@ export default function CategoryButton(): JSX.Element {
           </ToggleButtonGroup>
         </DialogContent>
         <DialogActions>
-          <Button autoFocus onClick={handleClose} color="primary">
-            Save changes
+          <Button autoFocus onClick={handleSave} color="primary">
+            저장
           </Button>
         </DialogActions>
       </Dialog>

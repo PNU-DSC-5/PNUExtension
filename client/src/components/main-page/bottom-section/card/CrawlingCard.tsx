@@ -29,11 +29,10 @@ interface Props {
   title: string;
   href: string;
   content: string;
+  category: string;
 }
 
-const CrawlingCard = ({
-  id, title, href, content,
-}: Props) => {
+const CrawlingCard = ({ id, title, href, content, category }: Props) => {
   const classes = useStyles();
 
   return (
