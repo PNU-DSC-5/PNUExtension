@@ -112,6 +112,8 @@ export function useUser(): UserContextValue {
 
     setUser(defaultUser);
     setState(undefined);
+
+    window.location.reload();
   };
 
   return {

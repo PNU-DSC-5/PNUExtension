@@ -39,6 +39,9 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
     flexDirection: 'row',
     justifyContent: 'flex-start',
   },
+  dialogRoot: {
+    baclgroundColor: theme.palette.background.paper,
+  },
   cardWrapper: {
     display: 'inline-flex',
     height: '100%',
@@ -51,8 +54,6 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
   weekLineWrapper: {
     width: '10%',
     height: '780px',
-    // marginRight: '4px',
-    // border: '1px solid black',
   },
   slider: {
     '&>ul>li': {
@@ -84,10 +85,12 @@ function splitTimeString(str: string) {
 
   return result;
 }
+
 const colors = [
   '#0c8599', '#ffd8a8', '#748ffc', '#1971c2', '#a5d8ff', '#ffa8a8', '#f08c00',
   '#40c057', '#f08c00', '#51cf66', '#99e9f2', '#495057', '#495057',
 ];
+
 export interface WeekTableProps {
   schoolClasses: SchoolClass[];
   handleAddSchoolClassRequest: (newClass: SchoolClass) => void;
@@ -99,12 +102,12 @@ export default function WeekTable(): JSX.Element {
   const { open, handleClose, handleOpen } = useBasicDialog();
   const [drawerOpen, setDrawerOpen] = React.useState<boolean>(false);
 
-  const [{ data: schoolData }] = useAxios<SchoolClass[]>({
+  const [{ data: schoolData }, getSchoolClasses] = useAxios<SchoolClass[]>({
     url: '/school-class',
     method: 'GET',
-  });
+  }, { manual: true });
 
-  const [{ loading: addClassLoading }, addSchoolClass] = useAxios<boolean>({
+  const [{ loading: addClassLoading }, addSchoolClasses] = useAxios<boolean>({
     url: '/school-class',
     method: 'POST',
   }, { manual: true });
@@ -133,7 +136,7 @@ export default function WeekTable(): JSX.Element {
       alert('수업 시간이 겹쳐 추가 할 수 없습니다.');
       return false;
     }
-    addSchoolClass({
+    addSchoolClasses({
       data: { newClass },
     });
     return true;
@@ -170,6 +173,10 @@ export default function WeekTable(): JSX.Element {
     }
   }, [schoolData]);
 
+  React.useEffect(() => {
+    getSchoolClasses();
+  }, [getSchoolClasses]);
+
   /**
    * @param isOpen 수업 검색 drawer open state
    */
@@ -182,6 +189,10 @@ export default function WeekTable(): JSX.Element {
       setDrawerOpen(false);
     }
     setDrawerOpen(isOpen);
+  };
+
+  const handleGetSchoolData = (): void => {
+    getSchoolClasses();
   };
 
   /**
@@ -237,8 +248,8 @@ export default function WeekTable(): JSX.Element {
         scroll="paper"
         PaperProps={{
           style: {
-            backgroundColor: fade('#ffff', 0.9),
-            borderRadius: 32,
+            backgroundColor: fade('#ffff', 1),
+            borderRadius: 16,
           },
         }}
       >
@@ -324,6 +335,7 @@ export default function WeekTable(): JSX.Element {
         drawerOpen={drawerOpen}
         handleDrawer={handleDrawer}
         handlers={[handleMon, handleTue, handleWen, handleThu, handleFri, handleSat]}
+        handleGetSchoolData={handleGetSchoolData}
       />
     </Paper>
 

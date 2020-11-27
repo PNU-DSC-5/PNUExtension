@@ -37,7 +37,7 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
   },
   blinkIcon: {
     animationName: '$blinker',
-    animationDuration: '1000ms',
+    animationDuration: '900ms',
     animationIterationCount: 'infinite',
     animationDirection: 'alternate',
     animationTimingFunction: 'ease-in-out',
@@ -50,12 +50,10 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
     overflowY: 'hidden',
   },
   listCurrWeek: {
-    border: `2px solid ${theme.palette.primary.main}`,
+    border: `3px solid ${theme.palette.secondary.contrastText}`,
     borderRadius: 4,
-    backgroundColor: theme.palette.secondary.dark,
   },
   classItem: {
-    // backgroundColor: '#74c0fc',
     color: 'white',
     position: 'absolute',
     borderRadius: 4,
@@ -76,17 +74,6 @@ function splitTimeString(str: string) {
   result.push('일');
   return result;
 }
-
-// 월 13
-// const makeCardColor = (timeString: string): string => {
-//   const real = Number(timeString.split(',')[0].slice(2, 4)) - 9;
-//   const colors = [
-//     '#0c8599', '#ffd8a8', '#748ffc', '#1971c2', '#a5d8ff', '#ffa8a8', '#f08c00',
-//     '#40c057', '#f08c00', '#51cf66', '#99e9f2', '#495057', '#495057',
-//   ];
-
-//   return colors[real];
-// };
 
 export default function WeekLine(props: WeekTimeLineProps): JSX.Element {
   const classes = useStyles();
@@ -116,7 +103,7 @@ export default function WeekLine(props: WeekTimeLineProps): JSX.Element {
       <List className={classname({
         [classes.list]: true,
         [classes.listCurrWeek]: isCurrWeek,
-        // [classes.blinkIcon]: isCurrWeek,
+        [classes.blinkIcon]: isCurrWeek,
       })}
       >
         {schoolTimes.map((each) => (
