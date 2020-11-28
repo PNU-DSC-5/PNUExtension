@@ -1,3 +1,18 @@
+export const DAYS = ['월', '화', '수', '목', '금', '토'];
+export const TIMES = [9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22];
+export const COLORS = ['#0c8599', '#ffd8a8', '#748ffc', '#1971c2', '#a5d8ff', '#ffa8a8', '#f08c00',
+  '#40c057', '#f08c00', '#51cf66', '#99e9f2', '#495057', '#495057'];
+
+export interface ClassCategory {
+    [key: string]: string[];
+}
+
+export interface ClassTimeFormat {
+  day: '월'|'화'| '수'| '목'| '금'| '토'|'일'| string;
+  startTime: Date;
+  endTime: Date;
+}
+
 export interface SchoolClass {
     연번: number;
     대학명: string;
@@ -22,29 +37,3 @@ export interface SchoolClass {
     교양영역: string;
     color?: string;
 }
-
-export interface ClassCategory {
-    [key: string]: string[];
-}
-
-// "연번": 3755,
-// "대학명": "교양교육원",
-// "주관학과": 611000,
-// "주관학과명": "교양교육원",
-// "학년": 0,
-// "교과목코드": "ZE10091",
-// "분반": "029",
-// "교과목명": "고전읽기와토론",
-// "영문교과목명": "READING CLASSICS OF GREAT LITERATURE",
-// "교과구분": "교양필수",
-// "학점": 2,
-// "이론": 2,
-// "실습": 0,
-// "교수명": "장혜진",
-// "제한인원": 30,
-// "시간표": "금 09:00(100) 417-407",
-// "교양영역": "",
-// "원어": "",
-// "팀티칭": "",
-// "원격": "",
-// "비고": ""

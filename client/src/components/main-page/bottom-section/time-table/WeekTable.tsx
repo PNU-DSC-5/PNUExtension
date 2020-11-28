@@ -25,7 +25,10 @@ import CardTimeLine from './CardTimeLine';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 
-import { SchoolClass } from '../shared/interfaces/timeTable.inteface';
+import { SchoolClass, DAYS, COLORS, TIMES,  } from '../shared/interfaces/timeTable.inteface';
+  SchoolClass, DAYS, COLORS, TIMES,
+} from '../shared/interfaces/timeTable.inteface';
+import { TimeStringToStringArray, CheckValidateNewClass } from '../shared/utils/time-table.util';
 
 const useStyles = makeStyles((theme: Theme) => createStyles({
   section: {
@@ -76,21 +79,6 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
   },
 }));
 
-function splitTimeString(str: string) {
-  const result = str.split(',');
-  if (result.length > 1) {
-    return result;
-  }
-  result.push('일');
-
-  return result;
-}
-
-const colors = [
-  '#0c8599', '#ffd8a8', '#748ffc', '#1971c2', '#a5d8ff', '#ffa8a8', '#f08c00',
-  '#40c057', '#f08c00', '#51cf66', '#99e9f2', '#495057', '#495057',
-];
-
 export interface WeekTableProps {
   schoolClasses: SchoolClass[];
   handleAddSchoolClassRequest: (newClass: SchoolClass) => void;
@@ -119,57 +107,68 @@ export default function WeekTable(): JSX.Element {
   const [thu, setThu] = React.useState<SchoolClass[]>([]);
   const [fri, setFri] = React.useState<SchoolClass[]>([]);
   const [sat, setSat] = React.useState<SchoolClass[]>([]);
-  const days = ['월', '화', '수', '목', '금', '토'];
-  const schoolTimes = [9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22];
 
   /**
-   * str -> number
-   * @param timeStr hh:mm
+   * 추가할 수업을 추가할 수 있는지 판단하고 추가 요청을 서버에
+   * @param newClass 추가할 수업
+   * @param targetList 유저의 보유 수업
    */
   const checkPossibleClassTime = (newClass: SchoolClass, targetList: SchoolClass[]): boolean => {
-    // 월 13:00(139)
-    const timeStrList = targetList.map((each) => each['시간표'].split(',')[0].slice(2, 7));
-    const newTime = newClass['시간표'].split(',')[0].slice(2, 7);
-
-    if (timeStrList.includes(newTime) || addClassLoading) {
-      /* 겹치는 시간이 존재 하는지 확인 요일, 시간 */
+    const checkResult = CheckValidateNewClass(newClass, targetList);
+    if (checkResult < 0) {
+      alert('수업 시간이 중복 되어 추가 할 수 없습니다.');
+      return false;
+    } if (checkResult === 0) {
       alert('수업 시간이 겹쳐 추가 할 수 없습니다.');
       return false;
     }
+
     addSchoolClasses({
       data: { newClass },
+    }).then(() => {
+      alert(`${newClass.교과목명} 수업이 추가되었습니다!`);
+    }).catch(() => {
+      alert(`${newClass.교과목명} 수업이 추가하는데 실패했습니다. 다시 시도해주세요`);
     });
+
     return true;
   };
 
-  const handleMon = (newClass: SchoolClass) => {
-    if (checkPossibleClassTime(newClass, mon)) setMon([...mon, newClass]);
+  const handleRemoveClass = (newClass: SchoolClass) => {
+    
+  }
+
+  const handleMon = (newClass: SchoolClass, isRemove?: any) => {
+    if (checkPossibleClassTime(newClass, mon) && !isRemove) setMon([...mon, newClass]);
   };
-  const handleTue = (newClass: SchoolClass) => {
-    if (checkPossibleClassTime(newClass, tue)) setTue([...tue, newClass]);
+  const handleTue = (newClass: SchoolClass, isRemove?: any) => {
+    if (checkPossibleClassTime(newClass, tue) && !isRemove) setTue([...tue, newClass]);
   };
-  const handleWen = (newClass: SchoolClass) => {
-    if (checkPossibleClassTime(newClass, wen)) setWen([...wen, newClass]);
+  const handleWen = (newClass: SchoolClass, isRemove?: any) => {
+    if (checkPossibleClassTime(newClass, wen) && !isRemove) setWen([...wen, newClass]);
   };
-  const handleThu = (newClass: SchoolClass) => {
-    if (checkPossibleClassTime(newClass, thu)) setThu([...thu, newClass]);
+  const handleThu = (newClass: SchoolClass, isRemove?: any) => {
+    if (checkPossibleClassTime(newClass, thu) && !isRemove) setThu([...thu, newClass]);
   };
-  const handleFri = (newClass: SchoolClass) => {
-    if (checkPossibleClassTime(newClass, fri)) setFri([...fri, newClass]);
+  const handleFri = (newClass: SchoolClass, isRemove?: any) => {
+    if (checkPossibleClassTime(newClass, fri) && !isRemove) setFri([...fri, newClass]);
   };
-  const handleSat = (newClass: SchoolClass) => {
-    if (checkPossibleClassTime(newClass, sat)) setSat([...sat, newClass]);
+  const handleSat = (newClass: SchoolClass, isRemove?: any) => {
+    if (checkPossibleClassTime(newClass, sat) && !isRemove) setSat([...sat, newClass]);
   };
 
   React.useEffect(() => {
     if (schoolData) {
-      const colored = schoolData.map((each, index) => ({ ...each, color: colors[index] }));
-      setMon(colored.filter((each) => splitTimeString(each['시간표'])[0][0] === '월' || splitTimeString(each['시간표'])[1][0] === '월'));
-      setTue(colored.filter((each) => splitTimeString(each['시간표'])[0][0] === '화' || splitTimeString(each['시간표'])[1][0] === '화'));
-      setWen(colored.filter((each) => splitTimeString(each['시간표'])[0][0] === '수' || splitTimeString(each['시간표'])[1][0] === '수'));
-      setThu(colored.filter((each) => splitTimeString(each['시간표'])[0][0] === '목' || splitTimeString(each['시간표'])[1][0] === '목'));
-      setFri(colored.filter((each) => splitTimeString(each['시간표'])[0][0] === '금' || splitTimeString(each['시간표'])[1][0] === '금'));
-      setSat(colored.filter((each) => splitTimeString(each['시간표'])[0][0] === '토' || splitTimeString(each['시간표'])[1][0] === '토'));
+      const colored = schoolData.map((each, index) => ({ ...each, color: COLORS[index] }));
+      const funcList = [setMon, setTue, setWen, setThu, setFri, setSat];
+      funcList.forEach((setFunc, index) => {
+        setFunc(
+          colored.filter(
+            (each) => TimeStringToStringArray(each['시간표'])[0][0] === DAYS[index]
+            || TimeStringToStringArray(each['시간표'])[1][0] === DAYS[index],
+          ),
+        );
+      });
     }
   }, [schoolData]);
 
@@ -206,7 +205,6 @@ export default function WeekTable(): JSX.Element {
       ? target.시간표.split(',')[0].slice(8, 11) : target.시간표.split(',')[0].slice(8, 10)) / 60;
 
     const currTime = Number(moment(new Date()).format('HH'));
-
     return currTime <= time + interval;
   };
 
@@ -232,7 +230,7 @@ export default function WeekTable(): JSX.Element {
         </Button>
 
         <Slider {...settings} className={classes.slider}>
-          {schoolData && schoolData.map((each, index) => ({ ...each, color: colors[index] }))
+          {schoolData && schoolData.map((each, index) => ({ ...each, color: COLORS[index] }))
             .filter((each) => checkIsCurrentClass(each))
             .map((each) => (
               <CardTimeLine schoolClass={each} />
@@ -283,7 +281,7 @@ export default function WeekTable(): JSX.Element {
                 paddingTop: 32,
               }}
             >
-              {schoolTimes.map((each) => (
+              {TIMES.map((each) => (
                 <Typography variant="h6" color="textSecondary" style={{ marginBottom: 28 }}>
                   {each < 10 ? `0${each}:00` : `${each}:00`}
                 </Typography>
@@ -293,27 +291,27 @@ export default function WeekTable(): JSX.Element {
 
             <WeekLine
               schoolClasses={mon}
-              targetWeek={days[0]}
+              targetWeek={DAYS[0]}
             />
             <WeekLine
               schoolClasses={tue}
-              targetWeek={days[1]}
+              targetWeek={DAYS[1]}
             />
             <WeekLine
               schoolClasses={wen}
-              targetWeek={days[2]}
+              targetWeek={DAYS[2]}
             />
             <WeekLine
               schoolClasses={thu}
-              targetWeek={days[3]}
+              targetWeek={DAYS[3]}
             />
             <WeekLine
               schoolClasses={fri}
-              targetWeek={days[4]}
+              targetWeek={DAYS[4]}
             />
             <WeekLine
               schoolClasses={sat}
-              targetWeek={days[5]}
+              targetWeek={DAYS[5]}
             />
           </div>
 
@@ -332,6 +330,7 @@ export default function WeekTable(): JSX.Element {
       </Dialog>
 
       <FilterDrawer
+        schoolData={schoolData || []}
         drawerOpen={drawerOpen}
         handleDrawer={handleDrawer}
         handlers={[handleMon, handleTue, handleWen, handleThu, handleFri, handleSat]}

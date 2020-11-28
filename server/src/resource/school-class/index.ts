@@ -67,4 +67,21 @@ router.post(
   },
 );
 
+router.delete(
+  '/',
+  JwtToken.check,
+  (req: Request, res: Response, next: NextFunction) => {
+    const user = req.user as User;
+    const newClass = req.body.newClass as SchoolClass;
+    console.log('[School Classes Delete] : Start ... ', newClass.교과목명);
+
+    if (newClass && user) {
+      console.log('[School Classes Delete] : Success ... ');
+      response.Helper.ok(req, res, true);
+    } else {
+      response.Helper.badRequest(req, res, []);
+    }
+  },
+);
+
 export = router;

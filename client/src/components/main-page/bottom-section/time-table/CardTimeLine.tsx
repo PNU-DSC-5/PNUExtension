@@ -31,10 +31,5 @@ export default function CardTimeLine(props: CardTimeLineProps): JSX.Element {
     >
       {schoolClass.교과목명}
     </div>
-
-  // <div>
-
-  //   <LinearProgress variant="determinate" value={30} style={{ height: '30px', borderRadius: 4 }} />
-  // </div>
   );
 }

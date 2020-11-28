@@ -32,7 +32,9 @@ interface Props {
   category: string;
 }
 
-const CrawlingCard = ({ id, title, href, content, category }: Props) => {
+const CrawlingCard = ({
+  id, title, href, content, category,
+}: Props) => {
   const classes = useStyles();
 
   return (

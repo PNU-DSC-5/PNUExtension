@@ -13,6 +13,12 @@ const useStyles = makeStyles({
     minWidth: 650,
   },
 });
+  // setMon(colored.filter((each) => TimeStringToStringArray(each['시간표'])[0][0] === '월' || TimeStringToStringArray(each['시간표'])[1][0] === '월'));
+// setTue(colored.filter((each) => TimeStringToStringArray(each['시간표'])[0][0] === '화' || TimeStringToStringArray(each['시간표'])[1][0] === '화'));
+// setWen(colored.filter((each) => TimeStringToStringArray(each['시간표'])[0][0] === '수' || TimeStringToStringArray(each['시간표'])[1][0] === '수'));
+// setThu(colored.filter((each) => TimeStringToStringArray(each['시간표'])[0][0] === '목' || TimeStringToStringArray(each['시간표'])[1][0] === '목'));
+// setFri(colored.filter((each) => TimeStringToStringArray(each['시간표'])[0][0] === '금' || TimeStringToStringArray(each['시간표'])[1][0] === '금'));
+// setSat(colored.filter((each) => TimeStringToStringArray(each['시간표'])[0][0] === '토' || TimeStringToStringArray(each['시간표'])[1][0] === '토'));
 // const [mon, setMon] = React.useState<SchoolClass[]>(schoolData.filter((each) => splitTimeString(each['시간표'])[0][0] === '월' || splitTimeString(each['시간표'])[1][0] === '월'));
   // const [tue, setTue] = React.useState<SchoolClass[]>(schoolData.filter((each) => splitTimeString(each['시간표'])[0][0] === '화' || splitTimeString(each['시간표'])[1][0] === '화'));
   // const [wen, setWen] = React.useState<SchoolClass[]>(schoolData.filter((each) => splitTimeString(each['시간표'])[0][0] === '수' || splitTimeString(each['시간표'])[1][0] === '수'));
