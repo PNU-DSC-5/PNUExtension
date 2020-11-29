@@ -25,10 +25,11 @@ import CardTimeLine from './CardTimeLine';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 
-import { SchoolClass, DAYS, COLORS, TIMES,  } from '../shared/interfaces/timeTable.inteface';
+import {
   SchoolClass, DAYS, COLORS, TIMES,
 } from '../shared/interfaces/timeTable.inteface';
-import { TimeStringToStringArray, CheckValidateNewClass } from '../shared/utils/time-table.util';
+
+import { TimeStringToStringArray, CheckValidateNewClass, StringArrayToTime } from '../shared/utils/time-table.util';
 
 const useStyles = makeStyles((theme: Theme) => createStyles({
   section: {
@@ -53,18 +54,15 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
     flexDirection: 'column',
     backgroundColor: theme.palette.primary.main,
     borderRadius: 4,
+    alignItems: 'center',
   },
   weekLineWrapper: {
     width: '10%',
     height: '780px',
   },
   slider: {
-    '&>ul>li': {
-      width: 50,
-    },
-    width: '95%',
-    margin: 'auto',
-    height: 'px',
+    width: '100%',
+    height: '100%',
   },
   '@keyframes blinker': {
     from: { opacity: 1 },
@@ -100,6 +98,11 @@ export default function WeekTable(): JSX.Element {
     method: 'POST',
   }, { manual: true });
 
+  const [{ loading: deleteClassLoading }, deleteSchoolClass] = useAxios<void>({
+    url: '/school-class',
+    method: 'DELETE',
+  }, { manual: true });
+
   /* 2차원 배열 정의시 setState 비동기로 인해 문제 발생 -> 일단 6분할 */
   const [mon, setMon] = React.useState<SchoolClass[]>([]);
   const [tue, setTue] = React.useState<SchoolClass[]>([]);
@@ -128,15 +131,26 @@ export default function WeekTable(): JSX.Element {
     }).then(() => {
       alert(`${newClass.교과목명} 수업이 추가되었습니다!`);
     }).catch(() => {
-      alert(`${newClass.교과목명} 수업이 추가하는데 실패했습니다. 다시 시도해주세요`);
+      alert(`${newClass.교과목명} 수업을 추가하는데 실패했습니다. 다시 시도해주세요`);
     });
 
     return true;
   };
 
+  /**
+   * 수업 삭제 요청 핸들러
+   * @param newClass 삭제할 수업
+   */
   const handleRemoveClass = (newClass: SchoolClass) => {
-    
-  }
+    deleteSchoolClass({
+      data: { newClass },
+    }).then(() => {
+      alert(`${newClass.교과목명} 수업이 삭제되었습니다!`);
+      getSchoolClasses();
+    }).catch(() => {
+      alert(`${newClass.교과목명} 수업을 삭제하는데 실패했습니다. 다시 시도해주세요`);
+    });
+  };
 
   const handleMon = (newClass: SchoolClass, isRemove?: any) => {
     if (checkPossibleClassTime(newClass, mon) && !isRemove) setMon([...mon, newClass]);
@@ -194,28 +208,131 @@ export default function WeekTable(): JSX.Element {
     getSchoolClasses();
   };
 
-  /**
-   * 지난 수업인지 체크
-   * @param target 수업
-   */
-  const checkIsCurrentClass = (target: SchoolClass) => {
-    // 월 13:00(100)
-    const time = Number(target.시간표.split(',')[0].slice(2, 7));
-    const interval = Number(target.시간표.split(',')[0][11] === ')'
-      ? target.시간표.split(',')[0].slice(8, 11) : target.시간표.split(',')[0].slice(8, 10)) / 60;
-
-    const currTime = Number(moment(new Date()).format('HH'));
-    return currTime <= time + interval;
-  };
-
   const settings = {
     // dots: true,
     infinite: true,
-    speed: 1000,
+    speed: 700,
     slidesToShow: 1,
     slidesToScroll: 1,
-    arrows: false,
+    arrows: true,
   };
+
+  /**
+   * 지난 수업인지 체크 요일은 필터링 됐다고 가정
+   * @param target 수업
+   */
+  const checkIsCurrentClass = (target: SchoolClass) => {
+    const currTime = moment(new Date());
+    const targetTimes = StringArrayToTime(TimeStringToStringArray(target.시간표));
+    // const checkTarget = targetTimes[0].day === DAYS[currTime.day() - 1] ? targetTimes[0] : targetTimes[1];
+    // console.log(checkTarget, currTime.format('hh:mm'));
+
+    const checkTarget = targetTimes[0];
+    const formatedCurrTime = moment(`1997-06-07 ${currTime.format('HH:MM')}:00`);
+
+    console.log(moment(formatedCurrTime).isAfter(moment(checkTarget.endTime)), 'asdfasdf');
+    if (moment(formatedCurrTime).isAfter(moment(checkTarget.endTime))) {
+      console.log(target, checkTarget);
+      return false;
+    }
+
+    return true;
+  };
+
+  const dummy = [
+    {
+      연번: 1699,
+      대학명: '사범대학',
+      주관학과: 362100,
+      주관학과명: '교육학과',
+      학년: 3,
+      교과목코드: 'XA40360',
+      분반: '005',
+      교과목명: '학교폭력예방및학생의이해',
+      영문교과목명: 'UNDERSTANDING STUDENTS AND SCHOOL VIOLENCE PREVENTION',
+      교과구분: '교직과목',
+      학점: 2,
+      이론: 2,
+      실습: 0,
+      교수명: '설정희',
+      제한인원: 25,
+      시간표: '월 16:00(30) 417-510',
+      교양영역: '',
+      원어: '',
+      팀티칭: '',
+      원격: '',
+      비고: '',
+    },
+    {
+      연번: 1716,
+      대학명: '사범대학',
+      주관학과: 362300,
+      주관학과명: '유아교육과',
+      학년: 2,
+      교과목코드: 'ER34348',
+      분반: '076',
+      교과목명: '아동수학지도',
+      영문교과목명: 'MATHEMATICS INSTRUCTION FOR CHILDREN',
+      교과구분: '전공선택',
+      학점: 3,
+      이론: 3,
+      실습: 0,
+      교수명: '정혜영',
+      제한인원: 19,
+      시간표: '월 17:00(75) 211-A202,수 15:00(75) 211-A202',
+      교양영역: '',
+      원어: '',
+      팀티칭: '',
+      원격: '',
+      비고: '',
+    },
+    {
+      연번: 1754,
+      대학명: '사범대학',
+      주관학과: 363060,
+      주관학과명: '통합사회전공',
+      학년: 3,
+      교과목코드: 'SD34599',
+      분반: '075',
+      교과목명: '통합사회논리및논술',
+      영문교과목명: 'LOGIC & WRITING OF INTEGRATED SOCIAL SCIENCE EDUCATION',
+      교과구분: '전공선택',
+      학점: 3,
+      이론: 3,
+      실습: 0,
+      교수명: '백종성/김효성/장혜진/박미향',
+      제한인원: 15,
+      시간표: '월 19:00(60) 417-102',
+      교양영역: '',
+      원어: '',
+      팀티칭: 'Y',
+      원격: '',
+      비고: '',
+    },
+    {
+      연번: 1,
+      대학명: '교육혁신과',
+      주관학과: 127100,
+      주관학과명: '교육혁신과',
+      학년: 0,
+      교과목코드: 'EA12620',
+      분반: '001',
+      교과목명: '소비문화',
+      영문교과목명: 'CONSUMER CULTURE',
+      교과구분: '일반선택',
+      학점: 3,
+      이론: 3,
+      실습: 0,
+      교수명: '',
+      제한인원: 30,
+      시간표: '월 10:00(100)',
+      교양영역: '',
+      원어: '',
+      팀티칭: '',
+      원격: 'Y',
+      비고: 'KNU-9',
+    },
+  ];
 
   return (
     <Paper className={classes.section}>
@@ -229,13 +346,24 @@ export default function WeekTable(): JSX.Element {
           </Typography>
         </Button>
 
-        <Slider {...settings} className={classes.slider}>
-          {schoolData && schoolData.map((each, index) => ({ ...each, color: COLORS[index] }))
-            .filter((each) => checkIsCurrentClass(each))
-            .map((each) => (
-              <CardTimeLine schoolClass={each} />
-            ))}
-        </Slider>
+        <div
+          style={{
+            width: 220,
+            marginLeft: 8,
+            marginRight: 8,
+          }}
+        >
+          <Slider {...settings} className={classes.slider}>
+            {schoolData && dummy.map((each, index) => ({ ...each, color: COLORS[index] }))
+              .filter((each) => each.시간표[0] === '월' && checkIsCurrentClass(each))
+              .map((each) => (
+                <CardTimeLine
+                  schoolClass={each}
+                />
+              ))}
+          </Slider>
+        </div>
+
       </div>
 
       {/* 다이얼로그 컴포넌트 */}
@@ -292,26 +420,32 @@ export default function WeekTable(): JSX.Element {
             <WeekLine
               schoolClasses={mon}
               targetWeek={DAYS[0]}
+              handleRemoveClass={handleRemoveClass}
             />
             <WeekLine
               schoolClasses={tue}
               targetWeek={DAYS[1]}
+              handleRemoveClass={handleRemoveClass}
             />
             <WeekLine
               schoolClasses={wen}
               targetWeek={DAYS[2]}
+              handleRemoveClass={handleRemoveClass}
             />
             <WeekLine
               schoolClasses={thu}
               targetWeek={DAYS[3]}
+              handleRemoveClass={handleRemoveClass}
             />
             <WeekLine
               schoolClasses={fri}
               targetWeek={DAYS[4]}
+              handleRemoveClass={handleRemoveClass}
             />
             <WeekLine
               schoolClasses={sat}
               targetWeek={DAYS[5]}
+              handleRemoveClass={handleRemoveClass}
             />
           </div>
 

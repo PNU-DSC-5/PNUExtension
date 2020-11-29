@@ -1,16 +1,16 @@
 import passport from 'passport';
-import doQuery from '../../database/doQuery';
 import { Strategy as NaverStrategy } from 'passport-naver';
 import { Strategy as KakaoStrategy } from 'passport-kakao';
 import { Strategy as GithubStrategy } from 'passport-github';
 import { Strategy as GoogleStrategy } from 'passport-google-oauth20';
 import { Strategy as CustomStrategy } from 'passport-custom';
 import { v4 as uuidV4 } from 'uuid';
+import * as dotenv from 'dotenv';
+import doQuery from '../../database/doQuery';
 
 // shared interfaces
 import { User, Url } from '../../shared/interfaces/user.interface';
 
-import * as dotenv from 'dotenv';
 dotenv.config();
 
 passport.serializeUser((user, done) => {
@@ -25,7 +25,7 @@ passport.deserializeUser((user, done) => {
 passport.use(
   'auto-login',
   new CustomStrategy((req, done) => {
-    const uuid = req.body['uuid'];
+    const { uuid } = req.body;
     console.log('[Auto Login ... UUID ]', uuid);
 
     const sql_check_uuid = `
@@ -58,9 +58,7 @@ passport.use(
 
         return done('Not Exist UUID ... ', null);
       })
-      .catch((err) => {
-        return done(err, null);
-      });
+      .catch((err) => done(err, null));
   }),
 );
 
@@ -85,7 +83,7 @@ passport.use(
       passReqToCallback: true,
     },
     (req, accessToken, refreshToken, profile, done) => {
-      const autoLogin: number = req.cookies.autoLogin;
+      const { autoLogin } = req.cookies;
       const googleUser: GoogleUser = profile._json;
 
       const remoteData: User = {
@@ -99,7 +97,7 @@ passport.use(
         url: [],
       };
 
-      checkAndLogin(remoteData, autoLogin > 0 ? true : false, done);
+      checkAndLogin(remoteData, autoLogin > 0, done);
     },
   ),
 );
@@ -124,7 +122,7 @@ passport.use(
       passReqToCallback: true,
     },
     (req, accessToken, refreshToken, profile, done) => {
-      const autoLogin: number = req.cookies.autoLogin;
+      const { autoLogin } = req.cookies;
       const naverUser: NaverUser = profile._json as NaverUser;
 
       const remoteData: User = {
@@ -138,7 +136,7 @@ passport.use(
         url: [],
       };
 
-      checkAndLogin(remoteData, autoLogin > 0 ? true : false, done);
+      checkAndLogin(remoteData, autoLogin > 0, done);
     },
   ),
 );
@@ -201,7 +199,7 @@ passport.use(
       passReqToCallback: true,
     },
     (req, accessToken, refreshToken, profile, done) => {
-      const autoLogin: number = req.cookies.autoLogin;
+      const { autoLogin } = req.cookies;
       const githubUser: GithubUser = profile._json as GithubUser;
       if (autoLogin) console.log('[Auto Login Checked ... ]');
 
@@ -216,7 +214,7 @@ passport.use(
         url: [],
       };
 
-      checkAndLogin(remoteData, autoLogin > 0 ? true : false, done);
+      checkAndLogin(remoteData, autoLogin > 0, done);
     },
   ),
 );
@@ -258,7 +256,7 @@ async function regist(
 
   doQuery(sql_regist, sql_data)
     .then(() => {
-      console.log('[Sign Up] : Success , uuid , auto login : ' + autoLogin);
+      console.log(`[Sign Up] : Success , uuid , auto login : ${autoLogin}`);
       const newUser: User = {
         ...user,
         email_verified: false,
@@ -289,12 +287,8 @@ async function updateUUID(
   const sql_uuid = create ? createUuid() : undefined;
 
   return doQuery(sql_upadateUUID, [sql_uuid, userId])
-    .then(() => {
-      return sql_uuid;
-    })
-    .catch(() => {
-      return undefined;
-    });
+    .then(() => sql_uuid)
+    .catch(() => undefined);
 }
 
 /**
@@ -349,7 +343,7 @@ async function checkAndLogin(
         /* 일시 로그인 */
         updateUUID(dbProfile.id).then((uuid) => {
           console.log('[Temp Login] : Success');
-          done(undefined, { ...dbProfile, uuid: uuid, url: urls });
+          done(undefined, { ...dbProfile, uuid, url: urls });
         });
       }
     }

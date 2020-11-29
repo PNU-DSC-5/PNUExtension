@@ -18,6 +18,7 @@ import { TimeStringToStringArray } from '../shared/utils/time-table.util';
 interface WeekTimeLineProps {
   schoolClasses: SchoolClass[];
   targetWeek: string;
+  handleRemoveClass: (newClass: SchoolClass) => void;
 }
 
 const useStyles = makeStyles((theme: Theme) => createStyles({
@@ -86,7 +87,7 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
 
 export default function WeekLine(props: WeekTimeLineProps): JSX.Element {
   const classes = useStyles();
-  const { schoolClasses, targetWeek } = props;
+  const { schoolClasses, targetWeek, handleRemoveClass } = props;
   const schoolTimes = [9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21];
 
   const days = ['월', '화', '수', '목', '금', '토'];
@@ -164,7 +165,7 @@ export default function WeekLine(props: WeekTimeLineProps): JSX.Element {
                 setClickedClass(index);
               }}
             >
-              <Typography variant="h6" align="left">
+              <Typography variant="h6" align="center">
                 {eachClass['교과목명'].length > 10 ? `${eachClass['교과목명'].slice(0, 11)}..` : eachClass['교과목명']}
               </Typography>
             </ListItem>
@@ -217,7 +218,8 @@ export default function WeekLine(props: WeekTimeLineProps): JSX.Element {
             color="primary"
             style={{ marginTop: 8, marginRight: 8 }}
             onClick={() => {
-
+              handleRemoveClass(schoolClasses[clickedClass]);
+              handleClose();
             }}
           >
             <Typography variant="body1" color="textPrimary">

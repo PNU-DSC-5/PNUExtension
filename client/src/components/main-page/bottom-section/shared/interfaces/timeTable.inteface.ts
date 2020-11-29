@@ -1,6 +1,6 @@
 export const DAYS = ['월', '화', '수', '목', '금', '토'];
 export const TIMES = [9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22];
-export const COLORS = ['#0c8599', '#ffd8a8', '#748ffc', '#1971c2', '#a5d8ff', '#ffa8a8', '#f08c00',
+export const COLORS = ['#ff6b6b', '#495057', '#d9480f', '#1971c2', '#2b8a3e', '#ffa8a8', '#f08c00',
   '#40c057', '#f08c00', '#51cf66', '#99e9f2', '#495057', '#495057'];
 
 export interface ClassCategory {

@@ -22,9 +22,13 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
   },
   gridList: {
     width: '100%',
+    overflow: 'hidden',
   },
-  specialTile: {
-
+  tileAction: {
+    '&:hover,select': {
+      transform: 'scale3d(1.05, 1.05, 1)',
+      // boxShadow: theme.shadows[5],
+    },
   },
 }));
 const category: any[] = [
@@ -115,7 +119,7 @@ export default function BottomTest(): JSX.Element {
         // position: 'fixed',
       }}
     >
-      <GridListTile cols={1} className={classes.specialTile}>
+      <GridListTile cols={1}>
         <WeekTable />
       </GridListTile>
       <GridListTile cols={1}>
@@ -133,7 +137,11 @@ export default function BottomTest(): JSX.Element {
       id, title, href, content,
     } = elem;
     return (
-      <GridListTile key={id} cols={1}>
+      <GridListTile
+        key={id}
+        cols={1}
+        className={classes.tileAction}
+      >
         {id === 5
           ? SpecialSection()
           : CrawlingSection(

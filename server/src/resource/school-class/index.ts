@@ -18,15 +18,13 @@ router.get('/', JwtToken.check, (req: Request, res: Response, next: NextFunction
     `;
     doQuery(sql_findAllSchoolClass, [user.id])
       .then((row) => {
-        if (row.result[0]) {
-          try {
-            const userClasses: SchoolClass[] = row.result;
-            console.log('[School Classes FindAll] : Success ... ');
-            response.Helper.ok(req, res, userClasses);
-          } catch (err) {
-            console.log('[School Classes FindAll] : Error ... ', err);
-            response.Helper.serverError(req, res, err);
-          }
+        try {
+          const userClasses: SchoolClass[] = row.result;
+          console.log('[School Classes FindAll] : Success ... ');
+          response.Helper.ok(req, res, userClasses);
+        } catch (err) {
+          console.log('[School Classes FindAll] : Error ... ', err);
+          response.Helper.serverError(req, res, err);
         }
       })
       .catch((err) => {
@@ -76,9 +74,21 @@ router.delete(
     console.log('[School Classes Delete] : Start ... ', newClass.교과목명);
 
     if (newClass && user) {
-      console.log('[School Classes Delete] : Success ... ');
-      response.Helper.ok(req, res, true);
+      const sql_deleteClass = `
+      DELETE FROM classes
+      WHERE userId = ? AND 연번 = ?
+      `;
+      doQuery(sql_deleteClass, [user.id, newClass.연번])
+        .then(() => {
+          console.log('[School Classes Delete] : Success ... ');
+          response.Helper.ok(req, res, true);
+        })
+        .catch((err) => {
+          console.log('[School Classes Delete] : Error ... ');
+          response.Helper.mysqlError(req, res, err);
+        });
     } else {
+      console.log('[School Classes Delete] : Bad Request Error ... ');
       response.Helper.badRequest(req, res, []);
     }
   },
