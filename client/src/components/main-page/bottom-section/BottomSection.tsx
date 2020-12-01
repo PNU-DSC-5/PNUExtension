@@ -24,6 +24,10 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
     width: '100%',
     overflow: 'hidden',
   },
+  specialSection: {
+    width: '20%',
+    position: 'absolute',
+  },
   tileAction: {
     '&:hover,select': {
       transform: 'scale3d(1.05, 1.05, 1)',
@@ -115,8 +119,9 @@ export default function BottomTest(): JSX.Element {
       cols={1}
       spacing={5}
       style={{
-        // width: '300px',
+        // width: '17%',
         // position: 'fixed',
+        // marginLeft: 1500,
       }}
     >
       <GridListTile cols={1}>
@@ -157,7 +162,7 @@ export default function BottomTest(): JSX.Element {
   return (
     <div>
       <CategoryButton />
-      {/* {SpecialSection()} */}
+
       <GridList
         cellHeight={450}
         className={classes.gridList}

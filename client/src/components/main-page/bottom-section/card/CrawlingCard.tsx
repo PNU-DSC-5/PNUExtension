@@ -43,13 +43,13 @@ const CrawlingCard = ({
   return (
     <Card className={classes.section}>
       <CardActionArea href={href}>
-        {/* <CardMedia // 사진 - 어떻게 설정하지?
+        <CardMedia // 사진 - 어떻게 설정하지?
           component="img"
           alt="Contemplative Reptile"
-          height="240"
-          // image="/images/space.jpg"
+          height="280"
+          image="http://www.pusan.ac.kr/_contents/kor/_Img/07Intro/ui06.jpg"
           title="Space"
-        /> */}
+        />
         <CardContent style={{ alignSelf: 'flex-end' }}>
           <Typography gutterBottom variant="h6" component="h2">
             {title}
