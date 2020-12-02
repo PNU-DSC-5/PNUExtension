@@ -5,7 +5,10 @@ import {
 } from '@material-ui/core';
 
 import BottomSection from '../bottom-section/BottomSection';
-import NoticeBoard from '../notice-board/NoticeBoard';
+import FreeBoardTable from '../free-board/FreeBoardTable';
+import {FreeBoard} from '../bottom-section/shared/interfaces/freeBoard.interface';
+
+import useAxios from 'axios-hooks';
 
 const useStyles = makeStyles((theme: Theme) => createStyles({
   rootPaper: {
@@ -23,6 +26,11 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
 export default function BottomSectionLayout(): JSX.Element {
   const classes = useStyles();
   const [tabIndex, setTabIndex] = React.useState<number>(0);
+
+  const [{data: freeBoardData}] = useAxios<FreeBoard[]>({
+    url: '/free-board',
+    method: 'GET'
+  },{manual: true})
 
   const handleTabChange = (event: any, newValue: number) => {
     setTabIndex(newValue);
@@ -50,7 +58,11 @@ export default function BottomSectionLayout(): JSX.Element {
       ) : (
         <Fade in={tabIndex === 1}>
           <Paper className={classes.rootPaper} elevation={0}>
-            <NoticeBoard />
+            {freeBoardData&& (
+              <FreeBoardTable 
+              freeBoardData={freeBoardData}
+            />
+            )}
           </Paper>
         </Fade>
       )}

@@ -4,6 +4,7 @@ import MaterialTable from 'material-table';
 
 import { makeStyles } from '@material-ui/core/styles';
 import { TableIcons } from './TableIcons';
+import {FreeBoard} from '../bottom-section/shared/interfaces/freeBoard.interface';
 
 const useStyles = makeStyles({
   table: {
@@ -12,7 +13,12 @@ const useStyles = makeStyles({
   },
 });
 
-export default function NoticeBoard(): JSX.Element {
+export interface FreeBoardTableProps {
+  freeBoardData: FreeBoard[]
+}
+
+export default function FreeBoardTable(props: FreeBoardTableProps): JSX.Element {
+  const {freeBoardData } = props;
   const classes = useStyles();
   return (
     <Grid
@@ -27,15 +33,15 @@ export default function NoticeBoard(): JSX.Element {
           icons={TableIcons}
           columns={[
             { title: 'NO', field: 'index', cellStyle:{width: 30}, headerStyle:{width:  30}},
+            { title: '카테고리', field: 'category',cellStyle:{width: 30}, headerStyle:{width: 30}}, 
+            { title: '태그', field: 'tag',cellStyle:{width: 30}, headerStyle:{width: 30}}, 
             { title: '제목', field: 'title', cellStyle:{width: 900}, headerStyle:{width: 900}},
             { title: '작성자', field: 'userId' ,cellStyle:{width: 30}, headerStyle:{width: 30}},
             { title: '작성일', field: 'createdAt',cellStyle:{width: 30}, headerStyle:{width: 30}}, 
             { title: '조회수', field: 'view',cellStyle:{maxWidth: '10px'}, headerStyle:{maxWidth: '10px'}}, 
-            { title: '좋아요', field: 'like',cellStyle:{maxWidth: '10px'}, headerStyle:{maxWidth: '10px'}, render: rowData=>(<div style={{width: '10px'}}>aa</div>)}, 
+            { title: '좋아요', field: 'like',cellStyle:{maxWidth: '10px'}, headerStyle:{maxWidth: '10px'}}, 
           ]}
-          data={[
-           {index: 0, title: 'testtesttesttest',userId:'qjqdn1568', createdAt:'2020-09-20',view: 33,like:23}
-          ]}
+          data={freeBoardData}
           options={{
             search: true,
           }}
