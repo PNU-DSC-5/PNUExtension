@@ -16,7 +16,7 @@ const globalTheme: ThemeOptions = {
     },
     text: {
       primary: '#212529',
-      secondary: '#f8f9fa',
+      secondary: '#495057',
     },
     // primary: {
     //   light: '#adb5bd',
