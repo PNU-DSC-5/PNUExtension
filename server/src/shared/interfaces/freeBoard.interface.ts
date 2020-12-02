@@ -4,8 +4,8 @@ export interface FreeBoard {
   userId: string;
   content: string;
   createdAt: Date;
-  like: number;
-  view: number;
+  likes: number;
+  views: number;
   category: string;
-  tag:string;
+  tag: string;
 }

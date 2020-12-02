@@ -1,14 +1,13 @@
 import React from 'react';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import {
-  Tabs, Tab, Typography, Fade, Paper, Grow,
+  Tabs, Tab, Typography, Fade, Paper, Zoom,
 } from '@material-ui/core';
 
+import useAxios from 'axios-hooks';
 import BottomSection from '../bottom-section/BottomSection';
 import FreeBoardTable from '../free-board/FreeBoardTable';
-import {FreeBoard} from '../bottom-section/shared/interfaces/freeBoard.interface';
-
-import useAxios from 'axios-hooks';
+import { FreeBoard } from '../shared/interfaces/freeBoard.interface';
 
 const useStyles = makeStyles((theme: Theme) => createStyles({
   rootPaper: {
@@ -27,14 +26,18 @@ export default function BottomSectionLayout(): JSX.Element {
   const classes = useStyles();
   const [tabIndex, setTabIndex] = React.useState<number>(0);
 
-  const [{data: freeBoardData}] = useAxios<FreeBoard[]>({
+  const [{ data: freeBoardData }, getFreeBoardData] = useAxios<FreeBoard[]>({
     url: '/free-board',
-    method: 'GET'
-  },{manual: true})
+    method: 'GET',
+  }, { manual: true });
 
-  const handleTabChange = (event: any, newValue: number) => {
+  const handleTabChange = (event: React.ChangeEvent<{}>, newValue: number) => {
     setTabIndex(newValue);
   };
+
+  React.useEffect(() => {
+    getFreeBoardData();
+  }, [getFreeBoardData]);
 
   return (
     <div style={{ width: '100%', minHeight: 1500 }}>
@@ -49,19 +52,21 @@ export default function BottomSectionLayout(): JSX.Element {
         <Tab label={<Typography variant="body1" className={classes.tabTitle}>게시판</Typography>} />
       </Tabs>
 
-      {tabIndex === 0 ? (
-        <Grow in={tabIndex === 0}>
+      {tabIndex === 0 && (
+        <Fade in={tabIndex === 0} style={{ transitionDelay: '200ms' }}>
           <Paper className={classes.rootPaper} elevation={0}>
             <BottomSection />
           </Paper>
-        </Grow>
-      ) : (
-        <Fade in={tabIndex === 1}>
+        </Fade>
+      )}
+
+      {tabIndex === 1 && (
+        <Fade in={tabIndex === 1} style={{ transitionDelay: '200ms' }}>
           <Paper className={classes.rootPaper} elevation={0}>
-            {freeBoardData&& (
-              <FreeBoardTable 
-              freeBoardData={freeBoardData}
-            />
+            {freeBoardData && (
+              <FreeBoardTable
+                freeBoardData={freeBoardData}
+              />
             )}
           </Paper>
         </Fade>
