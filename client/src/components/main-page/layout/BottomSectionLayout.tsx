@@ -35,6 +35,10 @@ export default function BottomSectionLayout(): JSX.Element {
     setTabIndex(newValue);
   };
 
+  const handleGetFreeBoardData = () => {
+    getFreeBoardData();
+  }
+
   React.useEffect(() => {
     getFreeBoardData();
   }, [getFreeBoardData]);
@@ -66,6 +70,7 @@ export default function BottomSectionLayout(): JSX.Element {
             {freeBoardData && (
               <FreeBoardTable
                 freeBoardData={freeBoardData}
+                handleGetFreeBoardData={handleGetFreeBoardData}
               />
             )}
           </Paper>

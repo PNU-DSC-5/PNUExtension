@@ -4,7 +4,6 @@ export interface FreeBoardPost {
   createdAt: Date;
   likes: number;
   views: number;
-  CheckValidateNewClass: number;
   category?: string;
   tag?: string;
 }

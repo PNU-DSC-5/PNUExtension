@@ -27,10 +27,12 @@ const useStyles = makeStyles((theme) => createStyles({
 export interface AddDialogProps {
   open: boolean;
   handleClose: () => void;
+  handleGetFreeBoardData: () => void;
+
 }
 
 export default function AddDialog(props: AddDialogProps): JSX.Element {
-  const { open, handleClose } = props;
+  const { open, handleClose,handleGetFreeBoardData } = props;
   const classes = useStyles();
 
   const titleInput = useEventTargetValue();
@@ -58,6 +60,7 @@ export default function AddDialog(props: AddDialogProps): JSX.Element {
     postFreeBoard({
       data: params,
     }).then(() => {
+      handleGetFreeBoardData();
       handleClose();
       handleInputReset();
     }).catch(() => {

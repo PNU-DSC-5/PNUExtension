@@ -8,6 +8,7 @@ import EditIcon from '@material-ui/icons/Edit';
 import { makeStyles, withStyles, createStyles } from '@material-ui/core/styles';
 import useAxios from 'axios-hooks';
 import { FreeBoard } from '../shared/interfaces/freeBoard.interface';
+import {FreeBoardPatch} from '../shared/dto/freeBoardPatch.dto';
 import useEventTargetValue from '../../../utils/hooks/useEventTargetValue';
 
 const useStyles = makeStyles((theme) => createStyles({
@@ -20,7 +21,7 @@ const useStyles = makeStyles((theme) => createStyles({
       '&:hover fieldset': {
         borderColor: theme.palette.primary.main,
       },
-    },
+    }, 
   },
 }));
 
@@ -36,26 +37,50 @@ const DarkerDisabledTextField = withStyles({
 export interface AddDialogProps {
   open: boolean;
   handleClose: () => void;
+  handleGetFreeBoardData: () => void;
   selectedContent: FreeBoard;
 }
 
 export default function ViewDialog(props: AddDialogProps): JSX.Element {
-  const { open, handleClose, selectedContent } = props;
+  const { open, handleClose, selectedContent,handleGetFreeBoardData } = props;
   const classes = useStyles();
 
   const [dialogState, setDialogState] = React.useState<'edit'|'view'>('view');
   const titleInput = useEventTargetValue(selectedContent.title);
   const contentInput = useEventTargetValue(selectedContent.content);
 
-  // const [, postFreeBoard] = useAxios<boolean>({
-  //   url: '/free-board',
-  //   method: 'POST',
-  // }, { manual: true });
+  const [, patchFreeBoard] = useAxios<boolean>({
+    url: '/free-board',
+    method: 'PATCH',
+  }, { manual: true });
 
   const handleInputReset = () => {
     titleInput.handleReset();
     contentInput.handleReset();
   };
+
+  const handleUpdateFreeBoard = () => {
+    const params: FreeBoardPatch = {
+      index: selectedContent.index,
+      title: titleInput.value,
+      content: contentInput.value,
+      likes: selectedContent.likes,
+      views: selectedContent.views,
+      category: selectedContent.category,
+      tag: selectedContent.tag
+    };
+
+    patchFreeBoard({
+      data: params
+    }).then(() => {
+      handleGetFreeBoardData();
+      handleInputReset();
+      handleClose();
+    })
+    .catch(() => {
+      alert('게시물 수정에 문제가 발생 했습니다. 다시 시도해주세요');
+    })
+  }
 
   return (
     <Dialog
@@ -97,9 +122,9 @@ export default function ViewDialog(props: AddDialogProps): JSX.Element {
         <div
           style={{
             display: 'flex',
-            flexDirection: 'column',
-          }}
-        >
+            flexDirection: 'column',  
+          }} 
+        > 
           <DarkerDisabledTextField
             variant="outlined"
             label="제목"
@@ -108,7 +133,7 @@ export default function ViewDialog(props: AddDialogProps): JSX.Element {
             onChange={titleInput.handleChange}
             style={{
               maxWidth: 400,
-            }}
+            }}  
             inputProps={{
               style: {
 
@@ -118,7 +143,7 @@ export default function ViewDialog(props: AddDialogProps): JSX.Element {
             disabled={dialogState !== 'edit'}
           />
           <div
-            style={{
+            style={{ 
               display: 'inline-flex',
               flexDirection: 'row',
               width: '100%',
@@ -168,11 +193,11 @@ export default function ViewDialog(props: AddDialogProps): JSX.Element {
               color="primary"
               disabled={!contentInput.value || !titleInput.value}
               onClick={() => {
-                // handleAddFreeBoard();
+                handleUpdateFreeBoard();
                 setDialogState('view');
               }}
             >
-              완료
+              수정
             </Button>
             <Button
               variant="outlined"

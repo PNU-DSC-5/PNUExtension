@@ -26,10 +26,11 @@ const useStyles = makeStyles({
 
 export interface FreeBoardTableProps {
   freeBoardData: FreeBoard[];
+  handleGetFreeBoardData: () => void;
 }
 
 export default function FreeBoardTable(props: FreeBoardTableProps): JSX.Element {
-  const { freeBoardData } = props;
+  const { freeBoardData,handleGetFreeBoardData } = props;
   const classes = useStyles();
 
   const addDialog = useBasicDialog();
@@ -122,12 +123,14 @@ export default function FreeBoardTable(props: FreeBoardTableProps): JSX.Element 
         <AddDialog
           open={addDialog.open}
           handleClose={addDialog.handleClose}
+          handleGetFreeBoardData={handleGetFreeBoardData}
         />
 
         <ViewDialog
           open={viewDialog.open}
           handleClose={viewDialog.handleClose}
           selectedContent={selectedContent}
+          handleGetFreeBoardData={handleGetFreeBoardData}
         />
       </Grid>
     </Grid>

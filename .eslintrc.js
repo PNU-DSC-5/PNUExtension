@@ -37,7 +37,7 @@ module.exports = {
      */
     "brace-style": "off",
     'camelcase': 1,
-    // 'no-console': [2, { allow: ['error'] }],
+    'no-console': [2, { allow: ['error'] }],
     'no-unused-vars': 'off',
     "no-use-before-define": 'off',
     'lines-between-class-members': 1,
@@ -58,7 +58,7 @@ module.exports = {
     'max-params': ["warn", 4],
     "no-shadow": 2,
     /**
-     * import rules 
+     * import rules
      */
     "import/no-extraneous-dependencies": [0, {"devDependencies": ["**/*.test.js", "**/*.spec.js"]}],
     'import/no-cycle': 0, // disable dependency cycle for this project

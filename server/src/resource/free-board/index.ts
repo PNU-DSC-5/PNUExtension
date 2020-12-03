@@ -6,6 +6,7 @@ import response from '../../middleware/responseHelper/helper';
 import { User } from '../../shared/interfaces/user.interface';
 import { FreeBoard } from '../../shared/interfaces/freeBoard.interface';
 import { FreeBoardPost } from '../../shared/dto/freeBoardPost.dto';
+import { FreeBoardPatch } from '../../shared/dto/freeBoardPatch.dto';
 
 const router = express.Router();
 
@@ -90,6 +91,36 @@ router.patch(
   JwtToken.check,
   (req: Request, res: Response, next: NextFunction) => {
     console.log('[Free Board Data Update One] : Start ... ');
+
+    try{
+     const user = req.user as User;
+     const updateData = req.body as FreeBoardPatch;
+     
+     if(user){  
+      const sql_update = `
+      UPDATE freeboard
+      SET title = ?, content = ?, category = ?, tag = ?, views =? ,likes =?
+      WHERE _index = ?`;
+
+      const sql_data = [
+        updateData.title, updateData.content,updateData.category, updateData.tag, updateData.views, updateData.likes, updateData.index
+      ];
+
+      doQuery(sql_update, sql_data)
+        .then(() => {
+          console.log('[Free Board Data Update One] : Success ..  ');
+          response.Helper.ok(req,res,true);
+        })
+        .catch((err) => {
+          console.log('[Free Board Data Update One] : Mysql Error ..  \n',err);
+          response.Helper.mysqlError(req,res,err);
+        })
+     }else{
+       response.Helper.unauthorized(req,res);
+     }
+    } catch(err) {
+      response.Helper.serverError(req,res,err);
+    }
   },
 );
 
@@ -101,7 +132,7 @@ router.delete(
   JwtToken.check,
   (req: Request, res: Response, next: NextFunction) => {
     console.log('[Free Board Data Delete One] : Start ... ');
-  },
+  }, 
 );
 
 export = router;
