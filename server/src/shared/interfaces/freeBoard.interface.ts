@@ -1,5 +1,5 @@
 export interface FreeBoard {
-  index: number;
+  _index: number;
   title: string;
   userId: string;
   content: string;

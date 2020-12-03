@@ -1,5 +1,5 @@
 export interface FreeBoardPatch {
-  index: number;
+  _index: number;
   title: string;
   content: string;
   likes: number;

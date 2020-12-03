@@ -64,7 +64,7 @@ export default function FreeBoardTable(props: FreeBoardTableProps): JSX.Element 
           columns={[
             {
               title: '',
-              field: 'index',
+              field: '_index',
               cellStyle: { width: 10, fontWeight: 'bold' },
               headerStyle: { width: 10, fontWeight: 'bold' },
               align: 'center',

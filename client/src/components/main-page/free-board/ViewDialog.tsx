@@ -45,7 +45,7 @@ export default function ViewDialog(props: AddDialogProps): JSX.Element {
   const { open, handleClose, selectedContent,handleGetFreeBoardData } = props;
   const classes = useStyles();
 
-  const [dialogState, setDialogState] = React.useState<'edit'|'view'>('view');
+  const [dialogState, setDialogState] = React.useState<'edit'|'view'>();
   const titleInput = useEventTargetValue(selectedContent.title);
   const contentInput = useEventTargetValue(selectedContent.content);
 
@@ -61,7 +61,7 @@ export default function ViewDialog(props: AddDialogProps): JSX.Element {
 
   const handleUpdateFreeBoard = () => {
     const params: FreeBoardPatch = {
-      index: selectedContent.index,
+      _index: selectedContent._index,
       title: titleInput.value,
       content: contentInput.value,
       likes: selectedContent.likes,
@@ -76,6 +76,7 @@ export default function ViewDialog(props: AddDialogProps): JSX.Element {
       handleGetFreeBoardData();
       handleInputReset();
       handleClose();
+      setDialogState('view');
     })
     .catch(() => {
       alert('게시물 수정에 문제가 발생 했습니다. 다시 시도해주세요');
@@ -85,7 +86,7 @@ export default function ViewDialog(props: AddDialogProps): JSX.Element {
   return (
     <Dialog
       open={open}
-      onClose={handleClose}
+      onClose={handleClose} 
       maxWidth="xl"
       scroll="body"
       PaperProps={{
@@ -180,7 +181,8 @@ export default function ViewDialog(props: AddDialogProps): JSX.Element {
           />
 
           {dialogState === 'edit' && (
-          <div
+            <Fade in={dialogState==='edit'} style={{ transitionDelay: '200ms' }}>
+            <div
             style={{
               display: 'flex',
               flexDirection: 'row',
@@ -194,7 +196,6 @@ export default function ViewDialog(props: AddDialogProps): JSX.Element {
               disabled={!contentInput.value || !titleInput.value}
               onClick={() => {
                 handleUpdateFreeBoard();
-                setDialogState('view');
               }}
             >
               수정
@@ -210,6 +211,8 @@ export default function ViewDialog(props: AddDialogProps): JSX.Element {
               취소
             </Button>
           </div>
+            </Fade>
+          
           )}
 
         </div>

@@ -103,7 +103,7 @@ router.patch(
       WHERE _index = ?`;
 
       const sql_data = [
-        updateData.title, updateData.content,updateData.category, updateData.tag, updateData.views, updateData.likes, updateData.index
+        updateData.title, updateData.content,updateData.category, updateData.tag, updateData.views, updateData.likes, updateData._index
       ];
 
       doQuery(sql_update, sql_data)

@@ -8,6 +8,7 @@ import useAxios from 'axios-hooks';
 import BottomSection from '../bottom-section/BottomSection';
 import FreeBoardTable from '../free-board/FreeBoardTable';
 import { FreeBoard } from '../shared/interfaces/freeBoard.interface';
+import WordCloud from '../shared/utils/WordCloud';
 
 const useStyles = makeStyles((theme: Theme) => createStyles({
   rootPaper: {
@@ -68,10 +69,17 @@ export default function BottomSectionLayout(): JSX.Element {
         <Fade in={tabIndex === 1} style={{ transitionDelay: '200ms' }}>
           <Paper className={classes.rootPaper} elevation={0}>
             {freeBoardData && (
+                <div>
               <FreeBoardTable
                 freeBoardData={freeBoardData}
                 handleGetFreeBoardData={handleGetFreeBoardData}
               />
+
+              <div style={{marginTop: 32}}>
+               <WordCloud/>
+              </div>
+              </div>
+         
             )}
           </Paper>
         </Fade>
