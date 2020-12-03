@@ -1,7 +1,7 @@
 import React from "react";
 
 // material-ui core components
-import { Button, IconButton } from "@material-ui/core";
+import { Button, colors, IconButton } from "@material-ui/core";
 import FormControl from "@material-ui/core/FormControl";
 import Modal from "@material-ui/core/Modal";
 import InputAdornment from "@material-ui/core/InputAdornment";
@@ -192,6 +192,12 @@ export default function Timer(): JSX.Element {
                   type="number"
                   onChange={handleChangeMinutes}
                   autoFocus={true}
+                  inputProps={{
+                    style: {
+                      color: "black",
+                      textAlign: "center",
+                    },
+                  }}
                   endAdornment={
                     <InputAdornment position="end">분</InputAdornment>
                   }
