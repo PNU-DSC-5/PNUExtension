@@ -6,4 +6,5 @@ export interface FreeBoardPatch {
   views: number;
   category: string;
   tag: string;
+  isSecret: boolean;
 }

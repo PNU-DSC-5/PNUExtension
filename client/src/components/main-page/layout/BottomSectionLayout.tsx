@@ -27,22 +27,9 @@ export default function BottomSectionLayout(): JSX.Element {
   const classes = useStyles();
   const [tabIndex, setTabIndex] = React.useState<number>(0);
 
-  const [{ data: freeBoardData }, getFreeBoardData] = useAxios<FreeBoard[]>({
-    url: '/free-board',
-    method: 'GET',
-  }, { manual: true });
-
   const handleTabChange = (event: React.ChangeEvent<{}>, newValue: number) => {
     setTabIndex(newValue);
   };
-
-  const handleGetFreeBoardData = () => {
-    getFreeBoardData();
-  }
-
-  React.useEffect(() => {
-    getFreeBoardData();
-  }, [getFreeBoardData]);
 
   return (
     <div style={{ width: '100%', minHeight: 1500 }}>
@@ -68,19 +55,16 @@ export default function BottomSectionLayout(): JSX.Element {
       {tabIndex === 1 && (
         <Fade in={tabIndex === 1} style={{ transitionDelay: '200ms' }}>
           <Paper className={classes.rootPaper} elevation={0}>
-            {freeBoardData && (
-                <div>
-              <FreeBoardTable
-                freeBoardData={freeBoardData}
-                handleGetFreeBoardData={handleGetFreeBoardData}
-              />
+            {/* {freeBoardData && ( */}
+            <div>
+              <FreeBoardTable />
 
-              <div style={{marginTop: 32}}>
-               <WordCloud/>
+              <div style={{ marginTop: 32 }}>
+                <WordCloud />
               </div>
-              </div>
-         
-            )}
+            </div>
+
+            {/* )} */}
           </Paper>
         </Fade>
       )}

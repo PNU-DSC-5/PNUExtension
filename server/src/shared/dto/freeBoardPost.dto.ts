@@ -6,4 +6,5 @@ export interface FreeBoardPost {
   views: number;
   category?: string;
   tag?: string;
+  isSecret: boolean;
 }
