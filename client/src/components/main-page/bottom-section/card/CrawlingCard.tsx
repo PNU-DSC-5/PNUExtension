@@ -40,14 +40,15 @@ const CrawlingCard = (input: Props) => {
         {/* <CardMedia // 사진 - 어떻게 설정하지?
           component="img"
           alt="Contemplative Reptile"
-          height="240"
-          // image="/images/space.jpg"
+          height="280"
+          image="http://www.pusan.ac.kr/_contents/kor/_Img/07Intro/ui06.jpg"
           title="Space"
         /> */}
         <CardContent style={{ alignSelf: "flex-end" }}>
           <Typography gutterBottom variant="h6" component="h2">
             {input.card.title}
           </Typography>
+          
           <Typography variant="body2" color="textSecondary" component="p">
             {input.card.date}
           </Typography>

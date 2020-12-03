@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-  List, ListItem, Button, Typography,
+  List, ListItem, Button, Typography, Popper, DialogTitle, DialogContent,
 } from '@material-ui/core';
 import {
   makeStyles, createStyles, Theme, fade,
@@ -8,11 +8,17 @@ import {
 
 import moment from 'moment';
 import classname from 'classnames';
+
+import Dialog from '@material-ui/core/Dialog';
+import useBasicDialog from '../../../../utils/hooks/useBasicDialog';
+
 import { SchoolClass } from '../shared/interfaces/timeTable.inteface';
+import { TimeStringToStringArray } from '../shared/utils/time-table.util';
 
 interface WeekTimeLineProps {
   schoolClasses: SchoolClass[];
   targetWeek: string;
+  handleRemoveClass: (newClass: SchoolClass) => void;
 }
 
 const useStyles = makeStyles((theme: Theme) => createStyles({
@@ -33,11 +39,11 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
   },
   '@keyframes blinker': {
     from: { opacity: 1 },
-    to: { opacity: 0.5 },
+    to: { opacity: 0.8 },
   },
   blinkIcon: {
     animationName: '$blinker',
-    animationDuration: '1000ms',
+    animationDuration: '900ms',
     animationIterationCount: 'infinite',
     animationDirection: 'alternate',
     animationTimingFunction: 'ease-in-out',
@@ -46,55 +52,49 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
     border: `1px solid ${theme.palette.secondary.dark}`,
     height: 780,
     padding: 0,
-    borderRadius: 4,
+    // borderRadius: 4,
     overflowY: 'hidden',
   },
   listCurrWeek: {
-    border: `2px solid ${theme.palette.primary.main}`,
-    borderRadius: 4,
-    backgroundColor: theme.palette.secondary.dark,
+    border: `3px solid ${theme.palette.secondary.contrastText}`,
+    // borderRadius: 4,
   },
   classItem: {
-    // backgroundColor: '#74c0fc',
     color: 'white',
     position: 'absolute',
-    borderRadius: 4,
+    // borderRadius: 4,
     boxShadow: theme.shadows[2],
+    '&:hover,select': {
+      // transform: 'scale3d(1.35, 1.05, 1)',
+      boxShadow: theme.shadows[5],
+      borderRadius: 4,
+      animationName: '$blinker',
+      animationDuration: '900ms',
+      animationIterationCount: 'infinite',
+      animationDirection: 'alternate',
+      animationTimingFunction: 'ease-in-out',
+    },
   },
   backgroundItem: {
     position: 'absolute',
     height: '60px',
     borderBottom: '1px solid gray',
   },
+  dialogText: {
+    marginBottom: theme.spacing(1) / 2,
+  },
 }));
-
-function splitTimeString(str: string) {
-  const result = str.split(',');
-  if (result.length > 1) {
-    return result;
-  }
-  result.push('일');
-  return result;
-}
-
-// 월 13
-// const makeCardColor = (timeString: string): string => {
-//   const real = Number(timeString.split(',')[0].slice(2, 4)) - 9;
-//   const colors = [
-//     '#0c8599', '#ffd8a8', '#748ffc', '#1971c2', '#a5d8ff', '#ffa8a8', '#f08c00',
-//     '#40c057', '#f08c00', '#51cf66', '#99e9f2', '#495057', '#495057',
-//   ];
-
-//   return colors[real];
-// };
 
 export default function WeekLine(props: WeekTimeLineProps): JSX.Element {
   const classes = useStyles();
-  const { schoolClasses, targetWeek } = props;
+  const { schoolClasses, targetWeek, handleRemoveClass } = props;
   const schoolTimes = [9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21];
 
   const days = ['월', '화', '수', '목', '금', '토'];
   const isCurrWeek = days[moment().day() - 1] === targetWeek;
+
+  const { open, handleClose, handleOpen } = useBasicDialog();
+  const [clickedClass, setClickedClass] = React.useState<number>(0);
 
   return (
     <div className={classes.weekLineWrapper}>
@@ -116,7 +116,7 @@ export default function WeekLine(props: WeekTimeLineProps): JSX.Element {
       <List className={classname({
         [classes.list]: true,
         [classes.listCurrWeek]: isCurrWeek,
-        // [classes.blinkIcon]: isCurrWeek,
+        [classes.blinkIcon]: isCurrWeek,
       })}
       >
         {schoolTimes.map((each) => (
@@ -126,13 +126,13 @@ export default function WeekLine(props: WeekTimeLineProps): JSX.Element {
           />
         ))}
 
-        {schoolClasses.map((eachClass) => {
+        {schoolClasses.map((eachClass, index) => {
           const pos = {
             height: 0,
             marginTop: 0,
           };
 
-          const times = splitTimeString(eachClass['시간표']);
+          const times = TimeStringToStringArray(eachClass['시간표']);
 
           const firstClass = times[0].split(' ');
           const secondClass = times[1].split(' ');
@@ -149,21 +149,96 @@ export default function WeekLine(props: WeekTimeLineProps): JSX.Element {
 
           return (
             <ListItem
-              className={classes.classItem}
+              // className={classes.classItem}
+              className={classname({
+                [classes.classItem]: true,
+                [classes.blinkIcon]: false,
+              })}
+              button
               style={{
                 marginTop: pos.marginTop,
                 height: pos.height,
                 backgroundColor: eachClass.color ? eachClass.color : '#ffff',
               }}
+              onClick={() => {
+                handleOpen();
+                setClickedClass(index);
+              }}
             >
-              <Typography variant="body1" align="left">
+              <Typography variant="h6" align="center">
                 {eachClass['교과목명'].length > 10 ? `${eachClass['교과목명'].slice(0, 11)}..` : eachClass['교과목명']}
               </Typography>
             </ListItem>
           );
         })}
       </List>
-    </div>
 
+      <Dialog
+        open={open}
+        onClose={handleClose}
+        maxWidth="md"
+        scroll="paper"
+        PaperProps={{
+          style: {
+            backgroundColor: fade('#ffff', 1),
+            borderRadius: 16,
+          },
+        }}
+      >
+        <DialogContent
+          style={{ padding: 32 }}
+        >
+
+          {schoolClasses[clickedClass] && (
+          <div
+            style={{
+              margin: 4,
+            }}
+          >
+            <Typography variant="h6" color="textSecondary" className={classes.dialogText}>
+              {`${schoolClasses[clickedClass].교과목명}`}
+            </Typography>
+
+            <Typography variant="h6" color="textSecondary" className={classes.dialogText}>
+              {`${schoolClasses[clickedClass].시간표}`}
+            </Typography>
+
+            <Typography variant="body1" color="textSecondary" className={classes.dialogText}>
+              {`${schoolClasses[clickedClass].학년} 학년 ${schoolClasses[clickedClass].학점} 학점`}
+            </Typography>
+
+            <Typography variant="body1" color="textSecondary" className={classes.dialogText}>
+              {`${schoolClasses[clickedClass].주관학과명}`}
+            </Typography>
+          </div>
+          )}
+
+          <Button
+            variant="contained"
+            color="primary"
+            style={{ marginTop: 8, marginRight: 8 }}
+            onClick={() => {
+              handleRemoveClass(schoolClasses[clickedClass]);
+              handleClose();
+            }}
+          >
+            <Typography variant="body1" color="textPrimary">
+              삭제
+            </Typography>
+          </Button>
+
+          <Button
+            variant="contained"
+            color="secondary"
+            style={{ marginTop: 8 }}
+            onClick={handleClose}
+          >
+            <Typography variant="body1" color="textSecondary">
+              취소
+            </Typography>
+          </Button>
+        </DialogContent>
+      </Dialog>
+    </div>
   );
 }

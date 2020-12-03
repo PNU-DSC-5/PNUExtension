@@ -74,7 +74,7 @@ export default function Timer(): JSX.Element {
       else if (hours === 0 && minutes === 0) resultTime = `${secondsStr}`;
       //1시간 미만이면 mm:ss 출력
       else if (hours === 0) resultTime = `${minutesStr}:${secondsStr}`;
-      //1시간 이상이면 hh:mm 출력
+      // 1시간 이상이면 hh:mm 출력
       else resultTime = `${hours}:${minutesStr}`;
 
       return resultTime;
@@ -85,7 +85,7 @@ export default function Timer(): JSX.Element {
     const dataString = localStorage.getItem("settingTime");
     if (dataString) {
       const settingTime = JSON.parse(dataString);
-      return settingTime / 1000; //총 설정한 시간 가져옴 : s 단위
+      return settingTime / 1000; // 총 설정한 시간 가져옴 : s 단위
     }
   };
 
@@ -95,24 +95,24 @@ export default function Timer(): JSX.Element {
     if (startTimeStr && settingTimeStr) {
       const startTime = JSON.parse(startTimeStr);
       const settingTime = JSON.parse(settingTimeStr);
-      let date = new Date();
+      const date = new Date();
 
-      let remainingTime = (startTime + settingTime - date.getTime()) / 1000;
-      return remainingTime; //남은 시간 가져옴 : s 단위
+      const remainingTime = (startTime + settingTime - date.getTime()) / 1000;
+      return remainingTime; // 남은 시간 가져옴 : s 단위
     }
   };
 
   const [open, setOpen] = React.useState(false);
-  const [selectTime_minutes, setSelectTime_minutes] = React.useState(0); //설정할 시간 : m 단위
-  const [modalStyle] = React.useState(getModalStyle); //팝업 스타일 지정
+  const [selectTime_minutes, setSelectTime_minutes] = React.useState(0); // 설정할 시간 : m 단위
+  const [modalStyle] = React.useState(getModalStyle); // 팝업 스타일 지정
 
   const handleClickOpen = () => {
-    //Timer를 클릭하면 실행되는 함수
-    setOpen(true); //팝업을 엶
+    // Timer를 클릭하면 실행되는 함수
+    setOpen(true); // 팝업을 엶
   };
   const handleCancel = () => {
-    //Dialog 바깥을 누르면 실행되는 함수
-    setOpen(false); //팝업을 닫음
+    // Dialog 바깥을 누르면 실행되는 함수
+    setOpen(false); // 팝업을 닫음
   };
   const handleReset = () => {
     //Dialog에서 Reset 버튼을 누르면 실행되는 함수
@@ -120,9 +120,9 @@ export default function Timer(): JSX.Element {
     localStorage.setItem("settingTime", JSON.stringify(0));
   };
   const handleSet = () => {
-    //Dialog에서 Set 버튼을 누르면 실행되는 함수
-    setOpen(false); //팝업을 닫음
-    const selectTime = selectTime_minutes * 60; //입력받은 시간을 통해 Timer에 설정할 시간 계산
+    // Dialog에서 Set 버튼을 누르면 실행되는 함수
+    setOpen(false); // 팝업을 닫음
+    const selectTime = selectTime_minutes * 60; // 입력받은 시간을 통해 Timer에 설정할 시간 계산
 
     let now = new Date();
     localStorage.setItem("startTime", JSON.stringify(now.getTime())); //set을 누른 시각 : ms 단위
