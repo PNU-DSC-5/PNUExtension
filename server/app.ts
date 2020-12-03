@@ -11,7 +11,9 @@ import testRouter from './src/resource/users/index';
 import userRouter from './src/resource/users/index';
 import urlRouter from './src/resource/url/index';
 import schoolClassRouter from './src/resource/school-class/index';
-import cardRouter from './src/resource/card/index';
+import infoCardRouter from './src/resource/info-card/index';
+import newsCardRouter from './src/resource/news-card/index';
+import contestCardRouter from './src/resource/contest-card/index';
 
 class PNUApi {
   public app: express.Express;
@@ -66,7 +68,9 @@ class PNUApi {
     this.app.use('/users', userRouter);
     this.app.use('/url', urlRouter);
     this.app.use('/school-class', schoolClassRouter);
-    this.app.use('/card', cardRouter);
+    this.app.use('/info-card', infoCardRouter);
+    this.app.use('/news-card', newsCardRouter);
+    this.app.use('/contest-card', contestCardRouter);
 
     this.app.use(
       () => (

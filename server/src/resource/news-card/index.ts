@@ -1,10 +1,8 @@
 import express, { Request, Response, NextFunction } from 'express';
 import doQuery from '../../database/doQuery';
-import JwtToken from '../../middleware/jwt/jwtToken';
 import response from '../../middleware/responseHelper/helper';
 
 import { Card } from '../../shared/interfaces/card.interface';
-import { User } from '../../shared/interfaces/user.interface';
 
 const router = express.Router();
 
@@ -12,7 +10,7 @@ router.get('/', (req: Request, res: Response, next: NextFunction) => {
   console.log('[Card FindAll] : Start ... ');
     const sql_findAllCard = `
     SELECT * 
-    FROM info
+    FROM news
     `;
     doQuery(sql_findAllCard, [])
       .then((row) => {
@@ -28,7 +26,7 @@ router.get('/', (req: Request, res: Response, next: NextFunction) => {
         }
       })
       .catch((err) => {
-        console.log('[School Classes FindAll] : Error ... ');
+        console.log('[Cards FindAll] : Error ... ');
         response.Helper.mysqlError(req, res, err);
       });
 });

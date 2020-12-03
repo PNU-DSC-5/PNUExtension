@@ -33,10 +33,22 @@ export default function BottomTest(): JSX.Element {
   const classes = useStyles();
 
   //서버로부터 card 데이터를 받아옴
-  const [{ data: cardData, loading }] = useAxios<Card[]>({
-    url: "/card",
+  const [{ data: infoCardData, loading: infoLoading }] = useAxios<Card[]>({
+    url: "/info-card",
     method: "GET",
   });
+
+  const [{ data: newsCardData, loading: newsLoading }] = useAxios<Card[]>({
+    url: "/news-card",
+    method: "GET",
+  });
+
+  const [{ data: contestCardData, loading: contestLoading }] = useAxios<Card[]>(
+    {
+      url: "/contest-card",
+      method: "GET",
+    }
+  );
 
   //CrawlingCard에 데이터 전달
   const CrawlingSection = (card: Card): JSX.Element => {
@@ -74,10 +86,17 @@ export default function BottomTest(): JSX.Element {
   // cardData에 있는 데이터를 Card 형태로 출력
   const bottomSection = (): Array<JSX.Element> => {
     //cardData가 존재하면
-    if (cardData) {
-      const result: JSX.Element[] = cardData.map((elem) => {
+    if (infoCardData && newsCardData && contestCardData) {
+      const info: JSX.Element[] = infoCardData.map((elem) => {
         return <GridListTile cols={1}>{CrawlingSection(elem)}</GridListTile>;
       });
+      const news: JSX.Element[] = newsCardData.map((elem) => {
+        return <GridListTile cols={1}>{CrawlingSection(elem)}</GridListTile>;
+      });
+      const contest: JSX.Element[] = contestCardData.map((elem) => {
+        return <GridListTile cols={1}>{CrawlingSection(elem)}</GridListTile>;
+      });
+      const result = info.concat(news, contest);
       result.splice(4, 0, SpecialSection()); //5번째 index 자리에 SpecialSection 추가
       console.log(result);
       return result;
@@ -88,7 +107,9 @@ export default function BottomTest(): JSX.Element {
   };
 
   //데이터를 받아오는 동안 Loading 메시지를 출력
-  if (loading) return <Typography>Loading...</Typography>;
+  if (infoLoading) return <Typography>Loading...</Typography>;
+  if (newsLoading) return <Typography>Loading...</Typography>;
+  if (contestLoading) return <Typography>Loading...</Typography>;
 
   return (
     <div>

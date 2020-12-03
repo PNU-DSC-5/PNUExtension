@@ -44,11 +44,12 @@ const CrawlingCard = (input: Props) => {
           // image="/images/space.jpg"
           title="Space"
         /> */}
+        <Typography variant="caption">{input.card.category}</Typography>
         <CardContent style={{ alignSelf: "flex-end" }}>
           <Typography gutterBottom variant="h6" component="h2">
             {input.card.title}
           </Typography>
-          <Typography variant="body2" color="textSecondary" component="p">
+          <Typography variant="body2" component="p">
             {input.card.date}
           </Typography>
         </CardContent>
