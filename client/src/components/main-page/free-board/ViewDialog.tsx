@@ -277,7 +277,7 @@ export default function ViewDialog(props: AddDialogProps): JSX.Element {
                   checked={isSecret}
                   onChange={handleIsSecretCjhange}
                   name="익명"
-                  color="primary"
+                  color="primary" 
                 />
               )}
               label="익명이"
@@ -293,7 +293,7 @@ export default function ViewDialog(props: AddDialogProps): JSX.Element {
             style={{
               marginTop: 16,
             }}
-            inputProps={{
+            inputProps={{    
               style: {
                 minHeight: 500,
                 width: '100%',

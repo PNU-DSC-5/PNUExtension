@@ -11,10 +11,7 @@ import { TableIcons } from './TableIcons';
 import { FreeBoard } from '../shared/interfaces/freeBoard.interface';
 import useBasicDialog from '../../../utils/hooks/useBasicDialog';
 import AddDialog from './AddDialog';
-<<<<<<< HEAD
-=======
 import { FreeBoardPost } from '../../../../../server/src/shared/dto/freeBoardPost.dto';
->>>>>>> b117d96c729409c7318bbec753024d5ee9aba560
 
 import ViewDialog from './ViewDialog';
 import { FreeBoardViewCount } from '../shared/dto/freeBoardViewCount.dto';
@@ -70,7 +67,7 @@ export default function FreeBoardTable(props: FreeBoardTableProps): JSX.Element 
 
   const [selectedContent, setSelectedContent] = React.useState<FreeBoard>();
   const handleSelectTableRow = (rowData: FreeBoard) => {
-    setSelectedContent(rowData);
+    setSelectedContent(rowData);    
   };
 
   return (
@@ -89,7 +86,7 @@ export default function FreeBoardTable(props: FreeBoardTableProps): JSX.Element 
               style={{ fontWeight: 'bold' }}
               onClick={addDialog.handleOpen}
             >
-              작성하기
+              작성하기 
             </Button>
           )}
           icons={TableIcons}

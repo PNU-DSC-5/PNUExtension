@@ -147,10 +147,10 @@ router.delete(
        DELETE FROM freeboard 
        WHERE freeboard._index = ? AND freeboard.userId = ?`;
  
-       const sql_data = [
+       const sql_data = [ 
          deleteData._index, user.id
-       ];
- 
+       ]; 
+   
        doQuery(sql_delete, sql_data)
          .then(() => {
            console.log('[Free Board Data Delete One] : Success ..  ');

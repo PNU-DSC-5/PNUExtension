@@ -6,7 +6,7 @@ module.exports = {
     ecmaFeatures: {
       jsx: true,
       modules: true,
-      experimentalObjectRestSpread: true
+      experimentalObjectRestSpread: true 
     }
   },
   root: true,
@@ -131,7 +131,7 @@ module.exports = {
               "location",
               "params",
               "location*"
-          ]
+          ] 
         }
     ]
   },
