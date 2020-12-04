@@ -38,15 +38,13 @@ export default function AddDialog(props: AddDialogProps): JSX.Element {
   const titleInput = useEventTargetValue();
   const contentInput = useEventTargetValue();
 
+  /**
+   * post 요청 함수 및 핸들러
+   */
   const [, postFreeBoard] = useAxios<boolean>({
     url: '/free-board',
     method: 'POST',
   }, { manual: true });
-
-  const handleInputReset = () => {
-    titleInput.handleReset();
-    contentInput.handleReset();
-  };
 
   const handleAddFreeBoard = () => {
     const params: FreeBoardPost = {
@@ -67,6 +65,16 @@ export default function AddDialog(props: AddDialogProps): JSX.Element {
       alert('새 게시물을 등록 할 수 없습니다. 다시 시도해주세요.');
     });
   };
+
+  /**
+   * title, content 리셋 핸들러
+   */
+  const handleInputReset = () => {
+    titleInput.handleReset();
+    contentInput.handleReset();
+  };
+
+  
 
   return (
     <Dialog

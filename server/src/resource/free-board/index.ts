@@ -7,6 +7,7 @@ import { User } from '../../shared/interfaces/user.interface';
 import { FreeBoard } from '../../shared/interfaces/freeBoard.interface';
 import { FreeBoardPost } from '../../shared/dto/freeBoardPost.dto';
 import { FreeBoardPatch } from '../../shared/dto/freeBoardPatch.dto';
+import { FreeBoardDelete } from '../../shared/dto/freeBoardDelete.dto';
 
 const router = express.Router();
 
@@ -132,6 +133,34 @@ router.delete(
   JwtToken.check,
   (req: Request, res: Response, next: NextFunction) => {
     console.log('[Free Board Data Delete One] : Start ... ');
+    try{
+      const user = req.user as User;
+      const deleteData = req.body as FreeBoardDelete;
+      
+      if(user){  
+       const sql_delete= `
+       DELETE FROM freeboard 
+       WHERE freeboard._index = ? AND freeboard.userId = ?`;
+ 
+       const sql_data = [
+         deleteData._index, user.id
+       ];
+ 
+       doQuery(sql_delete, sql_data)
+         .then(() => {
+           console.log('[Free Board Data Delete One] : Success ..  ');
+           response.Helper.ok(req,res,true);
+         })
+         .catch((err) => {
+           console.log('[Free Board Data Delete One] : Mysql Error ..  \n',err);
+           response.Helper.mysqlError(req,res,err);
+         })
+      }else{
+        response.Helper.unauthorized(req,res);
+      }
+     } catch(err) {
+       response.Helper.serverError(req,res,err);
+     }
   }, 
 );
 

@@ -9,7 +9,10 @@ import { makeStyles, withStyles, createStyles } from '@material-ui/core/styles';
 import useAxios from 'axios-hooks';
 import { FreeBoard } from '../shared/interfaces/freeBoard.interface';
 import {FreeBoardPatch} from '../shared/dto/freeBoardPatch.dto';
+import {FreeBoardDelete} from '../shared/dto/freeBoardDelete.dto';
 import useEventTargetValue from '../../../utils/hooks/useEventTargetValue';
+import UserContext from '../../../utils/contexts/UserContext';
+
 
 const useStyles = makeStyles((theme) => createStyles({
   dialogContent: {
@@ -45,19 +48,19 @@ export default function ViewDialog(props: AddDialogProps): JSX.Element {
   const { open, handleClose, selectedContent,handleGetFreeBoardData } = props;
   const classes = useStyles();
 
-  const [dialogState, setDialogState] = React.useState<'edit'|'view'>();
+  const userContext = React.useContext(UserContext);
+
+  const [dialogState, setDialogState] = React.useState<'edit'|'view'>('view');
   const titleInput = useEventTargetValue(selectedContent.title);
   const contentInput = useEventTargetValue(selectedContent.content);
 
+  /**
+   * update 요청 핸들러 및 함수
+   */
   const [, patchFreeBoard] = useAxios<boolean>({
     url: '/free-board',
     method: 'PATCH',
   }, { manual: true });
-
-  const handleInputReset = () => {
-    titleInput.handleReset();
-    contentInput.handleReset();
-  };
 
   const handleUpdateFreeBoard = () => {
     const params: FreeBoardPatch = {
@@ -75,12 +78,56 @@ export default function ViewDialog(props: AddDialogProps): JSX.Element {
     }).then(() => {
       handleGetFreeBoardData();
       handleInputReset();
-      handleClose();
       setDialogState('view');
+      handleClose();   
     })
     .catch(() => {
       alert('게시물 수정에 문제가 발생 했습니다. 다시 시도해주세요');
     })
+  };
+
+  /**
+   * delete 핸들러 및 요청 함수
+   */
+  const [, deleteFreeBoard] = useAxios<boolean>({
+    url: '/free-board',
+    method: 'DELETE',
+  }, { manual: true });
+
+  const handleDeleteFreeBoard = () => {
+    const params: FreeBoardDelete = {
+      _index: selectedContent._index
+    };
+
+    deleteFreeBoard({
+      data: params
+    }).then(() => {
+      handleGetFreeBoardData();
+      handleInputReset();
+      setDialogState('view');
+      handleClose();     
+    })
+    .catch(() => {
+      alert('게시물 삭제에 문제가 발생 했습니다. 다시 시도해주세요');
+    })
+  }
+
+  /**
+   * title, content 리셋 핸들러
+   */
+  const handleInputReset = () => {
+    titleInput.handleReset();
+    contentInput.handleReset();
+  };
+
+  
+  /**
+   * 로그인 유저와 작성자를 비교
+   * @param originId 로그인 유저
+   * @param compareId 작성자
+   */
+  const handleCheckAuthor = (originId: string, compareId: string):boolean => {
+    return originId === compareId;
   }
 
   return (
@@ -104,13 +151,25 @@ export default function ViewDialog(props: AddDialogProps): JSX.Element {
             <IconButton
               style={{ marginLeft: 16 }}
               size="small"
-              onClick={() => {
-                setDialogState('edit');
+              onClick={() => { 
+                if(handleCheckAuthor(userContext.user.id || '', selectedContent.userId)){
+                  setDialogState('edit');
+                } else{
+                  alert('작성자만 게시물을 수정 혹은 삭제 할 수 있습니다.')
+                }
               }}
             >
               <EditIcon />
             </IconButton>
-            <IconButton size="small">
+            <IconButton size="small"
+              onClick={() => {
+                if(handleCheckAuthor(userContext.user.id || '', selectedContent.userId)){
+                  handleDeleteFreeBoard();
+                } else{
+                  alert('작성자만 게시물을 삭제 할 수 있습니다.')
+                }
+              }}
+            >
               <DeleteIcon />
             </IconButton>
           </Typography>
@@ -195,7 +254,11 @@ export default function ViewDialog(props: AddDialogProps): JSX.Element {
               color="primary"
               disabled={!contentInput.value || !titleInput.value}
               onClick={() => {
-                handleUpdateFreeBoard();
+                if(handleCheckAuthor(userContext.user.id || '', selectedContent.userId)){
+                  handleUpdateFreeBoard();
+                } else{
+                  alert('작성자만 게시물을 수정 할 수 있습니다.')
+                }
               }}
             >
               수정
