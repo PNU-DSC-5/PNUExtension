@@ -2,9 +2,11 @@ export interface Card {
     _id: number;
     title: string;
     href: string;
-    date: string;
+    date: string; //info와 news에 존재
     tag: string;
     category: string;
+    context: string; //contest에 존재
+    imghref: string; //사진 경로
 }
 
 // "id": 13,
@@ -13,3 +15,5 @@ export interface Card {
 // "date" : "2020-11-30"
 // "tag" : "정보컴퓨터공학과"
 // "category" : "부산대학교"
+// "context" : "2020.11.11 (수) 0:00 ~ 2020.11.30 (월) 23:59"
+// "imghref" : ""

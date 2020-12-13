@@ -5,9 +5,7 @@ import {
   ListItem,
   Typography,
   ClickAwayListener,
-  // Accordion,
-  // AccordionDetails,
-  // AccordionSummary,
+  IconButton,
   Badge,
   // Button,
   Divider,
@@ -24,10 +22,10 @@ import {
 import useAxios from "axios-hooks";
 import moment from "moment";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
+import RefreshIcon from '@material-ui/icons/Refresh';
 
 import { Notification } from "./shared/interfaces/notification.interface";
 import { NotificationPatch } from "./shared/dto/notificationPatch.dto";
-
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -62,9 +60,14 @@ export default function NotificationPopper(
   const classes = useStyles();
   const { open, anchorEl, handleClose } = props;
 
-  const [{ data: notificationsData }, excuteGetNotifications] = useAxios<
-    Notification[]
-  >(
+  const [
+    {
+      data: notificationsData,
+      loading: notifcationsLoading,
+      error: notificationsError,
+    },
+    excuteGetNotifications,
+  ] = useAxios<Notification[]>(
     {
       url: "/notification",
       method: "GET",
@@ -98,22 +101,21 @@ export default function NotificationPopper(
           {notificationsData &&
             notificationsData.length > 0 &&
             notificationsData.map((notification) => (
-              <ListItem 
-                button 
+              <ListItem
+                button
                 className={classes.listItem}
                 onClick={() => {
                   const params: NotificationPatch = {
-                    _index : notification._index,
-                    option: 'READ'
+                    _index: notification._index,
+                    option: "READ",
                   };
                   excutePatchNotifications({
-                    data: params
-                  })
-                  .then(() => {
-                    excuteGetNotifications()
-                  })
+                    data: params,
+                  }).then(() => {
+                    excuteGetNotifications();
+                  });
                 }}
-                >
+              >
                 <Badge
                   color="primary"
                   invisible={notification.isRead}
@@ -131,9 +133,19 @@ export default function NotificationPopper(
               </ListItem>
             ))}
 
-          {notificationsData && notificationsData.length === 0 && (
+          {(notificationsError || notifcationsLoading || notificationsData?.length === 0) && (
             <Typography variant="h6" align="center">
               표시할 알림이 없습니다.
+
+              <span style={{marginLeft: 16}}>
+                <IconButton
+                  onClick={() => {
+                    excuteGetNotifications()
+                  }}
+                >
+                  <RefreshIcon/>
+                </IconButton>
+              </span>
             </Typography>
           )}
         </List>

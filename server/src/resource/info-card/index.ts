@@ -1,10 +1,8 @@
 import express, { Request, Response, NextFunction } from 'express';
 import doQuery from '../../database/doQuery';
-import JwtToken from '../../middleware/jwt/jwtToken';
 import response from '../../middleware/responseHelper/helper';
 
 import { Card } from '../../shared/interfaces/card.interface';
-import { User } from '../../shared/interfaces/user.interface';
 
 const router = express.Router();
 
@@ -25,12 +23,11 @@ router.get('/', (req: Request, res: Response, next: NextFunction) => {
           console.log('[Card FindAll] : Error ... ', err);
           response.Helper.serverError(req, res, err);
         }
-      }
-    })
-    .catch((err) => {
-      console.log('[School Classes FindAll] : Error ... ');
-      response.Helper.mysqlError(req, res, err);
-    });
+      })
+      .catch((err) => {
+        console.log('[Cards FindAll] : Error ... ');
+        response.Helper.mysqlError(req, res, err);
+      });
 });
  
 export = router;

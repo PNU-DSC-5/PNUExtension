@@ -37,19 +37,28 @@ const CrawlingCard = (input: Props) => {
   return (
     <Cards className={classes.section}>
       <CardActionArea href={input.card.href}>
-        {/* <CardMedia // 사진 - 어떻게 설정하지?
-          component="img"
-          alt="Contemplative Reptile"
-          height="280"
-          image="http://www.pusan.ac.kr/_contents/kor/_Img/07Intro/ui06.jpg"
-          title="Space"
-        /> */}
+
+        {
+          <CardMedia
+            component="img"
+            alt={input.card.title}
+            height="240"
+            image={input.card.href}
+            title={input.card.title}
+          />
+        }
+        <Typography variant="caption">{input.card.category}</Typography>
+ 
         <CardContent style={{ alignSelf: "flex-end" }}>
           <Typography gutterBottom variant="h6" component="h2">
             {input.card.title}
           </Typography>
-          
-          <Typography variant="body2" color="textSecondary" component="p">
+
+          <Typography variant="body2" component="p">
+            {input.card.context}
+          </Typography>
+          <Typography variant="body2" component="p">
+
             {input.card.date}
           </Typography>
         </CardContent>
