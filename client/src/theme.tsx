@@ -15,8 +15,8 @@ const globalTheme: ThemeOptions = {
       contrastText: '#212529',
     },
     text: {
-      primary: '#f8f9fa',
-      secondary: '#212529',
+      primary: '#212529',
+      secondary: '#495057',
     },
     // primary: {
     //   light: '#adb5bd',

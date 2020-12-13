@@ -7,13 +7,18 @@ import bodyParser from 'body-parser';
 import path from 'path';
 
 // routes
-import testRouter from './src/resource/users/index';
+// import testRouter from './src/resource/users/index';
 import userRouter from './src/resource/users/index';
 import urlRouter from './src/resource/url/index';
 import schoolClassRouter from './src/resource/school-class/index';
+
 import infoCardRouter from './src/resource/info-card/index';
 import newsCardRouter from './src/resource/news-card/index';
 import contestCardRouter from './src/resource/contest-card/index';
+
+import freeBoardRouter from './src/resource/free-board/index';
+import cardRouter from './src/resource/card/index';
+
 
 class PNUApi {
   public app: express.Express;
@@ -64,13 +69,18 @@ class PNUApi {
   private initializeRouters(): void {
     // 라우팅 적용부
 
-    this.app.use('/', testRouter);
+    // this.app.use('/', testRouter);
     this.app.use('/users', userRouter);
     this.app.use('/url', urlRouter);
     this.app.use('/school-class', schoolClassRouter);
+
     this.app.use('/info-card', infoCardRouter);
     this.app.use('/news-card', newsCardRouter);
     this.app.use('/contest-card', contestCardRouter);
+
+    this.app.use('/free-board',freeBoardRouter);
+    this.app.use('/card', cardRouter);
+
 
     this.app.use(
       () => (

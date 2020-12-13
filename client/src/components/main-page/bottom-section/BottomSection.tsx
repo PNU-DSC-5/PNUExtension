@@ -19,7 +19,7 @@ const useStyles = makeStyles((theme: Theme) =>
       display: "flex",
       flexWrap: "wrap",
       justifyContent: "space-around",
-      // overflow: 'hidden',
+      // overflow: 'hidden', 
       backgroundColor: theme.palette.background.paper,
     },
     gridList: {
@@ -114,6 +114,7 @@ export default function BottomTest(): JSX.Element {
   return (
     <div>
       <CategoryButton />
+
       <GridList
         cellHeight={450}
         className={classes.gridList}

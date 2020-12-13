@@ -40,6 +40,11 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
   appBar: {
     backgroundColor: fade(theme.palette.primary.main, 0.8),
   },
+  loginButton: {
+    '&:hover,select': {
+      transform: 'scale3d(1.15, 1.15, 1)',
+    },
+  },
   menuButton: {
     marginRight: theme.spacing(2),
   },
@@ -74,9 +79,9 @@ export function LayoutAppBar(): JSX.Element {
 
   const LoginButton = (): JSX.Element => (
     <Button
-          // href="http://localhost:3000/users/login/google"
-      variant="contained"
+      variant="outlined"
       color="secondary"
+      className={classes.loginButton}
       onClick={() => dialog.handleOpen()}
     >
       <Typography style={{ fontWeight: 'bold' }}>

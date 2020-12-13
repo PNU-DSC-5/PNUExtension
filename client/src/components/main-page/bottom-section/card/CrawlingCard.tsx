@@ -37,6 +37,7 @@ const CrawlingCard = (input: Props) => {
   return (
     <Cards className={classes.section}>
       <CardActionArea href={input.card.href}>
+
         {
           <CardMedia
             component="img"
@@ -47,14 +48,17 @@ const CrawlingCard = (input: Props) => {
           />
         }
         <Typography variant="caption">{input.card.category}</Typography>
+ 
         <CardContent style={{ alignSelf: "flex-end" }}>
           <Typography gutterBottom variant="h6" component="h2">
             {input.card.title}
           </Typography>
+
           <Typography variant="body2" component="p">
             {input.card.context}
           </Typography>
           <Typography variant="body2" component="p">
+
             {input.card.date}
           </Typography>
         </CardContent>

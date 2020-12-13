@@ -2,12 +2,10 @@ import React from 'react';
 // styles
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 // material-ui core components
-import { Grid, Typography } from '@material-ui/core';
+import { Grid } from '@material-ui/core';
 // app components
-import BottomTest from '../components/main-page/bottom-section/BottomSection';
+import BottomSectionLayout from '../components/main-page/layout/BottomSectionLayout';
 import TopSectionLayout from '../components/main-page/layout/TopSectionLayout';
-
-import BackGround from '../public/space.jpg';
 
 const useStyles = makeStyles((theme: Theme) => createStyles({
   root: {
@@ -22,7 +20,7 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
     // marginTop: '32px',
   },
   bottomSection: {
-    marginTop: theme.spacing(10),
+    marginTop: theme.spacing(2),
     minHeight: '2300px',
     backgroundColor: theme.palette.background.paper,
     paddingTop: '20px',
@@ -51,7 +49,7 @@ export default function Main(): JSX.Element {
 
       {/* 메인페이지 하단 섹션 */}
       <Grid container className={classes.bottomSection}>
-        <BottomTest />
+        <BottomSectionLayout />
       </Grid>
     </div>
   );

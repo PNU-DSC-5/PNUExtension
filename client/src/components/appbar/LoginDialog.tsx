@@ -32,7 +32,7 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
     flexDirection: 'column',
     justifyContent: 'center',
     flex: 1,
-    backgroundColor: fade(theme.palette.primary.main, 0.1),
+    backgroundColor: fade(theme.palette.background.paper, 0.9),
     padding: theme.spacing(4),
     borderRadius: 16,
   },
@@ -47,22 +47,33 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
   github: {
     backgroundColor: '#9775fa',
     '&:hover,select': {
-      backgroundColor: '#d0bfff',
+      backgroundColor: '#9775fa',
+      transform: 'scale3d(1.05, 1.05, 1)',
+      boxShadow: theme.shadows[5],
     },
   },
   google: {
     backgroundColor: '#ffff',
+    '&:hover,select': {
+      transform: 'scale3d(1.05, 1.05, 1)',
+      backgroundColor: '#ffff',
+      boxShadow: theme.shadows[5],
+    },
   },
   naver: {
     backgroundColor: '#2b8a3e',
     '&:hover,select': {
-      backgroundColor: '#69db7c',
+      transform: 'scale3d(1.05, 1.05, 1)',
+      backgroundColor: '#2b8a3e',
+      boxShadow: theme.shadows[5],
     },
   },
   kakao: {
     backgroundColor: '#ffd43b',
     '&:hover,select': {
-      backgroundColor: '#ffec99',
+      transform: 'scale3d(1.05, 1.05, 1)',
+      boxShadow: theme.shadows[5],
+      backgroundColor: '#ffd43b',
     },
   },
   buttonIcon: {
@@ -76,7 +87,8 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
     textAlign: 'left',
   },
   switchLabel: {
-    color: theme.palette.primary.contrastText,
+    color: theme.palette.secondary.contrastText,
+    fontWeight: 'bold',
   },
 }));
 
@@ -136,7 +148,7 @@ export default function LoginDialog(props: DialogProps): JSX.Element {
       scroll="paper"
       PaperProps={{
         style: {
-          backgroundColor: fade('#495057', 0.8),
+          // backgroundColor: fade('#495057', 0.8),
           borderRadius: 32,
         },
       }}
@@ -171,7 +183,7 @@ export default function LoginDialog(props: DialogProps): JSX.Element {
               </Grid>
 
               <Grid item xs={6}>
-                <Typography variant="h6" color="primary" className={classes.buttonText}>
+                <Typography variant="h6" color="textSecondary" className={classes.buttonText}>
                   Google
                 </Typography>
               </Grid>
@@ -262,11 +274,10 @@ export default function LoginDialog(props: DialogProps): JSX.Element {
               name="checked"
             />
           )}
-
           label={(
             <Typography
               variant="body1"
-              color="primary"
+              color="textSecondary"
               style={{ fontWeight: 'bold' }}
               className={classnames({
                 [classes.switchLabel]: autoLogin,

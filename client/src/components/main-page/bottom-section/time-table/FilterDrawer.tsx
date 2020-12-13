@@ -11,7 +11,8 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import SchoolClassData from '../../../../shared/data/form-2020-2.json';
 import CategoryData from '../../../../shared/data/category.json';
 
-import { SchoolClass, ClassCategory } from '../shared/interfaces/timeTable.inteface';
+import { SchoolClass, ClassCategory, DAYS } from '../shared/interfaces/timeTable.inteface';
+import { TimeStringToStringArray } from '../shared/utils/time-table.util';
 
 const useStyles = makeStyles((theme: Theme) => createStyles({
   drawer: {
@@ -44,7 +45,7 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
     backgroundColor: 'white',
   },
   schoolListItem: {
-    borderRadious: 16,
+    borderRadious: 4,
   },
   schoolListItemText: {
     display: 'inline-flex',
@@ -57,7 +58,9 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
 export interface FilterDrawerProps {
   drawerOpen: boolean;
   handleDrawer: (isOpen: boolean) => (event: React.KeyboardEvent | React.MouseEvent) => void;
-  handlers: ((newClass: SchoolClass) => void)[]
+  handlers: ((newClass: SchoolClass) => void)[];
+  handleGetSchoolData: () => void;
+  schoolData: SchoolClass[];
 }
 
 /**
@@ -69,7 +72,9 @@ export interface FilterDrawerProps {
  * @param props  
  */
 export default function FilterDrawer(props: FilterDrawerProps): JSX.Element {
-  const { drawerOpen, handleDrawer, handlers } = props;
+  const {
+    drawerOpen, handleDrawer, handlers, handleGetSchoolData,
+  } = props;
   const classes = useStyles();
 
   const [classList, setClassList] = React.useState<SchoolClass[]>([]);
@@ -84,8 +89,6 @@ export default function FilterDrawer(props: FilterDrawerProps): JSX.Element {
     setSelectedCategory(category);
     setClassList(filtered.filter((each) => each['대학명'] === department && each['주관학과명'] === category));
   };
-
-  const days = ['월', '화', '수', '목', '금', '토'];
 
   return (
     <Drawer
@@ -216,9 +219,10 @@ export default function FilterDrawer(props: FilterDrawerProps): JSX.Element {
                       button
                       className={classes.schoolListItem}
                       onClick={() => {
-                        const targetWeek = info['시간표'].split(',');
-                        handlers[days.indexOf(targetWeek[0][0])](info);
-                        if (targetWeek.length > 1) handlers[days.indexOf(targetWeek[1][0])](info);
+                        const times = TimeStringToStringArray(info.시간표);
+                        if (times[0][0] !== '일') handlers[DAYS.indexOf(times[0][0])](info);
+                        if (times[1][0] !== '일') handlers[DAYS.indexOf(times[1][0])](info);
+                        handleGetSchoolData();
                       }}
                     >
                       <div className={classes.schoolListItemText}>
