@@ -47,11 +47,7 @@ export default function AddDialog(props: AddDialogProps): JSX.Element {
   const titleInput = useEventTargetValue();
   const contentInput = useEventTargetValue();
 
-<<<<<<< HEAD
-  /**
-   * post 요청 함수 및 핸들러
-   */
-=======
+
   const [newCategory, setNewCategory] = React.useState<string>('기타');
   const [newTag, setNewTag] = React.useState<string>('기타');
   const [isSecret, setIsSecret] = React.useState<boolean>(false);
@@ -66,7 +62,9 @@ export default function AddDialog(props: AddDialogProps): JSX.Element {
     setIsSecret(event.target.checked);
   };
 
->>>>>>> b117d96c729409c7318bbec753024d5ee9aba560
+  /**
+   * post 요청 함수 및 핸들러
+   */
   const [, postFreeBoard] = useAxios<boolean>({
     url: '/free-board',
     method: 'POST',
@@ -96,14 +94,14 @@ export default function AddDialog(props: AddDialogProps): JSX.Element {
   };
 
   /**
-   * title, content 리셋 핸들러
+   * title, content 리셋 핸들러 
    */
   const handleInputReset = () => {
     titleInput.handleReset();
     contentInput.handleReset();
   };
-
-  
+ 
+   
 
   return (
     <Dialog

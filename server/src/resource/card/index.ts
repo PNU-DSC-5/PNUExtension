@@ -17,7 +17,7 @@ router.get('/', (req: Request, res: Response, next: NextFunction) => {
   doQuery(sql_findAllCard, [])
     .then((row) => {
       if (row.result[0]) {
-        try {
+        try { 
           const crawlingCard: Card[] = row.result;
           console.log('[Card FindAll] : Success ... ');
           response.Helper.ok(req, res, crawlingCard);
