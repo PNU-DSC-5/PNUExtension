@@ -13,6 +13,7 @@ import urlRouter from './src/resource/url/index';
 import schoolClassRouter from './src/resource/school-class/index';
 import freeBoardRouter from './src/resource/free-board/index';
 import cardRouter from './src/resource/card/index';
+import notificationRouter from './src/resource/notifications/index';
 
 class PNUApi {
   public app: express.Express;
@@ -69,6 +70,7 @@ class PNUApi {
     this.app.use('/school-class', schoolClassRouter);
     this.app.use('/free-board',freeBoardRouter);
     this.app.use('/card', cardRouter);
+    this.app.use('/notification', notificationRouter);
 
     this.app.use(
       () => (

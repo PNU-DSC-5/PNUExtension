@@ -14,7 +14,7 @@ import { Card } from "./shared/interfaces/card.interface";
 import { Typography } from "@material-ui/core";
 
 const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
+  createStyles({ 
     root: {
       display: "flex",
       flexWrap: "wrap",

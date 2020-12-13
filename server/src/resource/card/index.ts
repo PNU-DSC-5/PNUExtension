@@ -32,5 +32,5 @@ router.get('/', (req: Request, res: Response, next: NextFunction) => {
       response.Helper.mysqlError(req, res, err);
     });
 });
-
+ 
 export = router;

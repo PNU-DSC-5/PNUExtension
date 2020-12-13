@@ -106,8 +106,8 @@ export default function ViewDialog(props: AddDialogProps): JSX.Element {
       handleGetFreeBoardData();
       handleInputReset();
       setDialogState('view');
-      handleClose();   
-    })
+      handleClose();        
+    }) 
     .catch(() => {
       alert('게시물 수정에 문제가 발생 했습니다. 다시 시도해주세요');
     })
@@ -314,7 +314,7 @@ export default function ViewDialog(props: AddDialogProps): JSX.Element {
             }}
           >
             <Button
-              variant="contained"
+              variant="contained" 
               color="primary"
               disabled={!contentInput.value || !titleInput.value}
               onClick={() => {
