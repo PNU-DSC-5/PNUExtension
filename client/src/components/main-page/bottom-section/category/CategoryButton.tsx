@@ -1,22 +1,22 @@
-import React from 'react';
+import React from "react";
 import {
   createStyles,
   Theme,
   withStyles,
   WithStyles,
-} from '@material-ui/core/styles';
-import Button from '@material-ui/core/Button';
-import Dialog from '@material-ui/core/Dialog';
-import MuiDialogTitle from '@material-ui/core/DialogTitle';
-import MuiDialogContent from '@material-ui/core/DialogContent';
-import MuiDialogActions from '@material-ui/core/DialogActions';
-import IconButton from '@material-ui/core/IconButton';
-import CloseIcon from '@material-ui/icons/Close';
-import Typography from '@material-ui/core/Typography';
-import ToggleButton from '@material-ui/lab/ToggleButton';
-import ToggleButtonGroup from '@material-ui/lab/ToggleButtonGroup';
+} from "@material-ui/core/styles";
+import Button from "@material-ui/core/Button";
+import Dialog from "@material-ui/core/Dialog";
+import MuiDialogTitle from "@material-ui/core/DialogTitle";
+import MuiDialogContent from "@material-ui/core/DialogContent";
+import MuiDialogActions from "@material-ui/core/DialogActions";
+import IconButton from "@material-ui/core/IconButton";
+import CloseIcon from "@material-ui/icons/Close";
+import Typography from "@material-ui/core/Typography";
+import ToggleButton from "@material-ui/lab/ToggleButton";
+import ToggleButtonGroup from "@material-ui/lab/ToggleButtonGroup";
 
-import useAxios from 'axios-hooks';
+import useAxios from "axios-hooks";
 
 const styles = (theme: Theme) =>
   createStyles({
@@ -25,7 +25,7 @@ const styles = (theme: Theme) =>
       padding: theme.spacing(2),
     },
     closeButton: {
-      position: 'absolute',
+      position: "absolute",
       right: theme.spacing(1),
       top: theme.spacing(1),
       color: theme.palette.grey[500],
@@ -72,9 +72,9 @@ const DialogActions = withStyles((theme: Theme) => ({
 export default function CategoryButton(): JSX.Element {
   const [open, setOpen] = React.useState(false);
   const [formats, setFormats] = React.useState(() => [
-    'Hackathon',
-    'ITNews',
-    'CSE',
+    "Hackathon",
+    "ITNews",
+    "CSE",
   ]);
 
   const handleClickOpen = () => {
@@ -86,7 +86,7 @@ export default function CategoryButton(): JSX.Element {
 
   const handleFormat = (
     event: React.MouseEvent<HTMLElement>,
-    newFormats: string[],
+    newFormats: string[]
   ) => {
     setFormats(newFormats);
   };
@@ -104,27 +104,27 @@ export default function CategoryButton(): JSX.Element {
 
   const [, postUrlRequest] = useAxios<any>(
     {
-      url: 'http://localhost:3000/url',
-      method: 'post',
+      url: "http://localhost:3000/url",
+      method: "post",
     },
-    { manual: true },
+    { manual: true }
   );
 
   const [, putUrlRequest] = useAxios<any>(
     {
-      url: 'http://localhost:3000/url',
-      method: 'put',
+      url: "http://localhost:3000/url",
+      method: "put",
     },
-    { manual: true },
+    { manual: true }
   );
 
   return (
     <div style={{ margin: 5 }}>
-      <Typography color="secondary">
+      <Typography color="textSecondary">
         Your Category
         <Button
           variant="outlined"
-          color="secondary"
+          color="primary"
           onClick={handleClickOpen}
           style={{ margin: 5 }}
         >
@@ -138,10 +138,12 @@ export default function CategoryButton(): JSX.Element {
         open={open}
       >
         <DialogTitle id="customized-dialog-title" onClose={handleClose}>
-          원하는 카테고리를 선택해주세요. &#160; &#160; &#160;
+          <Typography color="textSecondary">
+            원하는 카테고리를 선택해주세요. &#160; &#160; &#160; &#160; &#160;
+          </Typography>
         </DialogTitle>
 
-        <DialogContent dividers style={{ textAlign: 'center' }}>
+        <DialogContent dividers style={{ textAlign: "center" }}>
           <ToggleButtonGroup
             value={formats}
             orientation="vertical"
