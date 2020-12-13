@@ -98,7 +98,7 @@ export default function BottomTest(): JSX.Element {
       });
       const result = info.concat(news, contest);
       result.splice(4, 0, SpecialSection()); //5번째 index 자리에 SpecialSection 추가
-      console.log(result);
+      // console.log(result);
       return result;
     }
 

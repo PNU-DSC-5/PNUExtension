@@ -7,6 +7,10 @@ import {
 import useAxios from 'axios-hooks';
 import BottomSection from '../bottom-section/BottomSection';
 import FreeBoardTable from '../free-board/FreeBoardTable';
+
+import DashboardIcon from '@material-ui/icons/Dashboard';
+import InfoIcon from '@material-ui/icons/Info';
+
 import { FreeBoard } from '../shared/interfaces/freeBoard.interface';
 import WordCloud from '../shared/utils/WordCloud';
 
@@ -40,8 +44,8 @@ export default function BottomSectionLayout(): JSX.Element {
         textColor="primary"
         onChange={handleTabChange}
       >
-        <Tab label={<Typography variant="body1" className={classes.tabTitle}>뉴스</Typography>} />
-        <Tab label={<Typography variant="body1" className={classes.tabTitle}>게시판</Typography>} />
+        <Tab label={<DashboardIcon className={classes.tabTitle}/>} />
+        <Tab label={<InfoIcon className={classes.tabTitle}/>} />
       </Tabs>
 
       {tabIndex === 0 && (
