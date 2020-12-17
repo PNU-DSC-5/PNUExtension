@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 
 // material-ui core components
 import {
@@ -7,12 +7,12 @@ import {
   Toolbar,
   Button,
   IconButton,
-} from "@material-ui/core";
+} from '@material-ui/core';
 
 // material-ui icons
-import AccountCircleIcon from "@material-ui/icons/AccountCircle";
-import TimerIcon from "@material-ui/icons/Timer";
-import NotificationsIcon from "@material-ui/icons/Notifications";
+import AccountCircleIcon from '@material-ui/icons/AccountCircle';
+import TimerIcon from '@material-ui/icons/Timer';
+import NotificationsIcon from '@material-ui/icons/Notifications';
 
 // styles
 import {
@@ -20,54 +20,52 @@ import {
   makeStyles,
   Theme,
   fade,
-} from "@material-ui/core/styles";
+} from '@material-ui/core/styles';
 
 // axios
-import useAxios from "axios-hooks";
+import useAxios from 'axios-hooks';
 
 // context
-import UserContext from "../../utils/contexts/UserContext";
+import UserContext from '../../utils/contexts/UserContext';
 
 // sub component
-import ProfilePopover from "./ProfilePopover";
-import LoginDialog from "./LoginDialog";
-import NotificationPopper from "./NotificationPopper";
+import ProfilePopover from './ProfilePopover';
+import LoginDialog from './LoginDialog';
+import NotificationPopper from './NotificationPopper';
 
 // hooks
-import useBasicDialog from "../../utils/hooks/useBasicDialog";
-import useAnchorEl from "../../utils/hooks/useAnchorEl";
+import useBasicDialog from '../../utils/hooks/useBasicDialog';
+import useAnchorEl from '../../utils/hooks/useAnchorEl';
 
 // Timer
-import Timer from "./Timer";
+import Timer from './Timer';
 
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    root: {
-      flexGrow: 1,
-      height: "auto",
+const useStyles = makeStyles((theme: Theme) => createStyles({
+  root: {
+    flexGrow: 1,
+    height: 'auto',
+  },
+  appBar: {
+    backgroundColor: fade(theme.palette.primary.main, 0.8),
+  },
+  loginButton: {
+    '&:hover,select': {
+      transform: 'scale3d(1.15, 1.15, 1)',
     },
-    appBar: {
-      backgroundColor: fade(theme.palette.primary.main, 0.8),
-    },
-    loginButton: {
-      "&:hover,select": {
-        transform: "scale3d(1.15, 1.15, 1)",
-      },
-    },
-    menuButton: {
-      marginRight: theme.spacing(2),
-    },
-    title: {
-      flexGrow: 1,
-    },
-    userInterfaceContainer: {
-      marginRight: "0px",
-      display: "flex",
-      flexGrow: 0,
-      paddingLeft: "10px",
-    },
-  })
-);
+  },
+  menuButton: {
+    marginRight: theme.spacing(2),
+  },
+  title: {
+    flexGrow: 1,
+  },
+  userInterfaceContainer: {
+    marginRight: '0px',
+    display: 'flex',
+    flexGrow: 0,
+    paddingLeft: '10px',
+  },
+}));
 
 /** ******************************************************
   페이지 레이아웃 최상단에 고정 위치하는 앱 바
@@ -93,7 +91,7 @@ export function LayoutAppBar(): JSX.Element {
       className={classes.loginButton}
       onClick={() => dialog.handleOpen()}
     >
-      <Typography style={{ fontWeight: "bold" }}>Login</Typography>
+      <Typography style={{ fontWeight: 'bold' }}>Login</Typography>
     </Button>
   );
 
@@ -110,9 +108,9 @@ export function LayoutAppBar(): JSX.Element {
   return (
     <div className={classes.root}>
       <AppBar position="fixed" className={classes.appBar}>
-        <Toolbar style={{ justifyContent: "space-between" }}>
+        <Toolbar style={{ justifyContent: 'space-between' }}>
           <Typography variant="h6">PNU Extension</Typography>
-          {userContext.state === "logined" ? UserInterfaces() : LoginButton()}
+          {userContext.state === 'logined' ? UserInterfaces() : LoginButton()}
         </Toolbar>
       </AppBar>
 

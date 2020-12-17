@@ -9,11 +9,10 @@ import EditIcon from '@material-ui/icons/Edit';
 import { makeStyles, withStyles, createStyles } from '@material-ui/core/styles';
 import useAxios from 'axios-hooks';
 import { FreeBoard } from '../shared/interfaces/freeBoard.interface';
-import {FreeBoardPatch} from '../shared/dto/freeBoardPatch.dto';
-import {FreeBoardDelete} from '../shared/dto/freeBoardDelete.dto';
+import { FreeBoardPatch } from '../shared/dto/freeBoardPatch.dto';
+import { FreeBoardDelete } from '../shared/dto/freeBoardDelete.dto';
 import useEventTargetValue from '../../../utils/hooks/useEventTargetValue';
 import UserContext from '../../../utils/contexts/UserContext';
-
 
 const useStyles = makeStyles((theme) => createStyles({
   dialogContent: {
@@ -65,7 +64,6 @@ export default function ViewDialog(props: AddDialogProps): JSX.Element {
   const titleInput = useEventTargetValue(selectedContent.title);
   const contentInput = useEventTargetValue(selectedContent.content);
 
- 
   const [newCategory, setNewCategory] = React.useState<string>('기타');
   const [newTag, setNewTag] = React.useState<string>('기타');
   const [isSecret, setIsSecret] = React.useState<boolean>(false);
@@ -80,8 +78,8 @@ export default function ViewDialog(props: AddDialogProps): JSX.Element {
     setIsSecret(event.target.checked);
   };
 
-   /**
-   * update 요청 핸들러 및 함수
+  /**
+   * update 요청 핸들러 및 함수 
    */
   const [, patchFreeBoard] = useAxios<boolean>({
     url: '/free-board',
@@ -106,11 +104,11 @@ export default function ViewDialog(props: AddDialogProps): JSX.Element {
       handleGetFreeBoardData();
       handleInputReset();
       setDialogState('view');
-      handleClose();        
-    }) 
-    .catch(() => {
-      alert('게시물 수정에 문제가 발생 했습니다. 다시 시도해주세요');
+      handleClose();
     })
+      .catch(() => {
+        alert('게시물 수정에 문제가 발생 했습니다. 다시 시도해주세요');
+      });
   };
 
   /**
@@ -123,21 +121,21 @@ export default function ViewDialog(props: AddDialogProps): JSX.Element {
 
   const handleDeleteFreeBoard = () => {
     const params: FreeBoardDelete = {
-      _index: selectedContent._index
+      _index: selectedContent._index,
     };
 
     deleteFreeBoard({
-      data: params
+      data: params,
     }).then(() => {
       handleGetFreeBoardData();
       handleInputReset();
       setDialogState('view');
-      handleClose();     
+      handleClose();
     })
-    .catch(() => {
-      alert('게시물 삭제에 문제가 발생 했습니다. 다시 시도해주세요');
-    })
-  }
+      .catch(() => {
+        alert('게시물 삭제에 문제가 발생 했습니다. 다시 시도해주세요');
+      });
+  };
 
   /**
    * title, content 리셋 핸들러
@@ -147,15 +145,12 @@ export default function ViewDialog(props: AddDialogProps): JSX.Element {
     contentInput.handleReset();
   };
 
-  
   /**
    * 로그인 유저와 작성자를 비교
    * @param originId 로그인 유저
    * @param compareId 작성자
    */
-  const handleCheckAuthor = (originId: string, compareId: string):boolean => {
-    return originId === compareId;
-  }
+  const handleCheckAuthor = (originId: string, compareId: string): boolean => originId === compareId;
 
   return (
     <Dialog
@@ -178,22 +173,23 @@ export default function ViewDialog(props: AddDialogProps): JSX.Element {
             <IconButton
               style={{ marginLeft: 16 }}
               size="small"
-              onClick={() => { 
-                if(handleCheckAuthor(userContext.user.id || '', selectedContent.userId)){
+              onClick={() => {
+                if (handleCheckAuthor(userContext.user.id || '', selectedContent.userId)) {
                   setDialogState('edit');
-                } else{
-                  alert('작성자만 게시물을 수정 혹은 삭제 할 수 있습니다.')
+                } else {
+                  alert('작성자만 게시물을 수정 혹은 삭제 할 수 있습니다.');
                 }
               }}
             >
               <EditIcon />
             </IconButton>
-            <IconButton size="small"
+            <IconButton
+              size="small"
               onClick={() => {
-                if(handleCheckAuthor(userContext.user.id || '', selectedContent.userId)){
+                if (handleCheckAuthor(userContext.user.id || '', selectedContent.userId)) {
                   handleDeleteFreeBoard();
-                } else{
-                  alert('작성자만 게시물을 삭제 할 수 있습니다.')
+                } else {
+                  alert('작성자만 게시물을 삭제 할 수 있습니다.');
                 }
               }}
             >
@@ -277,7 +273,7 @@ export default function ViewDialog(props: AddDialogProps): JSX.Element {
                   checked={isSecret}
                   onChange={handleIsSecretCjhange}
                   name="익명"
-                  color="primary" 
+                  color="primary"
                 />
               )}
               label="익명이"
@@ -293,7 +289,7 @@ export default function ViewDialog(props: AddDialogProps): JSX.Element {
             style={{
               marginTop: 16,
             }}
-            inputProps={{    
+            inputProps={{
               style: {
                 minHeight: 500,
                 width: '100%',
@@ -304,40 +300,40 @@ export default function ViewDialog(props: AddDialogProps): JSX.Element {
           />
 
           {dialogState === 'edit' && (
-            <Fade in={dialogState==='edit'} style={{ transitionDelay: '200ms' }}>
-            <div
-            style={{
-              display: 'flex',
-              flexDirection: 'row',
-              width: '100%',
-              marginTop: 32,
-            }}
-          >
-            <Button
-              variant="contained" 
-              color="primary"
-              disabled={!contentInput.value || !titleInput.value}
-              onClick={() => {
-                if(handleCheckAuthor(userContext.user.id || '', selectedContent.userId)){
-                  handleUpdateFreeBoard();
-                } else{
-                  alert('작성자만 게시물을 수정 할 수 있습니다.')
-                }
-              }}
-            >
-              수정
-            </Button>
-            <Button
-              variant="outlined"
-              style={{ marginLeft: 16 }}
-              onClick={() => {
-                handleClose();
-                handleInputReset();
-              }}
-            >
-              취소
-            </Button>
-          </div>
+            <Fade in={dialogState === 'edit'} style={{ transitionDelay: '200ms' }}>
+              <div
+                style={{
+                  display: 'flex',
+                  flexDirection: 'row',
+                  width: '100%',
+                  marginTop: 32,
+                }}
+              >
+                <Button
+                  variant="contained"
+                  color="primary"
+                  disabled={!contentInput.value || !titleInput.value}
+                  onClick={() => {
+                    if (handleCheckAuthor(userContext.user.id || '', selectedContent.userId)) {
+                      handleUpdateFreeBoard();
+                    } else {
+                      alert('작성자만 게시물을 수정 할 수 있습니다.');
+                    }
+                  }}
+                >
+                  수정
+                </Button>
+                <Button
+                  variant="outlined"
+                  style={{ marginLeft: 16 }}
+                  onClick={() => {
+                    handleClose();
+                    handleInputReset();
+                  }}
+                >
+                  취소
+                </Button>
+              </div>
             </Fade>
 
           )}
