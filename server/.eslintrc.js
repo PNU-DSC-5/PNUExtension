@@ -6,34 +6,34 @@ module.exports = {
     ecmaFeatures: {
       jsx: true,
       modules: true,
-      experimentalObjectRestSpread: true
+      experimentalObjectRestSpread: true 
     }
   },
   root: true,
-  env: {
+  env: { 
     node: true,
     jest: true,
     browser: true,
     es6: true
   },
   plugins: [
-    "react",
-    "react-hooks",
+    // "react",
+    // "react-hooks",
     '@typescript-eslint/eslint-plugin',
     'prettier',
     'jest'
   ],
   extends: [
-    "plugin:react/recommended",
-    'airbnb-base',
-    'airbnb',
+    // "plugin:react/recommended", 
+    // 'airbnb-base',
+    // 'airbnb',
     'eslint:recommended',
     'plugin:@typescript-eslint/eslint-recommended',
     'plugin:@typescript-eslint/recommended',
   ],
   rules: {
     /**
-     * Basic rules
+     * Basic rules 
      */
     "brace-style": "off",
     'camelcase': 1,
@@ -92,48 +92,48 @@ module.exports = {
     /**
      * React rules
      */
-    "jsx-a11y/img-redundant-alt": 2,
-    "jsx-a11y/no-access-key": 2,
-    "jsx-a11y/aria-role": 2,
-    'react/button-has-type': 0,
-    "react/display-name": 0,
-    "react/jsx-props-no-spreading": 0,
-    "react/jsx-filename-extension": [
-        1,
-        {
-            "extensions": [
-                ".tsx",
-                ".jsx"
-            ]
-        }
-    ],
-    "react-hooks/rules-of-hooks": "error", // Checks rules of Hooks
-    "react-hooks/exhaustive-deps": "warn", // Checks effect dependencies
-    "react/require-default-props": 0,
-    "react/prefer-stateless-function": 1,
-    "react/jsx-pascal-case": 2,
-    "react/jsx-no-bind": 2,
-    "react/no-is-mounted": 2,
-    "react/forbid-prop-types": [
-        0,
-        {
-            "forbid": [
-                "object"
-            ]
-        }
-    ],
-    "react/prop-types": [
-        2,
-        {
-          "ignore": [
-              "className",
-              "children",
-              "location",
-              "params",
-              "location*"
-          ]
-        }
-    ]
+    // "jsx-a11y/img-redundant-alt": 2,
+    // "jsx-a11y/no-access-key": 2,
+    // "jsx-a11y/aria-role": 2,
+    // 'react/button-has-type': 0,
+    // "react/display-name": 0,
+    // "react/jsx-props-no-spreading": 0,
+    // "react/jsx-filename-extension": [
+    //     1,
+    //     {
+    //         "extensions": [
+    //             ".tsx",
+    //             ".jsx"
+    //         ]
+    //     }
+    // ],
+    // "react-hooks/rules-of-hooks": "error", // Checks rules of Hooks
+    // "react-hooks/exhaustive-deps": "warn", // Checks effect dependencies
+    // "react/require-default-props": 0,
+    // "react/prefer-stateless-function": 1,
+    // "react/jsx-pascal-case": 2,
+    // "react/jsx-no-bind": 2,
+    // "react/no-is-mounted": 2,
+    // "react/forbid-prop-types": [
+    //     0,
+    //     {
+    //         "forbid": [
+    //             "object"
+    //         ]
+    //     }
+    // ],
+    // "react/prop-types": [
+    //     2,
+    //     {
+    //       "ignore": [
+    //           "className",
+    //           "children",
+    //           "location",
+    //           "params",
+    //           "location*"
+    //       ] 
+    //     }
+    // ]
   },
   overrides: [
     {
@@ -157,25 +157,25 @@ module.exports = {
   settings: {
     "import/extensions": [
       ".js",
-      ".jsx",
+      // ".jsx",
       ".ts",
-      ".tsx"
+      // ".tsx"
     ],
     "import/parsers": {
         "@typescript-eslint/parser": [
             ".js",
-            ".jsx",
+            // ".jsx",
             ".ts",
-            ".tsx"
+            // ".tsx"
         ]
     },
     "import/resolver": {
         node: {
             extensions: [
                 ".js",
-                ".jsx",
+                // ".jsx",
                 ".ts",
-                ".tsx"
+                // ".tsx"
             ]
         }
     }

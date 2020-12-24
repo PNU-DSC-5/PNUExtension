@@ -135,6 +135,7 @@ module.exports = {
         }
     ]
   },
+  
   overrides: [
     {
       // enable the rule specifically for TypeScript files

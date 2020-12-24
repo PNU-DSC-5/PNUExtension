@@ -6,12 +6,15 @@ import MaterialTable from 'material-table';
 import moment from 'moment';
 import { makeStyles } from '@material-ui/core/styles';
 
+import useAxios from 'axios-hooks';
 import { TableIcons } from './TableIcons';
 import { FreeBoard } from '../shared/interfaces/freeBoard.interface';
 import useBasicDialog from '../../../utils/hooks/useBasicDialog';
 import AddDialog from './AddDialog';
 import { FreeBoardPost } from '../../../../../server/src/shared/dto/freeBoardPost.dto';
+   
 import ViewDialog from './ViewDialog';
+import { FreeBoardViewCount } from '../shared/dto/freeBoardViewCount.dto';
 
 const useStyles = makeStyles({
   table: {
@@ -25,20 +28,46 @@ const useStyles = makeStyles({
 });
 
 export interface FreeBoardTableProps {
-  freeBoardData: FreeBoard[];
-  handleGetFreeBoardData: () => void;
 }
 
 export default function FreeBoardTable(props: FreeBoardTableProps): JSX.Element {
-  const { freeBoardData,handleGetFreeBoardData } = props;
+  const { } = props;
   const classes = useStyles();
+
+  const [{ data: freeBoardData }, getFreeBoardData] = useAxios<FreeBoard[]>({
+    url: '/free-board',
+    method: 'GET',
+  }, { manual: true });
+
+  const [, patchFreeBoardViewCount] = useAxios<boolean>({
+    url: '/free-board/view-count',
+    method: 'PATCH',
+  }, { manual: true });
+
+  const handleGetFreeBoardData = () => {
+    getFreeBoardData(); 
+  }; 
+    
+  const handlePatchViewCount = (targetBoard: FreeBoard) => { 
+    const params: FreeBoardViewCount = {
+      _index: targetBoard._index,
+      views: targetBoard.views,
+    };
+    patchFreeBoardViewCount({
+      data: params,
+    });
+  }
+  
+  React.useEffect(() => {
+    getFreeBoardData();
+  }, [getFreeBoardData]);
 
   const addDialog = useBasicDialog();
   const viewDialog = useBasicDialog();
 
-  const [selectedContent, setSelectedContent] = React.useState<FreeBoard>(freeBoardData[0]);
+  const [selectedContent, setSelectedContent] = React.useState<FreeBoard>();
   const handleSelectTableRow = (rowData: FreeBoard) => {
-    setSelectedContent(rowData);
+    setSelectedContent(rowData);    
   };
 
   return (
@@ -60,12 +89,12 @@ export default function FreeBoardTable(props: FreeBoardTableProps): JSX.Element 
               작성하기
             </Button>
           )}
-          icons={TableIcons}
+          icons={TableIcons} 
           columns={[
             {
               title: '',
               field: '_index',
-              cellStyle: { width: 10, fontWeight: 'bold' },
+              cellStyle: { width: 10, fontWeight: 'bold' }, 
               headerStyle: { width: 10, fontWeight: 'bold' },
               align: 'center',
             },
@@ -85,7 +114,15 @@ export default function FreeBoardTable(props: FreeBoardTableProps): JSX.Element 
               title: '제목', field: 'title', cellStyle: { width: 900 }, headerStyle: { width: 900, fontWeight: 'bold' },
             },
             {
-              title: '작성자', field: 'userId', cellStyle: { width: 50 }, headerStyle: { width: 50, fontWeight: 'bold' },
+              title: '작성자',
+              field: 'userName',
+              cellStyle: { width: 50 },
+              headerStyle: { width: 50, fontWeight: 'bold' },
+              render: (rowData) => (
+                <div>
+                  {rowData.isSecret ? '***' : rowData.userName}
+                </div>
+              ),
             },
             {
               title: '작성일',
@@ -109,12 +146,13 @@ export default function FreeBoardTable(props: FreeBoardTableProps): JSX.Element 
               align: 'center',
             },
           ]}
-          data={freeBoardData}
+          data={freeBoardData || []}
           options={{
             search: true,
           }}
           onRowClick={(e, rowData) => {
             if (rowData) {
+              handlePatchViewCount(rowData);
               handleSelectTableRow(rowData);
               viewDialog.handleOpen();
             }
@@ -126,12 +164,15 @@ export default function FreeBoardTable(props: FreeBoardTableProps): JSX.Element 
           handleGetFreeBoardData={handleGetFreeBoardData}
         />
 
+        {selectedContent && (
         <ViewDialog
           open={viewDialog.open}
           handleClose={viewDialog.handleClose}
           selectedContent={selectedContent}
           handleGetFreeBoardData={handleGetFreeBoardData}
         />
+        )}
+
       </Grid>
     </Grid>
   );

@@ -2,7 +2,10 @@ import React from 'react';
 
 // material-ui core components
 import {
-  AppBar, Typography, Toolbar, Button,
+  AppBar,
+  Typography,
+  Toolbar,
+  Button,
   IconButton,
 } from '@material-ui/core';
 
@@ -13,7 +16,10 @@ import NotificationsIcon from '@material-ui/icons/Notifications';
 
 // styles
 import {
-  createStyles, makeStyles, Theme, fade,
+  createStyles,
+  makeStyles,
+  Theme,
+  fade,
 } from '@material-ui/core/styles';
 
 // axios
@@ -25,9 +31,11 @@ import UserContext from '../../utils/contexts/UserContext';
 // sub component
 import ProfilePopover from './ProfilePopover';
 import LoginDialog from './LoginDialog';
+import NotificationPopper from './NotificationPopper';
 
 // hooks
 import useBasicDialog from '../../utils/hooks/useBasicDialog';
+import useAnchorEl from '../../utils/hooks/useAnchorEl';
 
 // Timer
 import Timer from './Timer';
@@ -72,10 +80,9 @@ export function LayoutAppBar(): JSX.Element {
   const classes = useStyles();
   const userContext = React.useContext(UserContext);
   const dialog = useBasicDialog();
+  const popper = useAnchorEl();
 
-  React.useLayoutEffect(() => {
-
-  }, [userContext]);
+  React.useLayoutEffect(() => {}, [userContext]);
 
   const LoginButton = (): JSX.Element => (
     <Button
@@ -84,16 +91,14 @@ export function LayoutAppBar(): JSX.Element {
       className={classes.loginButton}
       onClick={() => dialog.handleOpen()}
     >
-      <Typography style={{ fontWeight: 'bold' }}>
-        Login
-      </Typography>
+      <Typography style={{ fontWeight: 'bold' }}>Login</Typography>
     </Button>
   );
 
   const UserInterfaces = (): JSX.Element => (
     <div className={classes.userInterfaceContainer}>
       <Timer />
-      <IconButton>
+      <IconButton onClick={(e) => popper.handleAnchorOpen(e)}>
         <NotificationsIcon fontSize="large" color="secondary" />
       </IconButton>
       <ProfilePopover />
@@ -104,9 +109,7 @@ export function LayoutAppBar(): JSX.Element {
     <div className={classes.root}>
       <AppBar position="fixed" className={classes.appBar}>
         <Toolbar style={{ justifyContent: 'space-between' }}>
-          <Typography variant="h6">
-            PNU Extension
-          </Typography>
+          <Typography variant="h6">PNU Extension</Typography>
           {userContext.state === 'logined' ? UserInterfaces() : LoginButton()}
         </Toolbar>
       </AppBar>
@@ -116,6 +119,14 @@ export function LayoutAppBar(): JSX.Element {
         handleOpen={dialog.handleOpen}
         handleClose={dialog.handleClose}
       />
+
+      {popper.anchorEl && popper.open && (
+        <NotificationPopper
+          open={popper.open}
+          anchorEl={popper.anchorEl}
+          handleClose={popper.handleAnchorClose}
+        />
+      )}
     </div>
   );
 }
