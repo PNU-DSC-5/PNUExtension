@@ -44,7 +44,7 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
     borderRadius: 32,
     margin: theme.spacing(2),
   },
-  github: {
+  github: { 
     backgroundColor: '#9775fa',
     '&:hover,select': {
       backgroundColor: '#9775fa',
@@ -59,7 +59,7 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
       backgroundColor: '#ffff',
       boxShadow: theme.shadows[5],
     },
-  },
+  }, 
   naver: {
     backgroundColor: '#2b8a3e',
     '&:hover,select': {
@@ -109,7 +109,7 @@ const WithStyledSwitch = withStyles({
       backgroundColor: '#69db7c',
       opacity: 1,
     },
-  },
+  }, 
   colorSecondary: {
     '&$checked': {
       color: '#2b8a3e',

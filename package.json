@@ -1,16 +1,44 @@
 {
-  "name": "PNUExtension",
+  "name": "pnu_extension",
   "version": "1.0.0",
   "main": "index.js",
   "repository": "https://github.com/PNU-DSC-5/PNUExtension.git",
-  "author": "KIMBEOBWOO",
+  "author": "kimbeobwoo",
   "license": "MIT",
+  "private": true,
+  "scripts": {
+    "build": "lerna run build",
+    "lint:commit:fix": "yarn workspaces run lint:commit:fix",
+    "lint:fix": "yarn workspaces run lint:fix",
+    "lint": "yarn workspaces run lint"
+  },
+  "lint-staged": {
+    "**/*.+(js|jsx|ts|tsx)": [
+      "yarn lint:commit:fix",
+      "git add"
+    ]
+  },
   "dependencies": {
     "react-countdown-circle-timer": "^2.3.7",
     "typescript": "^4.1.2"
   },
   "devDependencies": {
-  
-  }
+    "@typescript-eslint/eslint-plugin": "4.0.1",
+    "@typescript-eslint/parser": "4.0.1",
+    "eslint": "^6.6.0",
+    "eslint-config-airbnb": "^18.2.0",
+    "eslint-config-airbnb-base": "^14.2.0",
+    "eslint-config-prettier": "^6.11.0",
+    "eslint-plugin-import": "^2.22.0",
+    "eslint-plugin-jest": "^23.20.0",
+    "eslint-plugin-jsx-a11y": "^6.3.1",
+    "eslint-plugin-prettier": "^3.1.4",
+    "eslint-plugin-react": "^7.20.6",
+    "eslint-plugin-react-hooks": "^4.1.0",
+    "husky": "^4.3.0",
+    "lerna": "^2.11.0",
+    "lint-staged": "^10.4.0",
+    "prettier": "^2.0.5" 
+  },
+  "description": "부산대학교 정보 컴퓨터 공학부 학생을 위한  react + express 크롬 익스텐션 어플리케이션"
 }
- 
