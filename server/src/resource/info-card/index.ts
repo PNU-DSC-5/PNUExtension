@@ -23,6 +23,7 @@ router.get('/', (req: Request, res: Response, next: NextFunction) => {
           console.log('[Card FindAll] : Error ... ', err);
           response.Helper.serverError(req, res, err);
         }
+      }
       })
       .catch((err) => {
         console.log('[Cards FindAll] : Error ... ');

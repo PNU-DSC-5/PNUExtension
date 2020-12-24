@@ -17,15 +17,15 @@ import newsCardRouter from "./src/resource/news-card/index";
 import contestCardRouter from "./src/resource/contest-card/index";
 
 import freeBoardRouter from "./src/resource/free-board/index";
-import cardRouter from "./src/resource/card/index";
+// import cardRouter from "./src/resource/card/index";
 import notificationRouter from "./src/resource/notifications/index";
- 
+
 class PNUApi {
   public app: express.Express;
 
   constructor() {
     this.app = express();
-    this.initializeAppSettings();
+    this.initializeAppSettings(); 
     this.initializeRouters();
   }
 
@@ -79,7 +79,7 @@ class PNUApi {
     this.app.use("/contest-card", contestCardRouter);
 
     this.app.use("/free-board", freeBoardRouter);
-    this.app.use("/card", cardRouter);
+    // this.app.use("/card", cardRouter);
     this.app.use("/notification", notificationRouter);
 
     this.app.use(
