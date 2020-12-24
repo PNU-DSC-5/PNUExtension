@@ -10,7 +10,6 @@ import * as serviceWorker from './serviceWorker';
 
 // 브라우저 라우팅 라이브러리
 
-
 // axios 설정 파일
 import axios from './utils/axios';
 
@@ -48,7 +47,7 @@ function Index(): JSX.Element {
   React.useEffect(() => {
     /* uuid 가 쿠키에 존재  */
     if (cookie.load('uuid')) {
-      //window.localStorage.clear();
+      // window.localStorage.clear();
       window.localStorage.removeItem('uuid');
 
       /* 로컬 스토리지에 삽입  */
@@ -83,19 +82,19 @@ function Index(): JSX.Element {
           state,
           handleAutoLogin,
         }}
-  >
-    <BrowserRouter>
-      {/* 상단 고정 앱 바 */}
-      <LayoutAppBar />
+      >
+        <BrowserRouter>
+          {/* 상단 고정 앱 바 */}
+          <LayoutAppBar />
 
-      {/* 라우팅 스위치 */}
-      <Switch>
-        {/* 메인 페이지 */}
-        <Route path="/" component={Main} />
-      </Switch>
-    </BrowserRouter>
-  </UserContext.Provider>
-    </ThemeProvider >
+          {/* 라우팅 스위치 */}
+          <Switch>
+            {/* 메인 페이지 */}
+            <Route path="/" component={Main} />
+          </Switch>
+        </BrowserRouter>
+      </UserContext.Provider>
+    </ThemeProvider>
   );
 }
 

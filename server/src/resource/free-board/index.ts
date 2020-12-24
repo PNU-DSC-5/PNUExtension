@@ -13,7 +13,7 @@ import { FreeBoardViewCount } from '../../shared/dto/freeBoardViewCount.dto';
 
 const router = express.Router();
 
-/**
+/** 
  * 로그인 여부 상관 없이 모든 게시판 정보 조회
  */
 router.get('/', (req: Request, res: Response, next: NextFunction) => {
@@ -33,14 +33,14 @@ router.get('/', (req: Request, res: Response, next: NextFunction) => {
     });
 });
 
-/**
+/** 
  * 로그인 필요, 특정 게시물 정보 조회
  */
 router.get('/each', JwtToken.check, (req: Request, res: Response, next: NextFunction) => {
   console.log('[Free Board Data Find One] : Start ... ');
 });
 
-/**
+/** 
  * 게시물 등록
  */
 router.post(
@@ -67,7 +67,7 @@ router.post(
           addData.content, new Date(addData.createdAt), addData.likes, addData.views,
           addData.category ? addData.category : '기타',
           addData.tag ? addData.tag : '기타',
-          addData.isSecret,
+          addData.isSecret
         ];
 
         doQuery(sql_add, sql_data)
@@ -84,7 +84,7 @@ router.post(
       console.log('[Free Board Data Add One] : Error ... \n', err);
       response.Helper.serverError(req, res, err);
     }
-  },
+  }
 );
 
 /**
@@ -109,7 +109,7 @@ router.patch(
         const sql_data = [
           updateData.title, updateData.content, updateData.category,
           updateData.tag, updateData.views, updateData.likes, updateData.isSecret,
-          updateData._index,
+          updateData._index
         ];
 
         doQuery(sql_update, sql_data)
@@ -127,7 +127,7 @@ router.patch(
     } catch (err) {
       response.Helper.serverError(req, res, err);
     }
-  },
+  }
 );
 
 /**
@@ -141,16 +141,16 @@ router.delete(
     try{
       const user = req.user as User;
       const deleteData = req.body as FreeBoardDelete;
-       
-      if(user){  
+
+      if(user){
        const sql_delete= `
        DELETE FROM freeboard 
        WHERE freeboard._index = ? AND freeboard.userId = ?`;
- 
-       const sql_data = [ 
+
+       const sql_data = [
          deleteData._index, user.id
-       ]; 
-    
+       ];
+
        doQuery(sql_delete, sql_data)
          .then(() => {
            console.log('[Free Board Data Delete One] : Success ..  ');
@@ -166,7 +166,7 @@ router.delete(
      } catch(err) {
        response.Helper.serverError(req,res,err);
      }
-  }, 
+  }
 );
 
 /**
@@ -194,7 +194,7 @@ router.patch(
     } catch (err) {
       response.Helper.serverError(req, res, err);
     }
-  },
+  }
 );
 
 /**
@@ -222,7 +222,7 @@ router.patch(
     } catch (err) {
       response.Helper.serverError(req, res, err);
     }
-  },
+  }
 );
 
 export = router;
