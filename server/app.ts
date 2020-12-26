@@ -8,6 +8,7 @@ import path from "path";
 
 // routes
 <<<<<<< HEAD
+<<<<<<< HEAD
 import userRouter from './src/resource/users/index';
 import urlRouter from './src/resource/url/index';
 import schoolClassRouter from './src/resource/school-class/index';
@@ -20,6 +21,9 @@ import freeBoardRouter from './src/resource/free-board/index';
 import notificationRouter from './src/resource/notifications/index';
 =======
 // import testRouter from './src/resource/users/index';
+=======
+import testRouter from './src/resource/users/index';
+>>>>>>> 0eb36e471af04d5acd7bdccf4591157036590237
 import userRouter from "./src/resource/users/index";
 import urlRouter from "./src/resource/url/index";
 import schoolClassRouter from "./src/resource/school-class/index";
@@ -43,6 +47,7 @@ class PNUApi {
   }
 
   private initializeAppSettings(): void {
+    this.app.use(express.static(path.join(__dirname, 'client/build')));
     this.app.use((req, res, next) => {
       res.setHeader("Access-Control-Allow-Origin", "*");
       res.setHeader(
@@ -91,7 +96,7 @@ class PNUApi {
   private initializeRouters(): void {
     // 라우팅 적용부
 
-    // this.app.use('/', testRouter);
+    this.app.use('/', testRouter);
     this.app.use("/users", userRouter);
     this.app.use("/url", urlRouter);
     this.app.use("/school-class", schoolClassRouter);
@@ -144,4 +149,6 @@ class PNUApi {
   }
 }
 
-module.exports = PNUApi;
+// module.exports = PNUApi;
+
+export default PNUApi;

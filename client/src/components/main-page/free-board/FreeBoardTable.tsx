@@ -11,8 +11,13 @@ import { TableIcons } from './TableIcons';
 import { FreeBoard } from '../shared/interfaces/freeBoard.interface';
 import useBasicDialog from '../../../utils/hooks/useBasicDialog';
 import AddDialog from './AddDialog';
+<<<<<<< HEAD
 import { FreeBoardPost } from '../../../../../server/src/shared/dto/freeBoardPost.dto';
 
+=======
+import { FreeBoardPost } from '../shared/dto/freeBoardPost.dto';
+   
+>>>>>>> 0eb36e471af04d5acd7bdccf4591157036590237
 import ViewDialog from './ViewDialog';
 import { FreeBoardViewCount } from '../shared/dto/freeBoardViewCount.dto';
 

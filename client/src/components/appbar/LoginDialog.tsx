@@ -18,11 +18,7 @@ import GithubIcon from '../../atoms/icons/GithubIcon';
 import KakaoIcon from '../../atoms/icons/KakaoIcon';
 import NaverIcon from '../../atoms/icons/NaverIcon';
 
-// styles
-
-// classnames
-
-// cookie
+const HREF_PRODUCT = 'https://back-dot-pnuextension.dt.r.appspot.com/'
 
 const useStyles = makeStyles((theme: Theme) => createStyles({
   dialogContents: {
@@ -174,7 +170,7 @@ export default function LoginDialog(props: DialogProps): JSX.Element {
             className={classnames([
               classes.buttonCommon, classes.google,
             ])}
-            href="http://localhost:3000/users/login/google"
+            href={HREF_PRODUCT+"users/login/google"}
           >
             <Grid container alignItems="center" style={{ width: '100%', height: '100%', padding: '-30px' }}>
 
@@ -196,7 +192,7 @@ export default function LoginDialog(props: DialogProps): JSX.Element {
             className={classnames([
               classes.buttonCommon, classes.naver,
             ])}
-            href="http://localhost:3000/users/login/naver"
+            href={HREF_PRODUCT+"users/login/naver"}
           >
             <Grid container alignItems="center" style={{ width: '100%', height: '100%' }}>
 
@@ -226,7 +222,7 @@ export default function LoginDialog(props: DialogProps): JSX.Element {
             className={classnames([
               classes.buttonCommon, classes.github,
             ])}
-            href="http://localhost:3000/users/login/github"
+            href={HREF_PRODUCT+"users/login/github"}
           >
             <Grid container alignItems="center" style={{ width: '100%', height: '100%' }}>
 
@@ -248,7 +244,7 @@ export default function LoginDialog(props: DialogProps): JSX.Element {
             className={classnames([
               classes.buttonCommon, classes.kakao,
             ])}
-            href="http://localhost:3000/users/login/kakao"
+            href={HREF_PRODUCT+"users/login/kakao"}
           >
             <Grid container alignItems="center" style={{ width: '100%', height: '100%' }}>
 

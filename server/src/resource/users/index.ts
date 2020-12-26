@@ -7,7 +7,7 @@ const router = express.Router();
 router.use('/login', loginRouter);
 
 router.get('/', (req: Request, res: Response, next: NextFunction) => {
-  res.send('user router');
+  res.send('test router');
 });
 
 export = router;

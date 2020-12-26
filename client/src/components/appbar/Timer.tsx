@@ -158,6 +158,7 @@ export default function Timer(): JSX.Element {
           trailColor="#FFFFFF"
           colors="#FF0000"
         >
+<<<<<<< HEAD
           {remainTime}
           {/* {{({ remainingTime }) => remainingTime}} */}
         </CountdownCircleTimer>
@@ -197,6 +198,56 @@ export default function Timer(): JSX.Element {
                 }}
                 endAdornment={
                   <InputAdornment position="end">분</InputAdornment>
+=======
+          <CountdownCircleTimer //타이머
+            isPlaying //={isPlay}
+            size={35}
+            strokeWidth={2}
+            duration={getSettingTime() || 1}
+            initialRemainingTime={getRemaingTime()}
+            trailColor={"#FFFFFF"}
+            colors={"#FF0000"}
+          >
+            {remainTime}
+            {/* {{({ remainingTime }) => remainingTime}} */}
+          </CountdownCircleTimer>
+        </IconButton>
+        <Modal //팝업
+          open={open}
+          onClose={handleCancel}
+        >
+          <div style={modalStyle} className={classes.modal}>
+            <IconButton onClick={handleReset} className={classes.clock}>
+              <CountdownCircleTimer //타이머
+                isPlaying
+                size={400}
+                strokeWidth={20}
+                duration={getSettingTime() || 1}
+                initialRemainingTime={getRemaingTime()}
+                trailColor={"#FFFFFF"}
+                colors={"#FF0000"}
+              >
+                {remainTime}
+              </CountdownCircleTimer>
+            </IconButton>
+
+            <div className={classes.inputContainer}>
+              <FormControl>
+                <Input //입력창
+                  id="input_minutes"
+                  value={selectTime_minutes}
+                  type="number"
+                  onChange={handleChangeMinutes}
+                  autoFocus={true}
+                  inputProps={{
+                    style: {
+                      color: "black",
+                      textAlign: "center",
+                    },
+                  }}
+                  endAdornment={
+                    <InputAdornment position="end">분</InputAdornment>
+>>>>>>> 0eb36e471af04d5acd7bdccf4591157036590237
                   }
               />
             </FormControl>
