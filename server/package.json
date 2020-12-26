@@ -9,7 +9,7 @@
     "start:debug:mac": "PORT=3000 && nodemon --watch ./ --exec ts-node ./bin/www.ts --inspect=9229",
     "prebuild": "rimraf dist",
     "postbuild": "cp -r ./public ./dist/public",
-    "start": "node ./dist/bundle.js",
+    "start": "NODE_ENV=production node ./dist/bundle.js",
     "start:production:window": "set NODE_ENV=production && node ./dist/bundle.js",
     "test": "jest --coverage --detectOpenHandles --forceExit --passWithNoTests"
   },
