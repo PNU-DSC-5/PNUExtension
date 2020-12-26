@@ -19,7 +19,7 @@ const postData: PostRequestData = {
 
 const axiosInstance = axios.create({
   withCredentials: true,
-  baseURL: 'http://localhost:3000',
+  baseURL: 'http://back-dot-pnuextension.dt.r.appspot.com',
   timeout: 3600,
 });
 
