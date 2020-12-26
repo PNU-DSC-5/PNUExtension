@@ -122,7 +122,4 @@ class PNUApi {
     );
   }
 }
-
-// module.exports = PNUApi;
-
 export default PNUApi;
