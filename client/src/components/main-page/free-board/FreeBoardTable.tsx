@@ -12,7 +12,6 @@ import { FreeBoard } from '../shared/interfaces/freeBoard.interface';
 import useBasicDialog from '../../../utils/hooks/useBasicDialog';
 import AddDialog from './AddDialog';
 import { FreeBoardPost } from '../shared/dto/freeBoardPost.dto';
-   
 import ViewDialog from './ViewDialog';
 import { FreeBoardViewCount } from '../shared/dto/freeBoardViewCount.dto';
 

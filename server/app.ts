@@ -25,7 +25,7 @@ class PNUApi {
 
   constructor() {
     this.app = express();
-    this.initializeAppSettings(); 
+    this.initializeAppSettings();
     this.initializeRouters();
   }
 
