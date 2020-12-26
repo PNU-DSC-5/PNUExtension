@@ -103,7 +103,8 @@ router.get(
       if (user.uuid) res.cookie('uuid', user.uuid);
       else res.cookie('uuid', null);
 
-      res.redirect(process.env.HOST_CLIENT || 'localhost:3000');
+      // res.redirect(process.env.HOST_CLIENT || 'localhost:3000');
+      res.send(true);
     } catch (err) {
       res.cookie('error', 'Internal server Error ... create Token');
       res.redirect(process.env.HOST_CLIENT || 'localhost:3000');
