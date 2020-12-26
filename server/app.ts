@@ -7,8 +7,6 @@ import bodyParser from "body-parser";
 import path from "path";
 
 // routes
-<<<<<<< HEAD
-<<<<<<< HEAD
 import userRouter from './src/resource/users/index';
 import urlRouter from './src/resource/url/index';
 import schoolClassRouter from './src/resource/school-class/index';
@@ -19,23 +17,8 @@ import contestCardRouter from './src/resource/contest-card/index';
 
 import freeBoardRouter from './src/resource/free-board/index';
 import notificationRouter from './src/resource/notifications/index';
-=======
 // import testRouter from './src/resource/users/index';
-=======
 import testRouter from './src/resource/users/index';
->>>>>>> 0eb36e471af04d5acd7bdccf4591157036590237
-import userRouter from "./src/resource/users/index";
-import urlRouter from "./src/resource/url/index";
-import schoolClassRouter from "./src/resource/school-class/index";
-
-import infoCardRouter from "./src/resource/info-card/index";
-import newsCardRouter from "./src/resource/news-card/index";
-import contestCardRouter from "./src/resource/contest-card/index";
->>>>>>> cef1bf6b87caa9dd994b73d90f6ef931689376b1
-
-import freeBoardRouter from "./src/resource/free-board/index";
-// import cardRouter from "./src/resource/card/index";
-import notificationRouter from "./src/resource/notifications/index";
 
 class PNUApi {
   public app: express.Express;
@@ -51,21 +34,12 @@ class PNUApi {
     this.app.use((req, res, next) => {
       res.setHeader("Access-Control-Allow-Origin", "*");
       res.setHeader(
-<<<<<<< HEAD
-        'Access-Control-Allow-Methods',
-        'GET, POST, OPTIONS, PUT, DELETE'
-      );
-      res.setHeader(
-        'Access-Control-Allow-Headers',
-        'authorization, content-type'
-=======
         "Access-Control-Allow-Methods",
         "GET, POST, OPTIONS, PUT, DELETE"
       );
       res.setHeader(
         "Access-Control-Allow-Headers",
         "authorization, content-type"
->>>>>>> cef1bf6b87caa9dd994b73d90f6ef931689376b1
       );
       next();
     });
