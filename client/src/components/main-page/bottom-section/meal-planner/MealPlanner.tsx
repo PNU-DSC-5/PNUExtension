@@ -1,26 +1,24 @@
-import React from "react";
+import React from 'react';
 
-import { makeStyles, createStyles, Theme } from "@material-ui/core/styles";
+import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
 
-import Paper from "@material-ui/core/Paper";
-import Typography from "@material-ui/core/Typography";
-import LocalDiningOutlinedIcon from "@material-ui/icons/LocalDiningOutlined";
+import Paper from '@material-ui/core/Paper';
+import Typography from '@material-ui/core/Typography';
+import LocalDiningOutlinedIcon from '@material-ui/icons/LocalDiningOutlined';
 
-import Marquee from "react-marquee-slider";
-import { JsxAttribute } from "typescript";
-//yarn add react-marquee-slider
-//yarn add lodash styled-components
+import Marquee from 'react-marquee-slider';
+import { JsxAttribute } from 'typescript';
+// yarn add react-marquee-slider
+// yarn add lodash styled-components
 
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    section: {
-      height: "100%",
-      width: "100%",
-      textAlign: "center",
-      background: theme.palette.primary.main,
-    },
-  })
-);
+const useStyles = makeStyles((theme: Theme) => createStyles({
+  section: {
+    height: '100%',
+    width: '100%',
+    textAlign: 'center',
+    backgroundColor: theme.palette.secondary.main,
+  },
+}));
 
 const marqueeText: JSX.Element[] = [
   <LocalDiningOutlinedIcon fontSize="small" />,
@@ -49,7 +47,7 @@ export default function MealPlanner(): JSX.Element {
   return (
     <Paper className={classes.section}>
       학식
-      <div style={{ marginTop: "10" }}>
+      <div style={{ marginTop: '10' }}>
         <Marquee
           children={marqueeText}
           direction="rtl"

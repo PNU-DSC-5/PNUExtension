@@ -7,25 +7,25 @@ import bodyParser from "body-parser";
 import path from "path";
 
 // routes
+import userRouter from './src/resource/users/index';
+import urlRouter from './src/resource/url/index';
+import schoolClassRouter from './src/resource/school-class/index';
+
+import infoCardRouter from './src/resource/info-card/index';
+import newsCardRouter from './src/resource/news-card/index';
+import contestCardRouter from './src/resource/contest-card/index';
+
+import freeBoardRouter from './src/resource/free-board/index';
+import notificationRouter from './src/resource/notifications/index';
+// import testRouter from './src/resource/users/index';
 import testRouter from './src/resource/users/index';
-import userRouter from "./src/resource/users/index";
-import urlRouter from "./src/resource/url/index";
-import schoolClassRouter from "./src/resource/school-class/index";
-
-import infoCardRouter from "./src/resource/info-card/index";
-import newsCardRouter from "./src/resource/news-card/index";
-import contestCardRouter from "./src/resource/contest-card/index";
-
-import freeBoardRouter from "./src/resource/free-board/index";
-// import cardRouter from "./src/resource/card/index";
-import notificationRouter from "./src/resource/notifications/index";
 
 class PNUApi {
   public app: express.Express;
 
   constructor() {
     this.app = express();
-    this.initializeAppSettings(); 
+    this.initializeAppSettings();
     this.initializeRouters();
   }
 
@@ -49,7 +49,7 @@ class PNUApi {
 
     const corsOptions = {
       origin: whiteList,
-      credentials: true,
+      credentials: true
     };
 
     this.app.use(cors(corsOptions));
@@ -115,14 +115,11 @@ class PNUApi {
           res.status(err.status || 500);
           res.send({
             code: err.status,
-            message: err.message || serverErrorMessage,
+            message: err.message || serverErrorMessage
           });
         }
       }
     );
   }
 }
-
-// module.exports = PNUApi;
-
 export default PNUApi;

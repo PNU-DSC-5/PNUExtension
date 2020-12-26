@@ -79,7 +79,7 @@ export default function HistoryPopper(props: HistoryPopperProps): JSX.Element {
                   color: 'white',
                 }}
               />
-              <Typography color="secondary" variant="h5">
+              <Typography color="secondary" style={{ fontSize: 18 }}>
                 {eachHistory}
               </Typography>
             </div>
@@ -89,8 +89,7 @@ export default function HistoryPopper(props: HistoryPopperProps): JSX.Element {
                 style={{
                   fontWeight: 'bold',
                   color: '#69db7c',
-                  alignSelf: 'flex-end',
-                  fontSize: '32px',
+                  fontSize: 22,
                 }}
               />
             )}

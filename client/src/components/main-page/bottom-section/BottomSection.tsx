@@ -93,13 +93,13 @@ export default function BottomTest(): JSX.Element {
         (elem) => <GridListTile cols={1}>{CrawlingSection(elem)}</GridListTile>,
       );
       const result = info.concat(news, contest);
-      result.splice(4, 0, SpecialSection()); // 5번째 index 자리에 SpecialSection 추가
+      // result.splice(4, 0, SpecialSection()); // 5번째 index 자리에 SpecialSection 추가
       // console.log(result);
       return result;
     }
-
+    return [<div>데이터가 없습니다.</div>];
     // cardData가 없을 때
-    return [SpecialSection()];
+    // return [SpecialSection()];
   };
 
   // 데이터를 받아오는 동안 Loading 메시지를 출력
@@ -114,7 +114,7 @@ export default function BottomTest(): JSX.Element {
       <GridList
         cellHeight={450}
         className={classes.gridList}
-        cols={5}
+        cols={4}
         spacing={30}
       >
         {bottomSection()}

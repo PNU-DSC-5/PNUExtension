@@ -39,7 +39,7 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
   },
 }));
 
-export default function ProfilePopover() {
+export default function ProfilePopover(): JSX.Element {
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
   const userContext = React.useContext(UserContext);
@@ -85,7 +85,7 @@ export default function ProfilePopover() {
   const ProfileFace = (): JSX.Element => {
     if (profile.picture) {
       return (
-        <Avatar src={profile.picture} />
+        <Avatar src={profile.picture} style={{ width: 32, height: 32 }} />
       );
     }
 

@@ -9,7 +9,8 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
     height: '100%',
     width: '100%',
     textAlign: 'center',
-    background: theme.palette.primary.main,
+    backgroundColor: theme.palette.secondary.main,
+    borderRadius: 8,
   },
 }));
 

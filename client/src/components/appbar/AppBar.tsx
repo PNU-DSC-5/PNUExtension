@@ -43,10 +43,10 @@ import Timer from './Timer';
 const useStyles = makeStyles((theme: Theme) => createStyles({
   root: {
     flexGrow: 1,
-    height: 'auto',
   },
   appBar: {
     backgroundColor: fade(theme.palette.primary.main, 0.8),
+    height: 56,
   },
   loginButton: {
     '&:hover,select': {
@@ -99,7 +99,7 @@ export function LayoutAppBar(): JSX.Element {
     <div className={classes.userInterfaceContainer}>
       <Timer />
       <IconButton onClick={(e) => popper.handleAnchorOpen(e)}>
-        <NotificationsIcon fontSize="large" color="secondary" />
+        <NotificationsIcon color="secondary" style={{ fontSize: 32 }} />
       </IconButton>
       <ProfilePopover />
     </div>
@@ -108,7 +108,7 @@ export function LayoutAppBar(): JSX.Element {
   return (
     <div className={classes.root}>
       <AppBar position="fixed" className={classes.appBar}>
-        <Toolbar style={{ justifyContent: 'space-between' }}>
+        <Toolbar style={{ justifyContent: 'space-between', alignItems: 'center', height: 50 }}>
           <Typography variant="h6">PNU Extension</Typography>
           {userContext.state === 'logined' ? UserInterfaces() : LoginButton()}
         </Toolbar>

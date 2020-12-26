@@ -32,6 +32,7 @@ import { spreadKorean } from './spreadKorean';
 
 const useStyles = makeStyles((theme: Theme) => createStyles({
   textField: {
+    marginTop: 32,
     '& label.Mui-focused': {
       color: 'white',
     },
@@ -47,7 +48,7 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
       },
       '&.Mui-focused fieldset': {
         borderColor: 'white',
-        border: '3px solid',
+        border: '2px solid',
       },
     },
     width: '700px',
@@ -141,14 +142,17 @@ export default function SearchBox(): JSX.Element {
    * 
    * 추후 추가사항 -> 최대부분 집합에서 종속 순열 찾기로
    */
-  const filterKoeranSpread = (targetString: string): string[] =>
+  const filterKoeranSpread = (targetString: string): string[] => {
     /* 한글이 포함되어 있는 경우 자모 분리 */
-    history.filter(
-      (hist) => spreadKorean(targetString).split('').every(
-        (each) => spreadKorean(hist).split('').includes(each),
-      ),
-    )
-  ;
+    if (history.length > 0 && spreadKorean(targetString)) {
+      return history.filter(
+        (hist) => spreadKorean(targetString).split('').every(
+          (each) => spreadKorean(hist) && spreadKorean(hist).split('').includes(each),
+        ),
+      );
+    }
+    return [];
+  };
 
   /**
    * up , down , enter 키보드 리스트 셀렉터
@@ -168,7 +172,7 @@ export default function SearchBox(): JSX.Element {
       } else setSelectedIndex(filterKoeranSpread(value).length);
     } else if (e.key === 'Enter') {
       if (value.length > 0) {
-        if (selectedIndex != -1 && selectedIndex != history.length) {
+        if (selectedIndex !== -1 && selectedIndex !== history.length) {
           setValue(filterKoeranSpread(value)[selectedIndex]);
           handleAddHistory(filterKoeranSpread(value)[selectedIndex]);
           window.location.assign(
@@ -203,7 +207,7 @@ export default function SearchBox(): JSX.Element {
                   color="secondary"
                   className={classes.searchBackground}
                 >
-                  <SearchIcon fontSize="large" style={{ color: 'white' }} />
+                  <SearchIcon style={{ color: 'white', fontSize: 28 }} />
                 </IconButton>
               </InputAdornment>
             )}
@@ -211,7 +215,7 @@ export default function SearchBox(): JSX.Element {
               style: {
                 marginLeft: '16px',
                 fontFamily: 'AppleSDGothicNeo',
-                fontSize: '22px',
+                fontSize: 18,
                 fontWeight: 440,
                 color: '#ffff',
               },

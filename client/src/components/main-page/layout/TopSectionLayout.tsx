@@ -33,7 +33,7 @@ export default function TopSectionLayout(): JSX.Element {
         <SearchBox />
       </Grid>
 
-      <Grid style={{ marginTop: '32px' }}>
+      <Grid style={{ marginTop: 16, marginBottom: 16 }}>
         <FaviconList />
       </Grid>
 
