@@ -30,6 +30,7 @@ class PNUApi {
   }
 
   private initializeAppSettings(): void {
+    this.app.use(express.static(path.join(__dirname, 'client/build')));
     this.app.use((req, res, next) => {
       res.setHeader("Access-Control-Allow-Origin", "*");
       res.setHeader(
@@ -122,4 +123,6 @@ class PNUApi {
   }
 }
 
-module.exports = PNUApi;
+// module.exports = PNUApi;
+
+export default PNUApi;
