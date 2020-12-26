@@ -156,7 +156,7 @@ export default function Timer(): JSX.Element {
             isPlaying //={isPlay}
             size={35}
             strokeWidth={2}
-            duration={getSettingTime()}
+            duration={getSettingTime() || 1}
             initialRemainingTime={getRemaingTime()}
             trailColor={"#FFFFFF"}
             colors={"#FF0000"}
@@ -175,7 +175,7 @@ export default function Timer(): JSX.Element {
                 isPlaying
                 size={400}
                 strokeWidth={20}
-                duration={getSettingTime()}
+                duration={getSettingTime() || 1}
                 initialRemainingTime={getRemaingTime()}
                 trailColor={"#FFFFFF"}
                 colors={"#FF0000"}
