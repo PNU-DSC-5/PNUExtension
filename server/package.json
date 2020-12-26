@@ -2,14 +2,14 @@
   "name": "server",
   "version": "0.0.0",
   "scripts": {
-    "start": "nodemon --watch src --delay 1 --exec 'ts-node' bin/www.ts",
+    "start:production": "nodemon --watch src --delay 1 --exec 'ts-node' bin/www.ts",
     "build": "webpack --config webpack.config.js",
     "start:mac": "PORT=3000 ts-node ./bin/www.ts",
     "start:debug": "set PORT=3000 && nodemon --watch *.ts --exec ts-node ./bin/www.ts",
     "start:debug:mac": "PORT=3000 && nodemon --watch ./ --exec ts-node ./bin/www.ts --inspect=9229",
     "prebuild": "rimraf dist",
     "postbuild": "cp -r ./public ./dist/public",
-    "start:production": "NODE_ENV=production node ./dist/bundle.js",
+    "start": "NODE_ENV=production node ./dist/bundle.js",
     "start:production:window": "set NODE_ENV=production && node ./dist/bundle.js",
     "test": "jest --coverage --detectOpenHandles --forceExit --passWithNoTests"
   },
