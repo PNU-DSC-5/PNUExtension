@@ -15,7 +15,7 @@ router.get('/', (req: Request, res: Response, next: NextFunction) => {
   doQuery(sql_findAllCard, [])
     .then((row) => {
       if (row.result[0]) {
-        try { 
+        try {
           const crawlingCard: Card[] = row.result;
           console.log('[Card FindAll] : Success ... ');
           response.Helper.ok(req, res, crawlingCard);
@@ -23,11 +23,12 @@ router.get('/', (req: Request, res: Response, next: NextFunction) => {
           console.log('[Card FindAll] : Error ... ', err);
           response.Helper.serverError(req, res, err);
         }
-      }) 
+        }
+      })
       .catch((err) => {
         console.log('[Cards FindAll] : Error ... ');
         response.Helper.mysqlError(req, res, err);
       });
 });
- 
+
 export = router;

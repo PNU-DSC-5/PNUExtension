@@ -1,18 +1,18 @@
 import React from 'react';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import {
-  Tabs, Tab, Typography, Fade, Paper, Zoom,
+  Tabs, Tab, Typography, Fade, Paper, Zoom, Grid,
 } from '@material-ui/core';
 
 import useAxios from 'axios-hooks';
+import DashboardIcon from '@material-ui/icons/Dashboard';
+import InfoIcon from '@material-ui/icons/Info';
 import BottomSection from '../bottom-section/BottomSection';
 import FreeBoardTable from '../free-board/FreeBoardTable';
 
-import DashboardIcon from '@material-ui/icons/Dashboard';
-import InfoIcon from '@material-ui/icons/Info';
-
 import { FreeBoard } from '../shared/interfaces/freeBoard.interface';
 import WordCloud from '../shared/utils/WordCloud';
+import SpecialSection from '../bottom-section/special-section/SpecialSection';
 
 const useStyles = makeStyles((theme: Theme) => createStyles({
   rootPaper: {
@@ -44,34 +44,35 @@ export default function BottomSectionLayout(): JSX.Element {
         textColor="primary"
         onChange={handleTabChange}
       >
-        <Tab label={<DashboardIcon className={classes.tabTitle}/>} />
-        <Tab label={<InfoIcon className={classes.tabTitle}/>} />
+        <Tab label={<DashboardIcon className={classes.tabTitle} />} />
+        <Tab label={<InfoIcon className={classes.tabTitle} />} />
       </Tabs>
 
-      {tabIndex === 0 && (
-        <Fade in={tabIndex === 0} style={{ transitionDelay: '200ms' }}>
-          <Paper className={classes.rootPaper} elevation={0}>
-            <BottomSection />
-          </Paper>
-        </Fade>
-      )}
-
-      {tabIndex === 1 && (
-        <Fade in={tabIndex === 1} style={{ transitionDelay: '200ms' }}>
-          <Paper className={classes.rootPaper} elevation={0}>
-            {/* {freeBoardData && ( */}
-            <div>
+      <Grid container direction="row" xs={12}>
+        <Grid item xs={10} style={{ height: 'auto' }}>
+          {tabIndex === 0 && (
+            <Fade in={tabIndex === 0} style={{ transitionDelay: '200ms' }}>
+              <Paper elevation={0}>
+                <BottomSection />
+              </Paper>
+            </Fade>
+          )}
+          {tabIndex === 1 && (
+          <Fade in={tabIndex === 1} style={{ transitionDelay: '200ms' }}>
+            <Paper elevation={0}>
               <FreeBoardTable />
+            </Paper>
+          </Fade>
 
-              <div style={{ marginTop: 32 }}>
-                <WordCloud />
-              </div>
-            </div>
+          )}
 
-            {/* )} */}
-          </Paper>
-        </Fade>
-      )}
+        </Grid>
+
+        <Grid item xs={2} style={{ height: 'auto' }}>
+          <SpecialSection />
+        </Grid>
+      </Grid>
+
     </div>
 
   );

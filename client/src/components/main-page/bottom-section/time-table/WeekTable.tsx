@@ -52,9 +52,10 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
     paddingLeft: 24,
     paddingRight: 24,
     flexDirection: 'column',
-    backgroundColor: theme.palette.primary.main,
-    borderRadius: 4,
+    borderRadius: 8,
     alignItems: 'center',
+    // boxShadow: theme.shadows[5],
+    backgroundColor: theme.palette.secondary.main,
   },
   weekLineWrapper: {
     width: '10%',

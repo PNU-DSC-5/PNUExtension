@@ -14,7 +14,7 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
     flexDirection: 'column',
   },
   topSection: {
-    minHeight: '400px',
+    minHeight: '300px',
     backgroundColor: theme.palette.primary.main,
     paddingTop: '64px',
     // marginTop: '32px',
@@ -24,7 +24,7 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
     minHeight: '2300px',
     backgroundColor: theme.palette.background.paper,
     paddingTop: '20px',
-    paddingLeft: theme.spacing(10),
+    paddingLeft: theme.spacing(5),
     paddingRight: theme.spacing(10),
   },
 }));

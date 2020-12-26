@@ -32,16 +32,17 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
     borderRadius: 4,
   },
   avatar: {
-    margin: '16px',
-    height: '40px',
-    width: '40px',
-    padding: '8px',
+    margin: 16,
+    height: 32,
+    width: 32,
+    padding: 8,
     boxShadow: theme.shadows[4],
     backgroundColor: fade(theme.palette.primary.light, 0.5),
   },
   avatarWrapper: {
     display: 'flex',
     flexDirection: 'column',
+    padding: 0,
     '&:hover,select': {
       backgroundColor: fade(theme.palette.primary.light, 0.5),
       boxShadow: theme.shadows[0],
@@ -49,12 +50,17 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
         color: 'purple',
       },
     },
-
   },
   iconButton: {
     width: '32px',
     color: theme.palette.primary.dark,
     justifySelf: 'flex-end',
+    padding: 0,
+  },
+  moreIconButton: {
+    color: theme.palette.primary.main,
+    justifySelf: 'flex-end',
+    padding: 0,
   },
   listPaper: {
     backgroundColor: fade(theme.palette.primary.light, 0.5),
@@ -210,7 +216,7 @@ export default function FavicionList(): JSX.Element {
             }}
           >
             <Button
-              className={classes.iconButton}
+              className={classes.moreIconButton}
               onClick={(e) => {
                 menuAnchorEl.handleAnchorOpen(e);
                 setSelectedUrlIndex(index);
@@ -221,7 +227,8 @@ export default function FavicionList(): JSX.Element {
 
             <Button
               style={{
-                padding: '4px',
+                // padding: '4px',
+                padding: 0,
               }}
               onClick={() => {
                 window.location.assign(`http://${each.url}`);
@@ -242,7 +249,7 @@ export default function FavicionList(): JSX.Element {
         className={classes.avatarWrapper}
         style={{
           alignItems: 'flex-end',
-          padding: '4px',
+          // padding: '4px',
           marginTop: '30px',
         }}
         disabled={!userContext.user.id}
@@ -255,7 +262,7 @@ export default function FavicionList(): JSX.Element {
           variant="rounded"
           className={classes.avatar}
           style={{
-            marginTop: '20px',
+            marginTop: 8,
           }}
         >
           <AddIcon />

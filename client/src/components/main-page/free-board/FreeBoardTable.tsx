@@ -12,13 +12,14 @@ import { FreeBoard } from '../shared/interfaces/freeBoard.interface';
 import useBasicDialog from '../../../utils/hooks/useBasicDialog';
 import AddDialog from './AddDialog';
 import { FreeBoardPost } from '../../../../../server/src/shared/dto/freeBoardPost.dto';
-   
+
 import ViewDialog from './ViewDialog';
 import { FreeBoardViewCount } from '../shared/dto/freeBoardViewCount.dto';
 
 const useStyles = makeStyles({
   table: {
     minWidth: 650,
+    width: '100%',
     color: 'black',
   },
   dialogContent: {
@@ -45,10 +46,10 @@ export default function FreeBoardTable(props: FreeBoardTableProps): JSX.Element 
   }, { manual: true });
 
   const handleGetFreeBoardData = () => {
-    getFreeBoardData(); 
-  }; 
-    
-  const handlePatchViewCount = (targetBoard: FreeBoard) => { 
+    getFreeBoardData();
+  };
+
+  const handlePatchViewCount = (targetBoard: FreeBoard) => {
     const params: FreeBoardViewCount = {
       _index: targetBoard._index,
       views: targetBoard.views,
@@ -56,8 +57,8 @@ export default function FreeBoardTable(props: FreeBoardTableProps): JSX.Element 
     patchFreeBoardViewCount({
       data: params,
     });
-  }
-  
+  };
+
   React.useEffect(() => {
     getFreeBoardData();
   }, [getFreeBoardData]);
@@ -67,7 +68,7 @@ export default function FreeBoardTable(props: FreeBoardTableProps): JSX.Element 
 
   const [selectedContent, setSelectedContent] = React.useState<FreeBoard>();
   const handleSelectTableRow = (rowData: FreeBoard) => {
-    setSelectedContent(rowData);    
+    setSelectedContent(rowData);
   };
 
   return (
@@ -76,8 +77,13 @@ export default function FreeBoardTable(props: FreeBoardTableProps): JSX.Element 
       direction="row"
       spacing={2}
       justify="flex-start"
+      style={{
+        padding: 32,
+        marginTop: 16,
+        paddingLeft: 0,
+      }}
     >
-      <Grid item xs={9}>
+      <Grid item xs>
         <MaterialTable
           title={(
             <Button
@@ -89,12 +95,12 @@ export default function FreeBoardTable(props: FreeBoardTableProps): JSX.Element 
               작성하기
             </Button>
           )}
-          icons={TableIcons} 
+          icons={TableIcons}
           columns={[
             {
               title: '',
               field: '_index',
-              cellStyle: { width: 10, fontWeight: 'bold' }, 
+              cellStyle: { width: 10, fontWeight: 'bold' },
               headerStyle: { width: 10, fontWeight: 'bold' },
               align: 'center',
             },
