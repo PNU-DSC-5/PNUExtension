@@ -7,6 +7,9 @@ import { HttpError } from 'http-errors';
 // shared interfaces
 import { Payload, Token } from '../../shared/interfaces/token.interface';
 import { User, Url } from '../../shared/interfaces/user.interface';
+import * as dotenv from 'dotenv';
+dotenv.config();
+
 
 const router = express.Router();
 
@@ -36,12 +39,12 @@ router.get(
 
       res.cookie('test', 12).send({
         accessToken,
-        refreshToken,
+        refreshToken
       });
     } else {
       response.Helper.serverError(req, res, new Error('[Something Wrong ...]'));
     }
-  },
+  }
 );
 
 /* auto login 수행 부 */
@@ -56,7 +59,7 @@ router.post(
 
       const { accessToken, refreshToken } = await JwtToken.create({
         ...user,
-        roles: 'user',
+        roles: 'user'
       });
       res.cookie('accessToken', accessToken, {});
       res.cookie('refreshToken', refreshToken, {});
@@ -69,7 +72,7 @@ router.post(
     } catch (err) {
       response.Helper.serverError(req, res, err);
     }
-  },
+  }
 );
 
 /* Google OAuth2.0 로그인  */
@@ -77,8 +80,8 @@ router.get(
   '/google',
   passport.authenticate('google', {
     session: false,
-    scope: ['profile', 'email'],
-  }),
+    scope: ['profile', 'email']
+  })
 );
 router.get(
   '/google/callback',
@@ -91,7 +94,7 @@ router.get(
 
       const { accessToken, refreshToken } = await JwtToken.create({
         ...user,
-        roles: 'user',
+        roles: 'user'
       });
       res.cookie('accessToken', accessToken, {});
       res.cookie('refreshToken', refreshToken, {});
@@ -100,12 +103,12 @@ router.get(
       if (user.uuid) res.cookie('uuid', user.uuid);
       else res.cookie('uuid', null);
 
-      res.redirect('http://localhost:3003');
+      res.redirect(process.env.HOST_CLIENT || 'localhost:3000');
     } catch (err) {
       res.cookie('error', 'Internal server Error ... create Token');
-      res.redirect('http://localhost:3003');
+      res.redirect(process.env.HOST_CLIENT || 'localhost:3000');
     }
-  },
+  }
 );
 
 /* Kakao OAuth2.0 로그인  */
@@ -121,7 +124,7 @@ router.get(
 
       const { accessToken, refreshToken } = await JwtToken.create({
         ...user,
-        roles: 'user',
+        roles: 'user'
       });
       res.cookie('accessToken', accessToken, {});
       res.cookie('refreshToken', refreshToken, {});
@@ -130,12 +133,12 @@ router.get(
       if (user.uuid) res.cookie('uuid', user.uuid);
       else res.cookie('uuid', null);
 
-      res.redirect('http://localhost:3003');
+      res.redirect(process.env.HOST_CLIENT || 'localhost:3000');
     } catch (err) {
       res.cookie('error', 'Internal server Error ... create Token');
-      res.redirect('http://localhost:3003');
+      res.redirect(process.env.HOST_CLIENT || 'localhost:3000');
     }
-  },
+  }
 );
 
 /* GitHub OAuth2.0 로그인  */
@@ -143,8 +146,8 @@ router.get(
   '/github',
   passport.authenticate('github', {
     session: false,
-    scope: ['profile', 'email'],
-  }),
+    scope: ['profile', 'email']
+  })
 );
 router.get(
   '/github/callback',
@@ -157,7 +160,7 @@ router.get(
 
       const { accessToken, refreshToken } = await JwtToken.create({
         ...user,
-        roles: 'user',
+        roles: 'user'
       });
       res.cookie('accessToken', accessToken, {});
       res.cookie('refreshToken', refreshToken, {});
@@ -166,12 +169,12 @@ router.get(
       if (user.uuid) res.cookie('uuid', user.uuid);
       else res.cookie('uuid', null);
 
-      res.redirect('http://localhost:3003');
+      res.redirect(process.env.HOST_CLIENT || 'localhost:3000');
     } catch (err) {
       res.cookie('error', 'Internal server Error ... create Token');
-      res.redirect('http://localhost:3003');
+      res.redirect(process.env.HOST_CLIENT || 'localhost:3000');
     }
-  },
+  }
 );
 
 /* Naver OAuth2.0 로그인  */
@@ -187,7 +190,7 @@ router.get(
 
       const { accessToken, refreshToken } = await JwtToken.create({
         ...user,
-        roles: 'user',
+        roles: 'user'
       });
       res.cookie('accessToken', accessToken, {});
       res.cookie('refreshToken', refreshToken, {});
@@ -196,12 +199,12 @@ router.get(
       if (user.uuid) res.cookie('uuid', user.uuid);
       else res.cookie('uuid', null);
 
-      res.redirect('http://localhost:3003');
+      res.redirect(process.env.HOST_CLIENT || 'localhost:3000');
     } catch (err) {
       res.cookie('error', 'Internal server Error ... create Token');
-      res.redirect('http://localhost:3003');
+      res.redirect(process.env.HOST_CLIENT || 'localhost:3000');
     }
-  },
+  }
 );
 
 export = router;
