@@ -58,18 +58,19 @@ function Index(): JSX.Element {
 
     if (id) {
       /* uuid 를 통한 토큰 요청  */
-      const token = handleGetToken(id);
+      const promiseToken = handleGetToken(id) as Promise<any>;
 
-      window.localStorage.removeItem('uuid');
-      /* 로컬 스토리지에 삽입  */
-      window.localStorage.setItem('uuid', token.uuid);
+      promiseToken.then((token) => {
+        window.localStorage.removeItem('uuid');
+        /* 로컬 스토리지에 삽입  */
+        window.localStorage.setItem('uuid', token.uuid);
 
-      console.log('token ? ', token);
+        console.log('token ? ', token);
 
-      axios.setAxiosHeaders('accesstoken', token.accessToken);
-      cookie.save('accessToken', token.accessToken, {});
-
-      handleProfile();
+        axios.setAxiosHeaders('accesstoken', token.accessToken);
+        cookie.save('accessToken', token.accessToken, {});
+        handleProfile();
+      });
     }
 
     /* uuid 가 쿠키에 존재  */
