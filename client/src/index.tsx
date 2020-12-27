@@ -24,7 +24,7 @@ import globalTheme from './theme';
 
 // contexts
 import UserContext, { useUser } from './utils/contexts/UserContext';
-import { Token } from '../../server/dist/src/shared/interfaces/token.interface';
+// import { Token } from '../../server/dist/src/shared/interfaces/token.interface';
 
 function Index(): JSX.Element {
   // api 요청 axios 설정 적용
