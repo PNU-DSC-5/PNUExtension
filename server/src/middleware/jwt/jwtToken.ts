@@ -21,14 +21,14 @@ async function create(user: Payload): Promise<Token> {
     email: user.email,
     roles: user.roles,
     id: user.id,
-    url: user.url,
+    url: user.url
   };
 
   const accessToken = jwt.sign(payload, process.env.JWT_SECRET!, {
-    expiresIn: '5m',
+    expiresIn: '5m'
   });
   const refreshToken = jwt.sign(payload, process.env.JWT_REFRESH!, {
-    expiresIn: '15m',
+    expiresIn: '15m'
   });
   const sql = 'UPDATE users SET refresh = ? WHERE id = ?';
 
@@ -41,17 +41,20 @@ async function create(user: Payload): Promise<Token> {
 async function check(
   req: express.Request,
   res: express.Response,
-  next: express.NextFunction,
+  next: express.NextFunction
 ) {
   const accessToken: string = req.header('accesstoken')!;
+
+  console.log(accessToken);
+
   if (accessToken) {
     try {
       const decoded: Payload = jwt.verify(
         accessToken,
-        process.env.JWT_SECRET!,
+        process.env.JWT_SECRET!
       ) as Payload;
       req.user = {
-        ...decoded,
+        ...decoded
       }; // req 인스턴스에 api 요청 유저 정보 삽입
 
       next();
@@ -68,7 +71,7 @@ async function check(
 async function refresh(
   req: express.Request,
   res: express.Response,
-  next: express.NextFunction,
+  next: express.NextFunction
 ) {
   const refreshToken: string = req.header('refreshtoken')!;
 
@@ -103,24 +106,24 @@ async function refresh(
             /* refresh 토큰 유효성 검증 후 재발급 */
             const dbProfile: User = {
               ...row.result[0],
-              email_verified: false,
+              email_verified: false
             };
 
             const urls: Url[] = row.result
             .map((each: any) => ({
               url: each.url,
-              name: each.urlName,
+              name: each.urlName
             }))
             .filter(
-              (eachUrl: Url) => eachUrl.url !== null && eachUrl.urlName !== null,
+              (eachUrl: Url) => eachUrl.url !== null && eachUrl.urlName !== null
             );
-            
+
             create({...dbProfile, url: urls, roles: 'user'}).then((token) => {
               console.log('[Success : Refresh Token ... ]');
               const { accessToken, refreshToken } = token;
               req.user = {
                 accessToken,
-                refreshToken,
+                refreshToken
               };
               next();
             });
@@ -145,5 +148,5 @@ async function refresh(
 export default {
   create,
   check,
-  refresh,
+  refresh
 };
