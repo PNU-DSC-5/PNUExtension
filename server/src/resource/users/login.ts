@@ -8,6 +8,7 @@ import { HttpError } from 'http-errors';
 import { Payload, Token } from '../../shared/interfaces/token.interface';
 import { User, Url } from '../../shared/interfaces/user.interface';
 import * as dotenv from 'dotenv';
+import { access } from 'fs';
 dotenv.config();
 
 
@@ -107,10 +108,13 @@ router.get(
       else res.setHeader('uuid', '');
 
       const HOST_CLIENT = 'https://front-dot-pnuextension.dt.r.appspot.com/';
-      // res.redirect(HOST_CLIENT+'test');
-      res.send({
-        accessToken, refreshToken
-      });
+      req.query.accessToken = accessToken;
+      req.query.refreshToken = refreshToken;
+
+      res.redirect(HOST_CLIENT+`/?accessToken=${accessToken}`);
+      // res.send({
+      //   accessToken, refreshToken
+      // });
     } catch (err) {
       res.cookie('error', 'Internal server Error ... create Token');
       // res.redirect(process.env.HOST_CLIENT || 'localhost:3000');

@@ -49,6 +49,7 @@ function Index(): JSX.Element {
     console.log(
       'test for master branch ...',
       cookie.load('uuid')
+
     );
 
     /* uuid 가 쿠키에 존재  */
@@ -63,6 +64,7 @@ function Index(): JSX.Element {
     /* access token 이 쿠키에 존재 */
     if (cookie.load('accessToken')) {
       // accessToken 을 axios 디폴트 요청 헤더에 삽입해야한다.
+      console.log(cookie.load('accessToken'));
       axios.setAxiosHeaders('accesstoken', cookie.load('accessToken'));
       handleProfile();
     } else if (!cookie.load('accessToken')) {
