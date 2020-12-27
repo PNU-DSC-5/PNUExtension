@@ -52,7 +52,7 @@ function Index(): JSX.Element {
     //   cookie.load('uuid'),
     // );
 
-    console.log(window.location.href.split('/'));
+    // console.log(window.location.href.split('/'));
 
     const id = window.location.href.split('/')[3];
 
@@ -68,6 +68,7 @@ function Index(): JSX.Element {
 
       axios.setAxiosHeaders('accesstoken', token.accessToken);
       cookie.save('accessToken', token.accessToken, {});
+
       handleProfile();
     }
 
