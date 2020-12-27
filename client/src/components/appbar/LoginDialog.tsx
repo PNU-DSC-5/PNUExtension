@@ -17,6 +17,7 @@ import GoogleIcon from '../../atoms/icons/GoogleIcon';
 import GithubIcon from '../../atoms/icons/GithubIcon';
 import KakaoIcon from '../../atoms/icons/KakaoIcon';
 import NaverIcon from '../../atoms/icons/NaverIcon';
+import useAxios from 'axios-hooks';
 
 const HREF_PRODUCT = 'https://back-dot-pnuextension.dt.r.appspot.com/'
 
@@ -129,6 +130,15 @@ export default function LoginDialog(props: DialogProps): JSX.Element {
     setAutoLogin(e.target.checked);
   };
 
+  const [{
+    data: profileData,
+    error: profileError,
+    loading: profileLoading,
+  },
+  excuteGetProfile] = useAxios<any>({
+    url: '/users/login/google',
+  }, { manual: true });
+
   React.useEffect(() => {
     cookie.save('autoLogin', (() => {
       if (autoLogin) return 1;
@@ -170,7 +180,10 @@ export default function LoginDialog(props: DialogProps): JSX.Element {
             className={classnames([
               classes.buttonCommon, classes.google,
             ])}
-            href={HREF_PRODUCT+"users/login/google"}
+            // href={HREF_PRODUCT+"users/login/google"}
+            onClick={() => {
+              excuteGetProfile();
+            }}
           >
             <Grid container alignItems="center" style={{ width: '100%', height: '100%', padding: '-30px' }}>
 
