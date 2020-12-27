@@ -97,6 +97,7 @@ function Index(): JSX.Element {
           handleProfile,
           state,
           handleAutoLogin,
+          handleGetToken,
         }}
       >
         <BrowserRouter>
