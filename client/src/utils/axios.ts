@@ -24,7 +24,7 @@ const axiosInstance = axios.create({
   headers: {
     'Access-Control-Allow-Origin': '*',
     'Access-Control-Allow-Methods': 'GET, POST, OPTIONS, PUT, DELETE',
-    'Access-Control-Allow-Headers': 'authorization, content-type',
+    'Access-Control-Allow-Headers': 'authorization, Origin, X-Requested-With, Content-Type, Accept',
   },
 });
 
