@@ -40,8 +40,9 @@ const CrawlingCard = (input: Props): JSX.Element => {
           component="img"
           alt={input.card.title}
           height="240"
-          image={input.card.href}
+          image={input.card.imghref}
           title={input.card.title}
+          src={input.card.imghref}
         />
         <Typography variant="caption">{input.card.category}</Typography>
 
