@@ -109,7 +109,10 @@ router.get(
 
       const HOST_CLIENT = 'https://front-dot-pnuextension.dt.r.appspot.com';
 
-      res.redirect(302,HOST_CLIENT);
+      res.json({
+        aa: true
+      })
+      // res.redirect(302,HOST_CLIENT);
       // res.send({
       //   accessToken, refreshToken
       // });
