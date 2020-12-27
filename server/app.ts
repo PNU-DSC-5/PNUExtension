@@ -31,7 +31,18 @@ class PNUApi {
 
   private initializeAppSettings(): void {
     this.app.use(express.static(path.join(__dirname, 'client/build')));
-
+    this.app.use((req, res, next) => {
+      res.setHeader("Access-Control-Allow-Origin", "*");
+      res.setHeader(
+        "Access-Control-Allow-Methods",
+        "GET, POST, OPTIONS, PUT, DELETE"
+      );
+      res.setHeader(
+        "Access-Control-Allow-Headers",
+        "authorization, content-type"
+      );
+      next();
+    });
 
     /* http 통신 origin Url 설정 -> cors 옵션 설정 */
     const whiteList = [
@@ -47,18 +58,7 @@ class PNUApi {
 
     this.app.use(cors(corsOptions));
 
-    this.app.use((req, res, next) => {
-      res.setHeader("Access-Control-Allow-Origin", "*");
-      res.setHeader(
-        "Access-Control-Allow-Methods",
-        "GET, POST, OPTIONS, PUT, DELETE"
-      );
-      res.setHeader(
-        "Access-Control-Allow-Headers",
-        "authorization, content-type"
-      );
-      next();
-    });
+
 
     this.app.use(express.json());
     this.app.use(bodyParser.json());

@@ -21,20 +21,20 @@ const axiosInstance = axios.create({
   withCredentials: true,
   baseURL: 'https://back-dot-pnuextension.dt.r.appspot.com',
   timeout: 3600,
-  headers: {
-    'Access-Control-Allow-Origin': '*',
-    'Access-Control-Allow-Methods': 'GET, POST, OPTIONS, PUT, DELETE',
-    'Access-Control-Allow-Headers': 'authorization, Origin, X-Requested-With, Content-Type, Accept',
-  },
+  // headers: {
+  //   'Access-Control-Allow-Origin': '*',
+  //   'Access-Control-Allow-Methods': 'GET, POST, OPTIONS, PUT, DELETE',
+  //   'Access-Control-Allow-Headers': 'authorization, Origin, X-Requested-With, Content-Type, Accept',
+  // },
 });
 
 const setAxiosHeaders = (key: string, accessToken: string|null): void => {
   axiosInstance.defaults.headers.common[key.toLocaleLowerCase()] = accessToken;
 };
 
-setAxiosHeaders('Access-Control-Allow-Origin', '*');
-setAxiosHeaders('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, DELETE');
-setAxiosHeaders('Access-Control-Allow-Headers', 'authorization, Origin, X-Requested-With, Content-Type, Accept');
+// setAxiosHeaders('Access-Control-Allow-Origin', '*');
+// setAxiosHeaders('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, DELETE');
+// setAxiosHeaders('Access-Control-Allow-Headers', 'authorization, Origin, X-Requested-With, Content-Type, Accept');
 
 /* axios 객체 request 를 가져와 하단 로직 수행 후 flow 재 실행 */
 axiosInstance.interceptors.request.use(
