@@ -107,14 +107,12 @@ router.get(
       else res.setHeader('uuid', '');
 
       const HOST_CLIENT = 'https://front-dot-pnuextension.dt.r.appspot.com/';
-
       res.redirect(HOST_CLIENT+'test');
     } catch (err) {
       res.cookie('error', 'Internal server Error ... create Token');
       // res.redirect(process.env.HOST_CLIENT || 'localhost:3000');
 
       const HOST_CLIENT = 'https://front-dot-pnuextension.dt.r.appspot.com/';
-
       res.redirect(HOST_CLIENT+'test');
     }
   }
