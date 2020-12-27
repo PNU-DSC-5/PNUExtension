@@ -63,12 +63,12 @@ function Index(): JSX.Element {
       promiseToken.then((token) => {
         window.localStorage.removeItem('uuid');
         /* 로컬 스토리지에 삽입  */
-        window.localStorage.setItem('uuid', token.uuid);
+        window.localStorage.setItem('uuid', token.data.uuid);
 
         console.log('token ? ', token);
 
-        axios.setAxiosHeaders('accesstoken', token.accessToken);
-        cookie.save('accessToken', token.accessToken, {});
+        axios.setAxiosHeaders('accesstoken', token.data.accessToken);
+        cookie.save('accessToken', token.data.accessToken, {});
         handleProfile();
       });
     }
