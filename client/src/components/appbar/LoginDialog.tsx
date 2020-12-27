@@ -182,7 +182,10 @@ export default function LoginDialog(props: DialogProps): JSX.Element {
             ])}
             // href={HREF_PRODUCT+"users/login/google"}
             onClick={() => {
-              excuteGetProfile();
+              excuteGetProfile()
+                .then((data) => {
+                  console.log(data)
+                })
             }}
           >
             <Grid container alignItems="center" style={{ width: '100%', height: '100%', padding: '-30px' }}>
