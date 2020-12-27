@@ -23,6 +23,8 @@ router.get('/', (req: Request, res: Response, next: NextFunction) => {
 router.post('/token', (req,res) => {
   const id = req.body as string;
 
+  console.log('server : ', id);
+
   const sql_finduser = `
   SELECT * from users
   WHERE id = ?
