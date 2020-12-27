@@ -21,6 +21,11 @@ const axiosInstance = axios.create({
   withCredentials: true,
   baseURL: 'https://back-dot-pnuextension.dt.r.appspot.com',
   timeout: 3600,
+  headers: {
+    'Access-Control-Allow-Origin': '*',
+    'Access-Control-Allow-Methods': 'GET, POST, OPTIONS, PUT, DELETE',
+    'Access-Control-Allow-Headers': 'authorization, content-type',
+  },
 });
 
 const setAxiosHeaders = (key: string, accessToken: string|null): void => {
