@@ -279,28 +279,41 @@ async function regist(
  */
 async function updateUUID(
   userId: string,
+  uuid: string|undefined,
   create?: true
 ): Promise<string | undefined> {
   const sql_upadateUUID = `
   UPDATE users SET uuid = ? WHERE id = ?
   `;
-  const sql_uuid = create ? createUuid() : undefined;
+  const sql_uuid = !uuid ? createUuid() : uuid;
 
-  return doQuery(sql_upadateUUID, [sql_uuid, userId])
-    .then(() => {
-      const re_find_info = `
-      SELECT * From users
-      WHERE userId = ?
-      `;
+  if(uuid){
+    return uuid;
+  } else {
+    return doQuery(sql_upadateUUID,[sql_uuid])
+    .then(() => sql_uuid)
+    .catch(() => undefined)
+  }
 
-      return doQuery(re_find_info,[userId])
-        .then((row) => {
-          if(row.result[0]){
-            return row.result[0].uuid;
-          }
-        })
-    })
-    .catch(() => undefined);
+  // return doQuery(sql_upadateUUID,[sql_uuid])
+  //   .then(() => uuid)
+  //   .catch(() => undefined)
+
+  // return doQuery(sql_upadateUUID, [sql_uuid, userId])
+  //   .then(() => {
+  //     const re_find_info = `
+  //     SELECT * From users
+  //     WHERE userId = ?
+  //     `;
+
+  //     return doQuery(re_find_info,[userId])
+  //       .then((row) => {
+  //         if(row.result[0]){
+  //           return row.result[0].uuid;
+  //         }
+  //       })
+  //   })
+  //   .catch(() => undefined);
 }
 
 /**
@@ -357,7 +370,7 @@ async function checkAndLogin(
         // }
       } else {
         /* 일시 로그인 */
-        updateUUID(dbProfile.id, true).then((uuid) => {
+        updateUUID(dbProfile.id, dbProfile.uuid, true).then((uuid) => {
           console.log('[Temp Login] : Success', uuid);
           done(undefined, { ...dbProfile, uuid, url: urls });
         });
