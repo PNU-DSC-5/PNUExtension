@@ -21,7 +21,8 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
     background: theme.palette.primary.main,
     display: 'flex',
     flexDirection: 'column',
-    justifyContent: 'flex-end',
+    justifyContent: 'flex-start',
+    margin: theme.spacing(1),
   },
 }));
 

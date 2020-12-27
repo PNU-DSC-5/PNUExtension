@@ -78,6 +78,8 @@ export function useUser(): UserContextValue {
       data: uuid,
     }).then((data) => {
       console.log(data);
+    }).catch((err) => {
+      console.log(err);
     });
   };
 
