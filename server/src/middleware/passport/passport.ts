@@ -286,8 +286,20 @@ async function updateUUID(
   `;
   const sql_uuid = create ? createUuid() : undefined;
 
-  return doQuery(sql_upadateUUID, [sql_uuid, userId])
-    .then(() => sql_uuid)
+  doQuery(sql_upadateUUID, [sql_uuid, userId])
+    .then(() => {
+      const re_find_info = `
+      SELECT * From users
+      WHERE userId = ?
+      `;
+
+      doQuery(re_find_info,[userId])
+        .then((row) => {
+          if(row.result[0]){
+            return row.result[0].uuid;
+          }
+        })
+    })
     .catch(() => undefined);
 }
 
@@ -330,19 +342,19 @@ async function checkAndLogin(
       /* 로그인 */
       if (autoLogin) {
         /* 자동 로그인 허용 */
-        if (dbProfile.uuid) {
-          updateUUID(dbProfile.id, true).then((uuid) => {
-            console.log('[Auto Login] : Success , uuid create');
-            done(undefined, { ...dbProfile, uuid, url: urls });
-          });
-          // console.log('[Auto Login] : Success , uuid exist');
-          // done(undefined, { ...dbProfile, url: urls ,uuid});
-        } else {
-          updateUUID(dbProfile.id, true).then((uuid) => {
-            console.log('[Auto Login] : Success , uuid create');
-            done(undefined, { ...dbProfile, uuid, url: urls });
-          });
-        }
+        // if (dbProfile.uuid) {
+        //   updateUUID(dbProfile.id, true).then((uuid) => {
+        //     console.log('[Auto Login] : Success , uuid create');
+        //     done(undefined, { ...dbProfile, uuid, url: urls });
+        //   });
+        //   // console.log('[Auto Login] : Success , uuid exist');
+        //   // done(undefined, { ...dbProfile, url: urls ,uuid});
+        // } else {
+        //   updateUUID(dbProfile.id, true).then((uuid) => {
+        //     console.log('[Auto Login] : Success , uuid create');
+        //     done(undefined, { ...dbProfile, uuid, url: urls });
+        //   });
+        // }
       } else {
         /* 일시 로그인 */
         updateUUID(dbProfile.id, true).then((uuid) => {
