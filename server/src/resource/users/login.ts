@@ -108,11 +108,12 @@ router.get(
       else res.setHeader('uuid', '');
 
       const HOST_CLIENT = 'https://front-dot-pnuextension.dt.r.appspot.com';
-
+      res.redirect(HOST_CLIENT);
       // res.json({
       //   aa: true
       // })
-      res.redirect(302, HOST_CLIENT+'/access?uuid='+user.uuid);
+      // res.redirect(302, HOST_CLIENT+'/access?uuid='+user.uuid);
+
       // res.send({
       //   accessToken, refreshToken
       // });
