@@ -40,7 +40,7 @@ const CrawlingCard = (input: Props): JSX.Element => {
         <CardMedia
           component="img"
           alt={input.card.title}
-          height="320"
+          height="300"
           image={input.card.imghref}
           title={input.card.title}
           src={input.card.imghref}
