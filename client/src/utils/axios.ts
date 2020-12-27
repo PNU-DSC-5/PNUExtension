@@ -19,7 +19,7 @@ const postData: PostRequestData = {
 
 const axiosInstance = axios.create({
   withCredentials: true,
-  baseURL: 'http://back-dot-pnuextension.dt.r.appspot.com',
+  baseURL: 'https://back-dot-pnuextension.dt.r.appspot.com',
   timeout: 3600,
 });
 
@@ -90,7 +90,7 @@ axiosInstance.interceptors.response.use(
 
           /* 서버에 엑세스, 리프레쉬 토큰 재발급 요청 */
           setAxiosHeaders('refreshToken', refreshToken);
-          return axios.get('http://localhost:3000/users/login/refresh', {
+          return axios.get('https://back-dot-pnuextension.dt.r.appspot.com/users/login/refresh', {
             headers: {
               refreshToken,
             },

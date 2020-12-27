@@ -48,7 +48,7 @@ export function useUser(): UserContextValue {
     loading: profileLoading,
   },
   excuteGetProfile] = useAxios<UserInfo>({
-    url: 'http://localhost:3000/users/login/check-profile',
+    url: 'https://back-dot-pnuextension.dt.r.appspot.com/users/login/check-profile',
   }, { manual: true });
 
   const [{
@@ -57,7 +57,7 @@ export function useUser(): UserContextValue {
     loading: autoLoginLoading,
   },
   excuteAutoLogin] = useAxios<UserInfo>({
-    url: 'http://localhost:3000/users/login/auto-login',
+    url: 'https://back-dot-pnuextension.dt.r.appspot.com/users/login/auto-login',
     method: 'post',
   }, { manual: true });
 
