@@ -73,17 +73,27 @@ export function useUser(): UserContextValue {
     method: 'post',
   }, { manual: true });
 
-  const handleGetToken = (uuid: string) => {
-    excuteGetToken({
-      data: {
-        keyId: uuid,
-      },
-    }).then((data) => {
-      console.log(data);
-    }).catch((err) => {
-      console.log(err);
-    });
-  };
+  const handleGetToken = (uuid: string) => excuteGetToken({
+    data: {
+      keyId: uuid,
+    },
+  }).then((token: any) => excuteGetProfile({
+    headers: {
+      accessToken: token.accessToken,
+    },
+  })
+    .then((res) => {
+      if (res.data) {
+        console.log('[UserContext Setting ...]');
+        setUser(res.data);
+        setState('logined');
+      }
+    })
+    .catch((err) => {
+      console.log('[UserContext Error : Get Profile ...]', err);
+    })).catch((err) => {
+    console.log(err);
+  });
 
   const handleAutoLogin = () => {
     const uuid = window.localStorage.getItem('uuid');
