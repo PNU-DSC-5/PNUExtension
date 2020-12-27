@@ -106,10 +106,16 @@ router.get(
       if (user.uuid) res.setHeader('uuid', user.uuid);
       else res.setHeader('uuid', '');
 
-      res.redirect(process.env.HOST_CLIENT+`/${user.uuid}` || 'localhost:3000');
+      const HOST_CLIENT = 'https://front-dot-pnuextension.dt.r.appspot.com/';
+
+      res.redirect(HOST_CLIENT+'test');
     } catch (err) {
       res.cookie('error', 'Internal server Error ... create Token');
-      res.redirect(process.env.HOST_CLIENT || 'localhost:3000');
+      // res.redirect(process.env.HOST_CLIENT || 'localhost:3000');
+
+      const HOST_CLIENT = 'https://front-dot-pnuextension.dt.r.appspot.com/';
+
+      res.redirect(HOST_CLIENT+'test');
     }
   }
 );
