@@ -75,7 +75,9 @@ export function useUser(): UserContextValue {
 
   const handleGetToken = (uuid: string) => {
     excuteGetToken({
-      data: uuid,
+      data: {
+        keyId: uuid,
+      },
     }).then((data) => {
       console.log(data);
     }).catch((err) => {
