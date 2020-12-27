@@ -45,12 +45,12 @@ function Index(): JSX.Element {
 
   // 페이지 렌더링 -> access Token 및 refresh Token 확인
   React.useEffect(() => {
+    // console.log(
+    //   'test for master branch ...',
+    //   cookie.load('uuid'),
+    // );
 
-    console.log(
-      'test for master branch ...',
-      cookie.load('uuid')
-
-    );
+    console.log(window.location.href.split('/'));
 
     /* uuid 가 쿠키에 존재  */
     if (cookie.load('uuid')) {
