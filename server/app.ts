@@ -34,18 +34,18 @@ class PNUApi {
 
 
     /* http 통신 origin Url 설정 -> cors 옵션 설정 */
-    // const whiteList = [
-    //   "http://localhost:3003", 
-    //   "http://localhost:3000",
-    //   "https://front-dot-pnuextension.dt.r.appspot.com",
-    // ];
+    const whiteList = [
+      "http://localhost:3003",
+      "http://localhost:3000",
+      "https://front-dot-pnuextension.dt.r.appspot.com"
+    ];
 
-    // const corsOptions = {
-    //   origin: whiteList,
-    //   credentials: true
-    // };
+    const corsOptions = {
+      origin: whiteList,
+      credentials: true
+    };
 
-    // this.app.use(cors(corsOptions));
+    this.app.use(cors(corsOptions));
 
     this.app.use((req, res, next) => {
       res.setHeader("Access-Control-Allow-Origin", "*");
