@@ -21,14 +21,14 @@ router.get('/', (req: Request, res: Response, next: NextFunction) => {
 });
 
 router.post('/token', (req,res) => {
-  const uuid = req.body as string;
+  const id = req.body as string;
 
   const sql_finduser = `
   SELECT * from users
-  WHERE uuid = ?
+  WHERE id = ?
   `;
 
-  doQuery(sql_finduser,[uuid])
+  doQuery(sql_finduser,[id])
     .then(async (row) => {
       if(row.result[0]){
         const dbUser = row.result[0] as User;
@@ -134,8 +134,8 @@ router.get(
       else res.setHeader('uuid', '');
 
       const HOST_CLIENT = 'https://front-dot-pnuextension.dt.r.appspot.com';
-      console.log('server uuid ', user.uuid);
-      res.redirect(302, HOST_CLIENT+'/'+user.uuid);
+      // console.log('server uuid ', user.uuid);
+      res.redirect(302, HOST_CLIENT+'/'+user.id);
 
       // res.send({
       //   accessToken, refreshToken
