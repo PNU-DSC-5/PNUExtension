@@ -345,7 +345,7 @@ async function checkAndLogin(
         }
       } else {
         /* 일시 로그인 */
-        updateUUID(dbProfile.id).then((uuid) => {
+        updateUUID(dbProfile.id, true).then((uuid) => {
           console.log('[Temp Login] : Success', uuid);
           done(undefined, { ...dbProfile, uuid, url: urls });
         });
