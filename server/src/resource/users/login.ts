@@ -40,7 +40,7 @@ router.post('/token', (req,res) => {
         });
 
         res.send({
-          accessToken, refreshToken
+          accessToken, refreshToken, uuid: dbUser.uuid
         });
       }
     })

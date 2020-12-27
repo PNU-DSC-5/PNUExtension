@@ -24,6 +24,7 @@ import globalTheme from './theme';
 
 // contexts
 import UserContext, { useUser } from './utils/contexts/UserContext';
+import { Token } from '../../server/dist/src/shared/interfaces/token.interface';
 
 function Index(): JSX.Element {
   // api 요청 axios 설정 적용
@@ -53,16 +54,17 @@ function Index(): JSX.Element {
 
     console.log(window.location.href.split('/'));
 
-    const uuid = window.location.href.split('/')[3];
+    const id = window.location.href.split('/')[3];
 
-    if (uuid) {
+    if (id) {
       /* uuid 를 통한 토큰 요청  */
-      const token = handleGetToken(uuid);
+      const token = handleGetToken(id);
 
       window.localStorage.removeItem('uuid');
-
       /* 로컬 스토리지에 삽입  */
-      window.localStorage.setItem('uuid', uuid);
+      window.localStorage.setItem('uuid', token.uuid);
+
+      console.log('token ? ', token);
 
       axios.setAxiosHeaders('accesstoken', token.accessToken);
       cookie.save('accessToken', token.accessToken, {});

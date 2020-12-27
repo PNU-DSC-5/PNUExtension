@@ -73,9 +73,9 @@ export function useUser(): UserContextValue {
     method: 'post',
   }, { manual: true });
 
-  const handleGetToken = async (uuid: string) => await excuteGetToken({
+  const handleGetToken = async (id: string) => excuteGetToken({
     data: {
-      keyId: uuid,
+      keyId: id,
     },
   }).then((token: any) => token);
 
