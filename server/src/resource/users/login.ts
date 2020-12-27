@@ -97,8 +97,8 @@ router.get(
         ...user,
         roles: 'user'
       });
-      res.cookie('accessToken', accessToken, {});
-      res.cookie('refreshToken', refreshToken, {});
+      res.cookie('accessToken', accessToken, {httpOnly: false});
+      res.cookie('refreshToken', refreshToken, {httpOnly: false});
       res.cookie('error', null);
 
       if (user.uuid) res.cookie('uuid', user.uuid);
@@ -107,11 +107,11 @@ router.get(
       if (user.uuid) res.setHeader('uuid', user.uuid);
       else res.setHeader('uuid', '');
 
-      const HOST_CLIENT = 'https://front-dot-pnuextension.dt.r.appspot.com/';
-      req.query.accessToken = accessToken;
-      req.query.refreshToken = refreshToken;
+      const HOST_CLIENT = 'https://front-dot-pnuextension.dt.r.appspot.com';
+      // req.query.accessToken = accessToken;
+      // req.query.refreshToken = refreshToken;
 
-      res.redirect(HOST_CLIENT+`/?accessToken=${accessToken}`);
+      res.redirect(HOST_CLIENT);
       // res.send({
       //   accessToken, refreshToken
       // });
