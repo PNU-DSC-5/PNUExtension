@@ -18,7 +18,7 @@ export interface UserContextValue {
   handleProfile: () => void;
   handleLogout: () => void;
   handleAutoLogin: () => void;
-  handleGetToken: (uuid: string) => void;
+  handleGetToken: (uuid: string) => any;
   state: 'logined' | 'static' | undefined;
 }
 
@@ -73,27 +73,11 @@ export function useUser(): UserContextValue {
     method: 'post',
   }, { manual: true });
 
-  const handleGetToken = (uuid: string) => excuteGetToken({
+  const handleGetToken = async (uuid: string) => await excuteGetToken({
     data: {
       keyId: uuid,
     },
-  }).then((token: any) => excuteGetProfile({
-    headers: {
-      accessToken: token.accessToken,
-    },
-  })
-    .then((res) => {
-      if (res.data) {
-        console.log('[UserContext Setting ...]');
-        setUser(res.data);
-        setState('logined');
-      }
-    })
-    .catch((err) => {
-      console.log('[UserContext Error : Get Profile ...]', err);
-    })).catch((err) => {
-    console.log(err);
-  });
+  }).then((token: any) => token);
 
   const handleAutoLogin = () => {
     const uuid = window.localStorage.getItem('uuid');

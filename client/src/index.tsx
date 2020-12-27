@@ -57,7 +57,16 @@ function Index(): JSX.Element {
 
     if (uuid) {
       /* uuid 를 통한 토큰 요청  */
-      handleGetToken(uuid);
+      const token = handleGetToken(uuid);
+
+      window.localStorage.removeItem('uuid');
+
+      /* 로컬 스토리지에 삽입  */
+      window.localStorage.setItem('uuid', uuid);
+
+      axios.setAxiosHeaders('accesstoken', token.accessToken);
+      cookie.save('accessToken', token.accessToken, {});
+      handleProfile();
     }
 
     /* uuid 가 쿠키에 존재  */
