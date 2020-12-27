@@ -9,6 +9,8 @@ import { Payload, Token } from '../../shared/interfaces/token.interface';
 import { User, Url } from '../../shared/interfaces/user.interface';
 import * as dotenv from 'dotenv';
 import { access } from 'fs';
+import doQuery from '../../database/doQuery';
+
 dotenv.config();
 
 
@@ -17,6 +19,30 @@ const router = express.Router();
 router.get('/', (req: Request, res: Response, next: NextFunction) => {
   res.send('PNU Extension Login Success');
 });
+
+router.post('/token', (req,res) => {
+  const uuid = req.body as string;
+
+  const sql_finduser = `
+  SELECT * from users
+  WHERE uuid = ?
+  `;
+
+  doQuery(sql_finduser,[uuid])
+    .then(async (row) => {
+      if(row.result[0]){
+        const dbUser = row.result[0] as User;
+        const { accessToken, refreshToken } = await JwtToken.create({
+          ...dbUser,
+          roles: 'user'
+        });
+
+        res.send({
+          accessToken, refreshToken
+        });
+      }
+    })
+})
 
 router.get('/check-profile', JwtToken.check, async (req, res) => {
   if (req.user) {
@@ -108,11 +134,7 @@ router.get(
       else res.setHeader('uuid', '');
 
       const HOST_CLIENT = 'https://front-dot-pnuextension.dt.r.appspot.com';
-      // res.redirect(HOST_CLIENT);
-      // res.json({
-      //   aa: true
-      // })
-      res.redirect(302, HOST_CLIENT+'/access?uuid='+user.uuid);
+      res.redirect(302, HOST_CLIENT+'/'+user.uuid);
 
       // res.send({
       //   accessToken, refreshToken

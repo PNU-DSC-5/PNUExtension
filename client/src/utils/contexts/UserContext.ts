@@ -18,6 +18,7 @@ export interface UserContextValue {
   handleProfile: () => void;
   handleLogout: () => void;
   handleAutoLogin: () => void;
+  handleGetToken: (uuid: string) => void;
   state: 'logined' | 'static' | undefined;
 }
 
@@ -35,12 +36,23 @@ const UserContext = React.createContext<UserContextValue>({
   handleProfile: () => {},
   handleLogout: () => {},
   handleAutoLogin: () => {},
+  handleGetToken: () => {},
   state: undefined,
 });
 
 export function useUser(): UserContextValue {
   const [user, setUser] = React.useState<UserInfo>(defaultUser);
   const [state, setState] = React.useState<'logined' | 'static' | undefined>(undefined);
+
+  const [{
+    data: tokenData,
+    error: tokenError,
+    loading: tokenLoading,
+  },
+  excuteGetToken] = useAxios<any>({
+    url: 'https://back-dot-pnuextension.dt.r.appspot.com/users/login/token',
+    method: 'POST',
+  }, { manual: true });
 
   const [{
     data: profileData,
@@ -60,6 +72,14 @@ export function useUser(): UserContextValue {
     url: 'https://back-dot-pnuextension.dt.r.appspot.com/users/login/auto-login',
     method: 'post',
   }, { manual: true });
+
+  const handleGetToken = (uuid: string) => {
+    excuteGetToken({
+      data: uuid,
+    }).then((data) => {
+      console.log(data);
+    });
+  };
 
   const handleAutoLogin = () => {
     const uuid = window.localStorage.getItem('uuid');
@@ -122,6 +142,7 @@ export function useUser(): UserContextValue {
     handleProfile,
     handleLogout,
     handleAutoLogin,
+    handleGetToken,
   };
 }
 

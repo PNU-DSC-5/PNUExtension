@@ -41,6 +41,7 @@ function Index(): JSX.Element {
     handleProfile,
     state,
     handleAutoLogin,
+    handleGetToken,
   } = useUser();
 
   // 페이지 렌더링 -> access Token 및 refresh Token 확인
@@ -51,6 +52,13 @@ function Index(): JSX.Element {
     // );
 
     console.log(window.location.href.split('/'));
+
+    const uuid = window.location.href.split('/')[3];
+
+    if (uuid) {
+      /* uuid 를 통한 토큰 요청  */
+      handleGetToken(uuid);
+    }
 
     /* uuid 가 쿠키에 존재  */
     if (cookie.load('uuid')) {
