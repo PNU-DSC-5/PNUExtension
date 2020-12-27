@@ -136,11 +136,10 @@ export default function TodoDialog(input: Props): JSX.Element {
                 <TextField
                   value={data[index]}
                   style={{ width: "90%" }}
-                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                  onChange={(e: React.ChangeEvent<{ value: unknown }>) => {
                     let newData: string[] = [];
-                    console.log(e.target.value);
                     for (let i = 0; i < data.length; i++) {
-                      if (i == index) newData.push(e.target.value as string);
+                      if (i === index) newData.push(e.target.value as string);
                       else newData.push(data[i]);
                     }
                     setData(newData);
