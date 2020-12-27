@@ -34,7 +34,7 @@ const setAxiosHeaders = (key: string, accessToken: string|null): void => {
 
 setAxiosHeaders('Access-Control-Allow-Origin', '*');
 setAxiosHeaders('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, DELETE');
-setAxiosHeaders('Access-Control-Allow-Headers', 'authorization, content-type');
+setAxiosHeaders('Access-Control-Allow-Headers', 'authorization, Origin, X-Requested-With, Content-Type, Accept');
 
 /* axios 객체 request 를 가져와 하단 로직 수행 후 flow 재 실행 */
 axiosInstance.interceptors.request.use(
