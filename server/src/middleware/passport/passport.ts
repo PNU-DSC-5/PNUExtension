@@ -286,14 +286,14 @@ async function updateUUID(
   `;
   const sql_uuid = create ? createUuid() : undefined;
 
-  doQuery(sql_upadateUUID, [sql_uuid, userId])
+  return doQuery(sql_upadateUUID, [sql_uuid, userId])
     .then(() => {
       const re_find_info = `
       SELECT * From users
       WHERE userId = ?
       `;
 
-      doQuery(re_find_info,[userId])
+      return doQuery(re_find_info,[userId])
         .then((row) => {
           if(row.result[0]){
             return row.result[0].uuid;
