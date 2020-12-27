@@ -41,16 +41,16 @@ passport.use(
         if (row.result[0]) {
           const dbProfile: User = {
             ...row.result[0],
-            email_verified: false,
+            email_verified: false
           };
 
           const urls: Url[] = row.result
             .map((each: any) => ({
               url: each.url,
-              name: each.urlName,
+              name: each.urlName
             }))
             .filter(
-              (eachUrl: Url) => eachUrl.url !== null && eachUrl.urlName !== null,
+              (eachUrl: Url) => eachUrl.url !== null && eachUrl.urlName !== null
             );
 
           return done(null, { ...dbProfile, url: urls });
@@ -59,7 +59,7 @@ passport.use(
         return done('Not Exist UUID ... ', null);
       })
       .catch((err) => done(err, null));
-  }),
+  })
 );
 
 /* Google Login */
@@ -80,7 +80,7 @@ passport.use(
       clientID: process.env.GOOGLE_CLIENT_ID!,
       clientSecret: process.env.GOOGLE_SECRET!,
       callbackURL: process.env.GOOGLE_CALLBACK!,
-      passReqToCallback: true,
+      passReqToCallback: true
     },
     (req, accessToken, refreshToken, profile, done) => {
       const { autoLogin } = req.cookies;
@@ -94,12 +94,12 @@ passport.use(
         picture: googleUser.picture,
         kind: 'google',
         email_verified: false,
-        url: [],
+        url: []
       };
 
       checkAndLogin(remoteData, autoLogin > 0, done);
-    },
-  ),
+    }
+  )
 );
 
 /* Naver Login */
@@ -119,7 +119,7 @@ passport.use(
       clientID: process.env.NAVER_CLIENT_ID!,
       clientSecret: process.env.NAVER_SECRET!,
       callbackURL: process.env.NAVER_CALLBACK!,
-      passReqToCallback: true,
+      passReqToCallback: true
     },
     (req, accessToken, refreshToken, profile, done) => {
       const { autoLogin } = req.cookies;
@@ -133,12 +133,12 @@ passport.use(
         kind: 'naver',
         name: naverUser.nickname,
         email_verified: false,
-        url: [],
+        url: []
       };
 
       checkAndLogin(remoteData, autoLogin > 0, done);
-    },
-  ),
+    }
+  )
 );
 
 /* Kakao Login */
@@ -154,7 +154,7 @@ passport.use(
     {
       clientID: process.env.KAKAO_CLIENT_ID!,
       clientSecret: '',
-      callbackURL: process.env.KAKAO_CALLBACK!,
+      callbackURL: process.env.KAKAO_CALLBACK!
     },
     (accessToken, refreshToken, profile, done) => {
       const kakaoUser = profile._json;
@@ -166,7 +166,7 @@ passport.use(
         kind: 'kakao',
         name: kakaoUser.kakao_account.profile.nickname,
         email_verified: false,
-        url: [],
+        url: []
       };
 
       /**
@@ -175,8 +175,8 @@ passport.use(
        * @param autologin 에 대한 설정이 필요함
        */
       checkAndLogin(remoteData, true, done);
-    },
-  ),
+    }
+  )
 );
 
 /* Github Login */
@@ -196,7 +196,7 @@ passport.use(
       clientID: process.env.GITHUB_CLIENT_ID!,
       clientSecret: process.env.GITHUB_SECRET!,
       callbackURL: process.env.GITHUB_CALLBACK!,
-      passReqToCallback: true,
+      passReqToCallback: true
     },
     (req, accessToken, refreshToken, profile, done) => {
       const { autoLogin } = req.cookies;
@@ -211,12 +211,12 @@ passport.use(
         kind: 'github',
         name: githubUser.name,
         email_verified: false,
-        url: [],
+        url: []
       };
 
       checkAndLogin(remoteData, autoLogin > 0, done);
-    },
-  ),
+    }
+  )
 );
 
 /**
@@ -233,7 +233,7 @@ function createUuid() {
 async function regist(
   user: User,
   autoLogin: boolean,
-  done: (err?: Error, user?: User | null, info?: any) => void,
+  done: (err?: Error, user?: User | null, info?: any) => void
 ): Promise<any> {
   const sql_regist = `
   INSERT INTO users(name, id, picture, email, locale, kind, uuid) 
@@ -247,7 +247,7 @@ async function regist(
     user.picture,
     user.email,
     'kor',
-    user.kind,
+    user.kind
   ];
 
   /* uuid 생성 */
@@ -260,7 +260,7 @@ async function regist(
       const newUser: User = {
         ...user,
         email_verified: false,
-        url: [],
+        url: []
       };
 
       /* 회원가입 성공 및 유저 정보 반환 */
@@ -279,7 +279,7 @@ async function regist(
  */
 async function updateUUID(
   userId: string,
-  create?: true,
+  create?: true
 ): Promise<string | undefined> {
   const sql_upadateUUID = `
   UPDATE users SET uuid = ? WHERE id = ?
@@ -300,7 +300,7 @@ async function updateUUID(
 async function checkAndLogin(
   user: User,
   autoLogin: boolean,
-  done: (err?: Error, user?: User | null | any, info?: any) => void,
+  done: (err?: Error, user?: User | null | any, info?: any) => void
 ) {
   const sql_GetProfile = `
   SELECT * FROM users u 
@@ -312,14 +312,14 @@ async function checkAndLogin(
   doQuery(sql_GetProfile, [user.id]).then(async (row) => {
     const dbProfile: User = {
       ...row.result[0],
-      email_verified: false,
+      email_verified: false
     };
 
     /* urls null 전처리 -> 빈배열 */
     const urls: Url[] = row.result
       .map((each: any) => ({
         url: each.url,
-        name: each.urlName,
+        name: each.urlName
       }))
       .filter((eachUrl: Url) => eachUrl.url !== null && eachUrl.urlName !== null);
 
@@ -331,8 +331,12 @@ async function checkAndLogin(
       if (autoLogin) {
         /* 자동 로그인 허용 */
         if (dbProfile.uuid) {
-          console.log('[Auto Login] : Success , uuid exist');
-          done(undefined, { ...dbProfile, url: urls });
+          updateUUID(dbProfile.id, true).then((uuid) => {
+            console.log('[Auto Login] : Success , uuid create');
+            done(undefined, { ...dbProfile, uuid, url: urls });
+          });
+          // console.log('[Auto Login] : Success , uuid exist');
+          // done(undefined, { ...dbProfile, url: urls ,uuid});
         } else {
           updateUUID(dbProfile.id, true).then((uuid) => {
             console.log('[Auto Login] : Success , uuid create');
@@ -342,7 +346,7 @@ async function checkAndLogin(
       } else {
         /* 일시 로그인 */
         updateUUID(dbProfile.id).then((uuid) => {
-          console.log('[Temp Login] : Success');
+          console.log('[Temp Login] : Success', uuid);
           done(undefined, { ...dbProfile, uuid, url: urls });
         });
       }

@@ -13,13 +13,13 @@ import {
 } from '@material-ui/core/styles';
 import classnames from 'classnames';
 import cookie from 'react-cookies';
+import useAxios from 'axios-hooks';
 import GoogleIcon from '../../atoms/icons/GoogleIcon';
 import GithubIcon from '../../atoms/icons/GithubIcon';
 import KakaoIcon from '../../atoms/icons/KakaoIcon';
 import NaverIcon from '../../atoms/icons/NaverIcon';
-import useAxios from 'axios-hooks';
 
-const HREF_PRODUCT = 'https://back-dot-pnuextension.dt.r.appspot.com/'
+const HREF_PRODUCT = 'https://back-dot-pnuextension.dt.r.appspot.com/';
 
 const useStyles = makeStyles((theme: Theme) => createStyles({
   dialogContents: {
@@ -41,7 +41,7 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
     borderRadius: 32,
     margin: theme.spacing(2),
   },
-  github: { 
+  github: {
     backgroundColor: '#9775fa',
     '&:hover,select': {
       backgroundColor: '#9775fa',
@@ -56,7 +56,7 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
       backgroundColor: '#ffff',
       boxShadow: theme.shadows[5],
     },
-  }, 
+  },
   naver: {
     backgroundColor: '#2b8a3e',
     '&:hover,select': {
@@ -106,7 +106,7 @@ const WithStyledSwitch = withStyles({
       backgroundColor: '#69db7c',
       opacity: 1,
     },
-  }, 
+  },
   colorSecondary: {
     '&$checked': {
       color: '#2b8a3e',
@@ -180,7 +180,7 @@ export default function LoginDialog(props: DialogProps): JSX.Element {
             className={classnames([
               classes.buttonCommon, classes.google,
             ])}
-            href={HREF_PRODUCT+"users/login/google"}
+            href={`${HREF_PRODUCT}users/login/google`}
           >
             <Grid container alignItems="center" style={{ width: '100%', height: '100%', padding: '-30px' }}>
 
@@ -202,7 +202,7 @@ export default function LoginDialog(props: DialogProps): JSX.Element {
             className={classnames([
               classes.buttonCommon, classes.naver,
             ])}
-            href={HREF_PRODUCT+"users/login/naver"}
+            href={`${HREF_PRODUCT}users/login/naver`}
           >
             <Grid container alignItems="center" style={{ width: '100%', height: '100%' }}>
 
@@ -232,7 +232,7 @@ export default function LoginDialog(props: DialogProps): JSX.Element {
             className={classnames([
               classes.buttonCommon, classes.github,
             ])}
-            href={HREF_PRODUCT+"users/login/github"}
+            href={`${HREF_PRODUCT}users/login/github`}
           >
             <Grid container alignItems="center" style={{ width: '100%', height: '100%' }}>
 
@@ -254,7 +254,7 @@ export default function LoginDialog(props: DialogProps): JSX.Element {
             className={classnames([
               classes.buttonCommon, classes.kakao,
             ])}
-            href={HREF_PRODUCT+"users/login/kakao"}
+            href={`${HREF_PRODUCT}users/login/kakao`}
           >
             <Grid container alignItems="center" style={{ width: '100%', height: '100%' }}>
 
