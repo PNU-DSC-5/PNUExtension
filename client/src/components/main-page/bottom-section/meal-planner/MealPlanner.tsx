@@ -31,7 +31,7 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
 export default function MealPlanner(): JSX.Element {
   const classes = useStyles();
 
-  const [{ data: mealData, loading: mealLoading }] = useAxios<Meal>({
+  const [{ data: mealData, loading: mealLoading }] = useAxios<Meal[]>({
     url: "/meal",
     method: "GET",
   });
@@ -60,6 +60,21 @@ export default function MealPlanner(): JSX.Element {
     </Typography>,
   ];
 
+  const kum = (meals: Meal[]) =>
+   
+        meals.map((each) => {
+          return (
+            <div>
+              <LocalDiningOutlinedIcon fontSize="small" />,
+              <Typography variant="h6">
+                &#160; {each.menu1+' '+each.menu2+' '+each.code+' '+each.time} &#160;
+              </Typography>
+            </div>
+          )
+        })}
+      
+  
+
   return (
     <Paper className={classes.section}>
       <Button>
@@ -73,33 +88,45 @@ export default function MealPlanner(): JSX.Element {
         </Typography>
       </Button>
       <div style={{ marginTop: "10" }}>
-        <Marquee
-          children={marqueeText}
-          direction="rtl"
-          velocity={30}
-          scatterRandomly={false}
-          resetAfterTries={1000}
-          onInit={() => {}}
-          onFinish={() => {}}
-        />
-        <Marquee
-          children={marqueeText2}
-          direction="rtl"
-          velocity={30}
-          scatterRandomly={false}
-          resetAfterTries={1000}
-          onInit={() => {}}
-          onFinish={() => {}}
-        />
-        <Marquee
-          children={marqueeText3}
-          direction="rtl"
-          velocity={30}
-          scatterRandomly={false}
-          resetAfterTries={1000}
-          onInit={() => {}}
-          onFinish={() => {}}
-        />
+        {!mealLoading && mealData && (
+          // <Marquee
+          //   children={kum}
+          //   direction="rtl"
+          //   velocity={30}
+          //   scatterRandomly={false}
+          //   resetAfterTries={1000}
+          //   onInit={() => {}}
+          //   onFinish={() => {}}
+          // />
+          <Marquee
+            children={mealData.map((each) => {
+              return (
+                <div>
+                  <LocalDiningOutlinedIcon fontSize="small" />,
+                  <Typography variant="h6">
+                    &#160; {each.menu1+' '+each.menu2+' '+each.code+' '+each.time} &#160;
+                  </Typography>
+                </div>
+              )
+            })}
+            direction="rtl"
+            velocity={30}
+            scatterRandomly={false}
+            resetAfterTries={1000}
+            onInit={() => {}}
+            onFinish={() => {}}
+          />
+          // <Marquee
+          //   children={marqueeText3}
+          //   direction="rtl"
+          //   velocity={30}
+          //   scatterRandomly={false}
+          //   resetAfterTries={1000}
+          //   onInit={() => {}}
+          //   onFinish={() => {}}
+          // />
+        )}
+       
       </div>
     </Paper>
   );
