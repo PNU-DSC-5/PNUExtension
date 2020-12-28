@@ -55,13 +55,15 @@ function Index(): JSX.Element {
     // console.log(window.location.href.split('/'));
 
     const id = window.location.href.split('/')[3];
+    // const isLogined = window.localStorage.getItem('isLogin');
 
-    if (id) {
+    if (id ) {
       /* uuid 를 통한 토큰 요청  */
       const promiseToken = handleGetToken(id) as Promise<any>;
 
       promiseToken.then((token) => {
         /* 로컬 스토리지에 삽입  */
+        // window.localStorage.removeItem('isLogin');
         window.localStorage.removeItem('uuid');
         window.localStorage.setItem('uuid', token.data.uuid);
 

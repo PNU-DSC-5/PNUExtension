@@ -251,8 +251,10 @@ async function regist(
   ];
 
   /* uuid 생성 */
-  if (autoLogin) sql_data.push(createUuid());
-  else sql_data.push(null);
+  // if (autoLogin) sql_data.push(createUuid());
+  // else sql_data.push(null);
+
+  sql_data.push(createUuid());
 
   doQuery(sql_regist, sql_data)
     .then(() => {
@@ -277,43 +279,41 @@ async function regist(
  * @param userId uuid 를 업데이트 할 유저 아이디
  * @param create uuid 생성 or 초기화 여부
  */
-async function updateUUID(
-  userId: string,
-  uuid: string|undefined,
-  create?: true
-): Promise<string | undefined> {
-  const sql_upadateUUID = `
-  UPDATE users SET uuid = ? WHERE id = ?
-  `;
-  const sql_uuid = !uuid ? createUuid() : uuid;
+// async function updateUUID(
+//   userId: string,
+//   uuid: string|undefined,
+//   create?: true
+// ): Promise<string | undefined> {
+//   const sql_upadateUUID = `
+//   UPDATE users SET uuid = ? WHERE id = ?
+//   `;
+//   const sql_uuid = !uuid ? createUuid() : uuid;
 
-  if(uuid){
+//   if(uuid){
+//     return uuid;
+//   } else {
+//     return doQuery(sql_upadateUUID,[sql_uuid])
+//     .then(() => sql_uuid)
+//     .catch(() => undefined)
+//   }
+
+  
+// }
+
+async function updateUUID(userId: string, uuid: string|undefined, create?:true):Promise<any>{
+  
+  if(uuid){ // uuid 가 존재하는 경우
     return uuid;
-  } else {
-    return doQuery(sql_upadateUUID,[sql_uuid])
-    .then(() => sql_uuid)
-    .catch(() => undefined)
+  } else { // uuid 가 없는 경우
+    const sql_uuid = createUuid();
+    const sql_upadateUUID = `
+    UPDATE users SET uuid = ? WHERE id = ?
+    `;
+  
+    return doQuery(sql_upadateUUID,[sql_uuid, userId])
+      .then(() => sql_uuid)
+      .catch(() => undefined)
   }
-
-  // return doQuery(sql_upadateUUID,[sql_uuid])
-  //   .then(() => uuid)
-  //   .catch(() => undefined)
-
-  // return doQuery(sql_upadateUUID, [sql_uuid, userId])
-  //   .then(() => {
-  //     const re_find_info = `
-  //     SELECT * From users
-  //     WHERE userId = ?
-  //     `;
-
-  //     return doQuery(re_find_info,[userId])
-  //       .then((row) => {
-  //         if(row.result[0]){
-  //           return row.result[0].uuid;
-  //         }
-  //       })
-  //   })
-  //   .catch(() => undefined);
 }
 
 /**
