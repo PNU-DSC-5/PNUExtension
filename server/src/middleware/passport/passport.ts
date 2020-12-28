@@ -38,7 +38,7 @@ passport.use(
 
     const sql_check_uuid = `
     SELECT * FROM users
-    WHERE uuid = ?
+    WHERE uuid = ??
     `;
 
     doQuery(sql_check_uuid, [uuid])
