@@ -61,14 +61,16 @@ function Index(): JSX.Element {
       const promiseToken = handleGetToken(id) as Promise<any>;
 
       promiseToken.then((token) => {
-        window.localStorage.removeItem('uuid');
         /* 로컬 스토리지에 삽입  */
+        window.localStorage.removeItem('uuid');
         window.localStorage.setItem('uuid', token.data.uuid);
 
-        console.log('token ? ', token);
+        console.log('[Token in Index.tsx] ... ', token);
 
         axios.setAxiosHeaders('accesstoken', token.data.accessToken);
         cookie.save('accessToken', token.data.accessToken, {});
+        cookie.save('refreshToken', token.data.refreshToken, {});
+
         handleProfile();
       });
     }
