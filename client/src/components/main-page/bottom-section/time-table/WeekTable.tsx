@@ -55,7 +55,7 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
     borderRadius: 8,
     alignItems: 'center',
     // boxShadow: theme.shadows[5],
-    backgroundColor: theme.palette.secondary.main,
+    backgroundColor: theme.palette.primary.main,
   },
   weekLineWrapper: {
     width: '10%',

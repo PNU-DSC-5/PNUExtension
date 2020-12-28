@@ -16,7 +16,7 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
     height: '100%',
     width: '100%',
     textAlign: 'center',
-    backgroundColor: theme.palette.secondary.main,
+    backgroundColor: theme.palette.primary.main,
   },
 }));
 
