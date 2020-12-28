@@ -73,7 +73,7 @@ export default function MealPlanner(): JSX.Element {
           학식
         </Typography>
       </Button>
-      <div style={{ marginTop: 20 }}>
+      <div style={{ marginTop: 10 , marginLeft: 32, marginRight: 32 }}>
         {!mealLoading && mealData && (
           <Marquee
             children={mealData.map((each) => {

@@ -99,6 +99,7 @@ function Index(): JSX.Element {
 
   React.useEffect(() => {
     if (!cookie.load('accessToken') && localStorage.getItem('uuid')) {
+      console.log('[Auto Login Start index.tsx] ... ');
       handleAutoLogin();
     }
   }, [handleAutoLogin]);

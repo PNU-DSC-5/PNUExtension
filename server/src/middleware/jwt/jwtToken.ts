@@ -44,7 +44,6 @@ async function check(
   next: express.NextFunction
 ) {
   const accessToken: string = req.header('accesstoken')!;
-
   console.log('access token in JWT CHeck ',accessToken);
 
   if (accessToken) {

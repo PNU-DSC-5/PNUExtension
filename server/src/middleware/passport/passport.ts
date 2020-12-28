@@ -28,15 +28,20 @@ passport.use(
     const { uuid } = req.body;
     console.log('[Auto Login ... UUID ]', uuid);
 
-    const sql_check_uuid = `
-      SELECT * FROM users u 
-      LEFT JOIN urls ul
-      ON ul.userId = u.id
-      WHERE u.uuid = ?
-    `;
-    const sql_data = [uuid];
+    // const sql_check_uuid = `
+    //   SELECT * FROM users u 
+    //   LEFT JOIN urls ul
+    //   ON ul.userId = u.id
+    //   WHERE u.uuid = ?
+    // `;
+    // const sql_data = [uuid];
 
-    doQuery(sql_check_uuid, sql_data)
+    const sql_check_uuid = `
+    SELECT * FROM users
+    WHERE uuid = ?
+    `;
+
+    doQuery(sql_check_uuid, [uuid])
       .then((row) => {
         if (row.result[0]) {
           const dbProfile: User = {
@@ -44,16 +49,16 @@ passport.use(
             email_verified: false
           };
 
-          const urls: Url[] = row.result
-            .map((each: any) => ({
-              url: each.url,
-              name: each.urlName
-            }))
-            .filter(
-              (eachUrl: Url) => eachUrl.url !== null && eachUrl.urlName !== null
-            );
+          // const urls: Url[] = row.result
+          //   .map((each: any) => ({
+          //     url: each.url,
+          //     name: each.urlName
+          //   }))
+          //   .filter(
+          //     (eachUrl: Url) => eachUrl.url !== null && eachUrl.urlName !== null
+          //   );
 
-          return done(null, { ...dbProfile, url: urls });
+          return done(null, { ...dbProfile });
         }
 
         return done('Not Exist UUID ... ', null);

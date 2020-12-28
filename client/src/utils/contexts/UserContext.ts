@@ -113,6 +113,7 @@ export function useUser(): UserContextValue {
         .catch((err) => {
           console.log('[UserContext Error : AutoLogin ...]', err);
           window.localStorage.removeItem('uuid');
+          window.location.reload();
         });
     }
   };
