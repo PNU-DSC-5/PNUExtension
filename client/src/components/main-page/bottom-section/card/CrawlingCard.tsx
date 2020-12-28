@@ -21,7 +21,8 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
     background: theme.palette.primary.main,
     display: 'flex',
     flexDirection: 'column',
-    justifyContent: 'flex-end',
+    justifyContent: 'flex-start',
+    margin: theme.spacing(1),
   },
 }));
 
@@ -39,9 +40,10 @@ const CrawlingCard = (input: Props): JSX.Element => {
         <CardMedia
           component="img"
           alt={input.card.title}
-          height="240"
-          image={input.card.href}
+          height="300"
+          image={input.card.imghref}
           title={input.card.title}
+          src={input.card.imghref}
         />
         <Typography variant="caption">{input.card.category}</Typography>
 

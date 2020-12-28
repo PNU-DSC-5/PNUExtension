@@ -18,6 +18,7 @@ export interface UserContextValue {
   handleProfile: () => void;
   handleLogout: () => void;
   handleAutoLogin: () => void;
+  handleGetToken: (uuid: string) => Promise<any> | any;
   state: 'logined' | 'static' | undefined;
 }
 
@@ -35,6 +36,7 @@ const UserContext = React.createContext<UserContextValue>({
   handleProfile: () => {},
   handleLogout: () => {},
   handleAutoLogin: () => {},
+  handleGetToken: () => {},
   state: undefined,
 });
 
@@ -43,12 +45,22 @@ export function useUser(): UserContextValue {
   const [state, setState] = React.useState<'logined' | 'static' | undefined>(undefined);
 
   const [{
+    data: tokenData,
+    error: tokenError,
+    loading: tokenLoading,
+  },
+  excuteGetToken] = useAxios<any>({
+    url: 'https://back-dot-pnuextension.dt.r.appspot.com/users/login/token',
+    method: 'POST',
+  }, { manual: true });
+
+  const [{
     data: profileData,
     error: profileError,
     loading: profileLoading,
   },
   excuteGetProfile] = useAxios<UserInfo>({
-    url: 'http://localhost:3000/users/login/check-profile',
+    url: 'https://back-dot-pnuextension.dt.r.appspot.com/users/login/check-profile',
   }, { manual: true });
 
   const [{
@@ -57,9 +69,22 @@ export function useUser(): UserContextValue {
     loading: autoLoginLoading,
   },
   excuteAutoLogin] = useAxios<UserInfo>({
-    url: 'http://localhost:3000/users/login/auto-login',
+    url: 'https://back-dot-pnuextension.dt.r.appspot.com/users/login/auto-login',
     method: 'post',
   }, { manual: true });
+
+  const handleGetToken = async (id: string) => {
+    const tokenData2 = await excuteGetToken({
+      data: {
+        keyId: id,
+      },
+    }).then((token: any) => {
+      console.log('token in a :', token);
+      return token;
+    });
+
+    return tokenData2;
+  };
 
   const handleAutoLogin = () => {
     const uuid = window.localStorage.getItem('uuid');
@@ -122,6 +147,7 @@ export function useUser(): UserContextValue {
     handleProfile,
     handleLogout,
     handleAutoLogin,
+    handleGetToken,
   };
 }
 

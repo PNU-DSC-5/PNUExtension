@@ -24,6 +24,7 @@ import globalTheme from './theme';
 
 // contexts
 import UserContext, { useUser } from './utils/contexts/UserContext';
+// import { Token } from '../../server/dist/src/shared/interfaces/token.interface';
 
 function Index(): JSX.Element {
   // api 요청 axios 설정 적용
@@ -41,10 +42,39 @@ function Index(): JSX.Element {
     handleProfile,
     state,
     handleAutoLogin,
+    handleGetToken,
   } = useUser();
 
   // 페이지 렌더링 -> access Token 및 refresh Token 확인
   React.useEffect(() => {
+    // console.log(
+    //   'test for master branch ...',
+    //   cookie.load('uuid'),
+    // );
+
+    // console.log(window.location.href.split('/'));
+
+    const id = window.location.href.split('/')[3];
+
+    if (id) {
+      /* uuid 를 통한 토큰 요청  */
+      const promiseToken = handleGetToken(id) as Promise<any>;
+
+      promiseToken.then((token) => {
+        /* 로컬 스토리지에 삽입  */
+        window.localStorage.removeItem('uuid');
+        window.localStorage.setItem('uuid', token.data.uuid);
+
+        console.log('[Token in Index.tsx] ... ', token);
+
+        axios.setAxiosHeaders('accesstoken', token.data.accessToken);
+        cookie.save('accessToken', token.data.accessToken, {});
+        cookie.save('refreshToken', token.data.refreshToken, {});
+
+        handleProfile();
+      });
+    }
+
     /* uuid 가 쿠키에 존재  */
     if (cookie.load('uuid')) {
       // window.localStorage.clear();
@@ -57,6 +87,7 @@ function Index(): JSX.Element {
     /* access token 이 쿠키에 존재 */
     if (cookie.load('accessToken')) {
       // accessToken 을 axios 디폴트 요청 헤더에 삽입해야한다.
+      console.log(cookie.load('accessToken'));
       axios.setAxiosHeaders('accesstoken', cookie.load('accessToken'));
       handleProfile();
     } else if (!cookie.load('accessToken')) {
@@ -81,6 +112,7 @@ function Index(): JSX.Element {
           handleProfile,
           state,
           handleAutoLogin,
+          handleGetToken,
         }}
       >
         <BrowserRouter>

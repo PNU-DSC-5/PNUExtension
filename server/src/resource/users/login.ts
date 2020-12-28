@@ -8,6 +8,9 @@ import { HttpError } from 'http-errors';
 import { Payload, Token } from '../../shared/interfaces/token.interface';
 import { User, Url } from '../../shared/interfaces/user.interface';
 import * as dotenv from 'dotenv';
+import { access } from 'fs';
+import doQuery from '../../database/doQuery';
+
 dotenv.config();
 
 
@@ -16,6 +19,32 @@ const router = express.Router();
 router.get('/', (req: Request, res: Response, next: NextFunction) => {
   res.send('PNU Extension Login Success');
 });
+
+router.post('/token', (req,res) => {
+  const id = req.body.keyId as string;
+
+  console.log('server : ', id);
+
+  const sql_finduser = `
+  SELECT * from users
+  WHERE id = ?
+  `;
+
+  doQuery(sql_finduser,[id])
+    .then(async (row) => {
+      if(row.result[0]){
+        const dbUser = row.result[0] as User;
+        const { accessToken, refreshToken } = await JwtToken.create({
+          ...dbUser,
+          roles: 'user'
+        });
+
+        res.send({
+          accessToken, refreshToken, uuid: dbUser.uuid
+        });
+      }
+    })
+})
 
 router.get('/check-profile', JwtToken.check, async (req, res) => {
   if (req.user) {
@@ -96,18 +125,29 @@ router.get(
         ...user,
         roles: 'user'
       });
-      res.cookie('accessToken', accessToken, {});
-      res.cookie('refreshToken', refreshToken, {});
+      res.cookie('accessToken', accessToken, {httpOnly: false});
+      res.cookie('refreshToken', refreshToken, {httpOnly: false});
       res.cookie('error', null);
 
       if (user.uuid) res.cookie('uuid', user.uuid);
       else res.cookie('uuid', null);
 
-      // res.redirect(process.env.HOST_CLIENT || 'localhost:3000');
-      res.send(true);
+      if (user.uuid) res.setHeader('uuid', user.uuid);
+      else res.setHeader('uuid', '');
+
+      const HOST_CLIENT = 'https://front-dot-pnuextension.dt.r.appspot.com';
+      // console.log('server uuid ', user.uuid);
+      res.redirect(302, HOST_CLIENT+'/'+user.id);
+
+      // res.send({
+      //   accessToken, refreshToken
+      // });
     } catch (err) {
       res.cookie('error', 'Internal server Error ... create Token');
-      res.redirect(process.env.HOST_CLIENT || 'localhost:3000');
+      // res.redirect(process.env.HOST_CLIENT || 'localhost:3000');
+
+      const HOST_CLIENT = 'https://front-dot-pnuextension.dt.r.appspot.com/';
+      res.redirect(HOST_CLIENT+'test');
     }
   }
 );
