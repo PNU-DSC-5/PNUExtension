@@ -131,7 +131,7 @@ export default function NotificationPopper(
               </ListItem>
             ))}
 
-          {(notificationsError || notifcationsLoading || notificationsData?.length === 0) && (
+          {/* {(notificationsError || notifcationsLoading || notificationsData?.length === 0) && (
             <Typography variant="h6" align="center">
               표시할 알림이 없습니다.
 
@@ -145,7 +145,7 @@ export default function NotificationPopper(
                 </IconButton>
               </span>
             </Typography>
-          )}
+          )} */}
         </List>
       </Popper>
     </ClickAwayListener>
