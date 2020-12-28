@@ -9,7 +9,7 @@ const router = express.Router();
 
 router.get('/', (req: Request, res: Response, next: NextFunction) => {
   const { userId } = req.query;
- 
+  
   if (userId) {
     const sql_getUrls = `
       SELECT * FROM urls

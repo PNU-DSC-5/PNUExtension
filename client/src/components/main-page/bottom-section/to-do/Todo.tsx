@@ -23,21 +23,16 @@ import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import { Typography } from "@material-ui/core";
 
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    section: {
-      height: "100%",
-      width: "100%",
-      textAlign: "center",
-      backgroundColor: theme.palette.secondary.main,
-      borderRadius: 8,
-    },
-    icon: {
-      width: 20,
-      height: 20,
-    },
-  })
-);
+const useStyles = makeStyles((theme: Theme) => createStyles({
+  section: {
+    height: '100%',
+    width: '100%',
+    textAlign: 'center',
+    backgroundColor: theme.palette.primary.main,
+    borderRadius: 8,
+  },
+}));
+
 
 export default function Todo(): JSX.Element {
   const classes = useStyles();

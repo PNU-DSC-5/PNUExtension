@@ -45,7 +45,7 @@ async function check(
 ) {
   const accessToken: string = req.header('accesstoken')!;
 
-  console.log(accessToken);
+  console.log('access token in JWT CHeck ',accessToken);
 
   if (accessToken) {
     try {

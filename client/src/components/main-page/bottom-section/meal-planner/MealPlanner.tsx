@@ -17,16 +17,16 @@ import { Button } from "@material-ui/core";
 // yarn add react-marquee-slider
 // yarn add lodash styled-components
 
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    section: {
-      height: "100%",
-      width: "100%",
-      textAlign: "center",
-      backgroundColor: theme.palette.secondary.main,
-    },
-  })
-);
+
+const useStyles = makeStyles((theme: Theme) => createStyles({
+  section: {
+    height: '100%',
+    width: '100%',
+    textAlign: 'center',
+    backgroundColor: theme.palette.primary.main,
+  },
+}));
+
 
 export default function MealPlanner(): JSX.Element {
   const classes = useStyles();

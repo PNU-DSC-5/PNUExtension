@@ -122,17 +122,17 @@ export default function FavicionList(): JSX.Element {
   const userContext = React.useContext(UserContext);
 
   const [, postUrlRequest] = useAxios<any>({
-    url: 'http://localhost:3000/url',
+    url: '/url',
     method: 'post',
   }, { manual: true });
 
   const [{ data: urlsData, error: urlError, loading: urlLoading }, getUrlRequest] = useAxios<Url[]>({
-    url: 'http://localhost:3000/url',
+    url: '/url',
     method: 'get',
   }, { manual: true });
 
   const [, deleteUrlRequest] = useAxios<any>({
-    url: 'http://localhost:3000/url',
+    url: '/url',
     method: 'delete',
   }, { manual: true });
 
