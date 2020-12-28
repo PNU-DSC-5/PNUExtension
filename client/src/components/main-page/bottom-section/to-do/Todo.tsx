@@ -38,10 +38,8 @@ export default function Todo(): JSX.Element {
   const classes = useStyles();
 
   const [data, setData] = React.useState([
-    "item 1",
-    "item 2",
-    "item 3",
-    "item 4", 
+    "롤 티어 올리기",
+    "DSC 발표하기"
   ]);
 
   const [checked, setChecked] = React.useState([0]);
