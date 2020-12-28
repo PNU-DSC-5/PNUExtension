@@ -150,7 +150,8 @@ export function useUser(): UserContextValue {
     setUser(defaultUser);
     setState(undefined);
 
-    window.location.reload();
+    window.location.replace('/');
+    // window.location.reload();
   };
 
   return {
