@@ -71,7 +71,7 @@ export default function MealPlanner(): JSX.Element {
               </Typography>
             </div>
           )
-        })}
+        })
       
   
 
