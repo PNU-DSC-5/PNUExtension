@@ -98,24 +98,24 @@ export default function MealPlanner(): JSX.Element {
           //   onInit={() => {}}
           //   onFinish={() => {}}
           // />
-          <Marquee
-            children={mealData.map((each) => {
-              return (
-                <div>
-                  <LocalDiningOutlinedIcon fontSize="small" />,
-                  <Typography variant="h6">
-                    &#160; {each.menu1+' '+each.menu2+' '+each.code+' '+each.time} &#160;
-                  </Typography>
-                </div>
-              )
-            })}
-            direction="rtl"
-            velocity={30}
-            scatterRandomly={false}
-            resetAfterTries={1000}
-            onInit={() => {}}
-            onFinish={() => {}}
-          />
+          // <Marquee
+          //   children={mealData.map((each) => {
+          //     return (
+          //       <div>
+          //         <LocalDiningOutlinedIcon fontSize="small" />,
+          //         <Typography variant="h6">
+          //           &#160; {each.menu1+' '+each.menu2+' '+each.code+' '+each.time} &#160;
+          //         </Typography>
+          //       </div>
+          //     )
+          //   })}
+          //   direction="rtl"
+          //   velocity={30}
+          //   scatterRandomly={false}
+          //   resetAfterTries={1000}
+          //   onInit={() => {}}
+          //   onFinish={() => {}}
+          // />
           // <Marquee
           //   children={marqueeText3}
           //   direction="rtl"
