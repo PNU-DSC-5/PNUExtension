@@ -20,6 +20,8 @@ import notificationRouter from './src/resource/notifications/index';
 // import testRouter from './src/resource/users/index';
 import testRouter from './src/resource/users/index';
 
+import mealRouter from './src/resource/meal/index';
+
 class PNUApi {
   public app: express.Express;
 
@@ -86,6 +88,7 @@ class PNUApi {
     this.app.use("/free-board", freeBoardRouter);
     // this.app.use("/card", cardRouter);
     this.app.use("/notification", notificationRouter);
+    this.app.use("/meal", mealRouter);
 
     this.app.use(
       () => (
