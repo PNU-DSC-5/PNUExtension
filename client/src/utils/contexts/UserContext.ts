@@ -2,6 +2,7 @@ import React from 'react';
 import useAxios from 'axios-hooks';
 import { AxiosError } from 'axios';
 import cookie from 'react-cookies';
+import axios from '../axios';
 
 import { Payload as UserInfo } from '../../shared/interfaces/token.interface';
 
@@ -63,12 +64,18 @@ export function useUser(): UserContextValue {
     url: 'https://back-dot-pnuextension.dt.r.appspot.com/users/login/check-profile',
   }, { manual: true });
 
+  interface AutoLoginRes {
+    user: UserInfo,
+    accessToken: string;
+    refreshToken: string;
+  }
+
   const [{
     data: autoLoginData,
     error: autoLoginError,
     loading: autoLoginLoading,
   },
-  excuteAutoLogin] = useAxios<UserInfo>({
+  excuteAutoLogin] = useAxios<AutoLoginRes>({
     url: 'https://back-dot-pnuextension.dt.r.appspot.com/users/login/auto-login',
     method: 'post',
   }, { manual: true });
@@ -96,8 +103,11 @@ export function useUser(): UserContextValue {
         },
       })
         .then((res) => {
-          console.log('[UserContext Setting By Auto Login ...]');
-          setUser(res.data);
+          console.log('[UserContext Setting By Auto Login ...]', res.data.user);
+          setUser(res.data.user);
+          cookie.save('accessToken', res.data.accessToken, {});
+          cookie.save('refreshToken', res.data.refreshToken, {});
+          axios.setAxiosHeaders('accesstoken', res.data.accessToken);
           setState('logined');
         })
         .catch((err) => {

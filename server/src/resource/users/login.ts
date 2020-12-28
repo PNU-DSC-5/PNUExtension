@@ -90,14 +90,20 @@ router.post(
         ...user,
         roles: 'user'
       });
-      res.cookie('accessToken', accessToken, {});
-      res.cookie('refreshToken', refreshToken, {});
-      res.cookie('error', null);
+      // res.cookie('accessToken', accessToken, {});
+      // res.cookie('refreshToken', refreshToken, {});
+      // res.cookie('error', null);
 
-      if (user.uuid) res.cookie('uuid', user.uuid);
-      else res.cookie('uuid', null);
+      // if (user.uuid) res.cookie('uuid', user.uuid);
+      // else res.cookie('uuid', null);
 
-      response.Helper.ok(req, res, user);
+      const returnData = {
+        user,
+        accessToken,
+        refreshToken
+      }
+
+      response.Helper.ok(req, res, returnData);
     } catch (err) {
       response.Helper.serverError(req, res, err);
     }
