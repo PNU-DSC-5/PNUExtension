@@ -103,7 +103,7 @@ export function useUser(): UserContextValue {
         },
       })
         .then((res) => {
-          console.log('[UserContext Setting By Auto Login ...]', res.data.user);
+          console.log('[UserContext Setting By Auto Login ...]', res.data);
           setUser(res.data.user);
           cookie.save('accessToken', res.data.accessToken, {});
           cookie.save('refreshToken', res.data.refreshToken, {});
